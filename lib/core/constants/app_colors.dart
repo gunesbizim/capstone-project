@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class AppColors{
   static const Color primaryBlue = Color.fromRGBO(19, 171, 205, 1);
+  static const Color _primaryBlue075 = Color.fromRGBO(19, 171, 205, 075);
+
   static const Color primaryPurple = Color.fromRGBO(148, 21, 151, 1);
   static const Color _primaryPurple052 = Color.fromRGBO(148, 21, 151, 0.52);
   static const Color _primaryPurple056 = Color.fromRGBO(148, 21, 151, 0.56);
-
+  static const Color _primaryPurple075 = Color.fromRGBO(148, 21, 151, 0.75);
   static const Color _primaryPurple092 = Color.fromRGBO(148, 21, 151, 0.92);
 
   static const Color _backgroundUp = Color.fromRGBO(55, 21, 151, 0.9);
@@ -30,7 +32,7 @@ class AppColors{
     ]);
   static const RadialGradient flightButtonGradient = RadialGradient(
     center: Alignment.center,
-    colors: [primaryBlue,_primaryPurple092],
+    colors: [_primaryBlue075,_primaryPurple075],
    );
 
   static const LinearGradient wingGradient = LinearGradient(
