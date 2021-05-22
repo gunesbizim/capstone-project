@@ -1,16 +1,10 @@
-
 import 'package:json_annotation/json_annotation.dart';
-part 'login_model.g.dart';
+//part 'login_model.g.dart';
 
 @JsonSerializable()
-class LoginModel{
+class LoginModel {
   final String email;
   final String password;
 
-  LoginModel(
-    {
-      required this.email,
-      required this.password
-    }
-  )
+  LoginModel({required this.email, required this.password});
 }
