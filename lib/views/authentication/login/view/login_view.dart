@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //TODO: connect it with an ypper widget
+    //TODO: connect it with an upper widget
     MediaQueryData data = MediaQuery.of(context);
     double height = data.size.height;
     return BaseView<LoginViewModel>(

@@ -36,7 +36,10 @@ class HomeView extends StatelessWidget {
         
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          buildProfilePictureRow(queryData),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: buildProfilePictureRow(queryData),
+          ),
           buildUserNameFlightTime(),
           buildThirdRow(queryData),
           Row(
@@ -48,8 +51,11 @@ class HomeView extends StatelessWidget {
 
         ],),
         appBar: AppBar(
-          shadowColor: Colors.transparent,
-          backgroundColor: Colors.white,
+          actions: <Widget>[
+            GestureDetector(
+              child: Icon(Icons.out)
+            )
+          ],
         ),
     );
   }
