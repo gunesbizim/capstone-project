@@ -40,7 +40,7 @@ class FlightButton extends StatelessWidget {
                   gradient: AppColors.flightButtonGradient,
                   shape: BoxShape.circle,
                 ),
-                child: Text("FLY"),
+                child: Text(),
               ),
               onTap: (){
 
