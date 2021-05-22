@@ -5,7 +5,7 @@ class AuthenticationService {
 
   AuthenticationService(this._firebaseAuth);
 
-  Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
+  //Stream<User> get authStateChanges =>_firebaseAuth.authStateChanges();
 
   Future<Map> signIn({required String email, required String password}) async {
     try {

@@ -23,12 +23,12 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   @override
   void init() {
+    print("init");
     loginService = AuthenticationService(FirebaseAuth.instance);
     navigationService = NavigationService.instance;
     emailController = TextEditingController();
     passwordController = TextEditingController();
   }
-
   @observable
   bool isLoading = false;
 
@@ -37,13 +37,20 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
 
   @action
   Future<void> login() async {
-    isLoadingChange();
+    //isLoadingChange();
+    print("test123123");
+    print(globalFormState);
     if(globalFormState.currentState!.validate()){
+          print("2");
+
       final response = await loginService.signIn(email: emailController!.text, password: passwordController!.text);
       if(response["userCredential"]==null){
+            print(response["message"]);
+
         //TODO: Sow snackbar
-      isLoadingChange();
-     }else{
+      //isLoadingChange(); zett@zett.com
+           print("4");
+
         navigationService.navigateToPageClear(
        path: RouteConstants.HOME_PAGE,
        data: response["userCredential"]

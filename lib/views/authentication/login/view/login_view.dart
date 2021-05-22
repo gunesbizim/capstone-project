@@ -30,8 +30,7 @@ class LoginView extends StatelessWidget {
                       SizedBox(height: height * 0.03, child: Text("FLY HIGH")),
                       Column(
                         children: [
-                          Container(height: 75, child: buildEmailForm(value)),
-                          buildPasswordForm(value),
+                          buildGeneralForm(value),
                           buildLoginButton(value)
                         ],
                       )
@@ -39,7 +38,10 @@ class LoginView extends StatelessWidget {
                   )),
               alignment: Alignment.center,
             ),
-        onModelReady: (model) {});
+        onModelReady: (model) {
+                        model.setContext(context);
+                        model.init();
+        });
   }
 
   Observer buildLoginButton(LoginViewModel loginViewModel) {
@@ -68,29 +70,28 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Form buildPasswordForm(LoginViewModel loginViewModel) {
+  Form buildGeneralForm(LoginViewModel loginViewModel) {
     return Form(
+      key: loginViewModel.globalFormState,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: buildPasswordField(loginViewModel),
+      child: Column(
+        children: [
+          buildEmailField(loginViewModel),
+          buildPasswordField(loginViewModel),
+        ],
+      ),
     );
   }
 
   TextFormField buildPasswordField(LoginViewModel loginViewModel) {
     return TextFormField(
-      controller: loginViewModel.emailController,
+      controller: loginViewModel.passwordController,
       obscureText: true,
       decoration: buildInputDecoration("Password", "Zett123!"),
       validator: (value) {
         if (value == null || value.isEmpty) return "Password can not be empty!";
         return PasswordValidator.validate(value) ? null : "Invalid Password";
       },
-    );
-  }
-
-  Form buildEmailForm(LoginViewModel loginViewModel) {
-    return Form(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: buildEmailField(loginViewModel),
     );
   }
 
