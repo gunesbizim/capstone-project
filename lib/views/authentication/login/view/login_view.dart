@@ -5,6 +5,7 @@ import 'package:capstone_project/views/authentication/login/view_model/login_vie
 import 'package:capstone_project/views/authentication/validation.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class LoginView extends StatelessWidget {
   @override
@@ -29,23 +30,9 @@ class LoginView extends StatelessWidget {
                       SizedBox(height: height * 0.03, child: Text("FLY HIGH")),
                       Column(
                         children: [
-                          Container(height: 75, child: buildEmailForm()),
-                          buildPasswordForm(),
-                          Container(
-                            height: 20,
-                            width: 100,
-                            child: Material(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30)),
-                              color: AppColors.primaryBlue,
-                              child: InkWell(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                                child: Text("LOG IN"),
-                                onTap: () {},
-                              ),
-                            ),
-                          )
+                          Container(height: 75, child: buildEmailForm(value)),
+                          buildPasswordForm(value),
+                          buildLoginButton(value)
                         ],
                       )
                     ],
@@ -55,15 +42,42 @@ class LoginView extends StatelessWidget {
         onModelReady: (model) {});
   }
 
-  Form buildPasswordForm() {
-    return Form(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: buildPasswordField(),
+  Observer buildLoginButton(LoginViewModel loginViewModel) {
+    return Observer(
+      builder: (_){
+        return Container(
+                height: 20,
+                width: 100,
+                child: Material(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(30)),
+                  color: AppColors.primaryBlue,
+                  child: InkWell(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(30)),
+                    child: Text("LOG IN"),
+                    onTap: loginViewModel.isLoading?
+                      null:
+                      () {
+                        loginViewModel.login();
+                      },
+                  ),
+                ),
+              );
+      },
     );
   }
 
-  TextFormField buildPasswordField() {
+  Form buildPasswordForm(LoginViewModel loginViewModel) {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: buildPasswordField(loginViewModel),
+    );
+  }
+
+  TextFormField buildPasswordField(LoginViewModel loginViewModel) {
     return TextFormField(
+      controller: loginViewModel.emailController,
       obscureText: true,
       decoration: buildInputDecoration("Password", "Zett123!"),
       validator: (value) {
@@ -73,15 +87,16 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Form buildEmailForm() {
+  Form buildEmailForm(LoginViewModel loginViewModel) {
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: buildEmailField(),
+      child: buildEmailField(loginViewModel),
     );
   }
 
-  TextFormField buildEmailField() {
+  TextFormField buildEmailField(LoginViewModel loginViewModel) {
     return TextFormField(
+      controller: loginViewModel.emailController,
       decoration: buildInputDecoration("Email", "example@example.com"),
       validator: (value) {
         if (value == null || value.isEmpty) return "Email can not be empty!";

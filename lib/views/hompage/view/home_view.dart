@@ -45,7 +45,7 @@ class HomeView extends StatelessWidget {
         ],
       ),
       appBar: AppBar(
-        actions: <Widget>[GestureDetector(child: Icon(Icons.out))],
+        actions: <Widget>[GestureDetector(child: Icon(Icons.logout_sharp))],
       ),
     );
   }
