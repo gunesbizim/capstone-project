@@ -33,14 +33,14 @@ class FlightButton extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               customBorder: CircleBorder(),
-              splashColor: Colors.green,
+              splashColor: AppColors.primaryPurple,
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   gradient: AppColors.flightButtonGradient,
                   shape: BoxShape.circle,
                 ),
-                child: Text(),
+                child: Text("FLY", style: TextStyle(color: Colors.white,fontSize: 50,fontFamily: "Roboto",fontWeight: FontWeight.w100),),
               ),
               onTap: (){
 
