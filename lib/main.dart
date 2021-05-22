@@ -1,8 +1,9 @@
 import 'dart:math';
 
-import 'package:capstone_project/views/authentication/IAuthService.dart';
+import 'package:capstone_project/services/FirebaseAuth.dart';
 import 'package:capstone_project/views/authentication/login/view/login_view.dart';
 import 'package:flutter/material.dart';
+
 void main() async {
   runApp(MyApp());
 }
@@ -17,7 +18,6 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginView(),
-      
     );
   }
 }
