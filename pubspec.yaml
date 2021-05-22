@@ -58,6 +58,15 @@ flutter:
   assets:
     - assets/images/left_wing.png
     - assets/images/right_wing.png
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Thin.ttf
+          weight: 100
+        - asset: fonts/Roboto-Light.ttf
+          weight: 300
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

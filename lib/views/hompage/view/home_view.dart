@@ -33,18 +33,24 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Column(
+        
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildProfilePictureRow(queryData),
           buildUserNameFlightTime(),
           buildThirdRow(queryData),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FlightButton()
             ],
           ),
 
         ],),
+        appBar: AppBar(
+          shadowColor: Colors.transparent,
+          backgroundColor: Colors.white,
+        ),
     );
   }
   Row buildThirdRow(MediaQueryData queryData) {
