@@ -87,7 +87,7 @@ class HomeView extends StatelessWidget {
                 height: queryData.size.height*0.24,
                 width: queryData.size.width*0.45,
                 decoration: BoxDecoration(
-                  gradient: AppColors.connectedDroneGradient,
+                  gradient: AppColors.lastFlighGradient,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(30),bottomLeft: Radius.circular(30))),
                 child:Column(
                     mainAxisAlignment: MainAxisAlignment.center,

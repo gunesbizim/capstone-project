@@ -11,14 +11,14 @@ class FlightButton extends StatelessWidget {
     return BaseView<StartFlightViewModel>(
       viewModel: StartFlightViewModel(), //TODO: Tidy up!!
       onPageBuilder: (BuildContext buildContext,StartFlightViewModel value ){
-        return buildFlightButton();
+        return buildFlightButton(value);
       },
       onModelReady: (model) {
 
       }
       );
   }
-  Widget buildFlightButton(){
+  Widget buildFlightButton(StartFlightViewModel startFlightViewModel){
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -29,12 +29,24 @@ class FlightButton extends StatelessWidget {
             color: Colors.white
           ),
           height: 147,width: 147,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: AppColors.flightButtonGradient,
-              shape: BoxShape.circle,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              customBorder: CircleBorder(),
+              splashColor: Colors.green,
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: AppColors.flightButtonGradient,
+                  shape: BoxShape.circle,
+                ),
+                child: Text("FLY"),
+              ),
+              onTap: (){
+
+              },
             ),
-          ),
+          )
         )
       ],
     );

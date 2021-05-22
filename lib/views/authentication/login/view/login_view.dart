@@ -42,7 +42,6 @@ class LoginView extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         child: Text("LOG IN"),
                         onTap: (){
-                          print("yeah");
                         },
                         ),
                     ),
