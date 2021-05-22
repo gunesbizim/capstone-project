@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'signup_view_model.dart';
+part of 'signUp_view_model.dart';
 
 // **************************************************************************
 // StoreGenerator
