@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: "Roboto",
-        
       ),
       home: LoginView(),
       onGenerateRoute: NavigationRoute.instance.generateRoute,

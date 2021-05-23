@@ -21,22 +21,27 @@ class LoginView extends StatelessWidget {
               child: Scaffold(
                   backgroundColor: Colors.transparent,
                   body: SingleChildScrollView(
-                                      child: Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
                           height: height * 0.13,
                         ),
                         ZettLogo(height: height * 0.30),
-                        SizedBox(height: height * 0.03, child: Text("FLY HIGH", style: TextStyle(color: AppColors.primaryBlue,fontSize: 16),)),
+                        SizedBox(
+                            height: height * 0.03,
+                            child: Text(
+                              "FLY HIGH",
+                              style: TextStyle(
+                                  color: AppColors.primaryBlue, fontSize: 16),
+                            )),
                         SizedBox(height: height * 0.01),
                         Container(
-                          width: data.size.width*0.75,
+                          width: data.size.width * 0.75,
                           child: Column(
-                            
                             children: [
                               buildGeneralForm(value),
-                              buildLoginButton(data,value)
+                              buildLoginButton(data, value)
                             ],
                           ),
                         )
@@ -46,33 +51,38 @@ class LoginView extends StatelessWidget {
               alignment: Alignment.center,
             ),
         onModelReady: (model) {
-                        model.setContext(context);
-                        model.init();
+          model.setContext(context);
+          model.init();
         });
   }
 
-  Observer buildLoginButton(MediaQueryData data,LoginViewModel loginViewModel) {
+  Observer buildLoginButton(
+      MediaQueryData data, LoginViewModel loginViewModel) {
     return Observer(
-      builder: (_){
+      builder: (_) {
         return Container(
-                height: data.size.height*0.05,
-                width: data.size.width*0.27,
-                child: Material(
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(30)),
-                  color: AppColors.primaryBlue,
-                  child: InkWell(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(30)),
-                    child: Center(child: Text("LOG IN", style:TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 16,))),
-                    onTap: loginViewModel.isLoading?
-                      null:
-                      () {
-                        loginViewModel.login();
-                      },
-                  ),
-                ),
-              );
+          height: data.size.height * 0.05,
+          width: data.size.width * 0.27,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            color: AppColors.primaryBlue,
+            child: InkWell(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              child: Center(
+                  child: Text("LOG IN",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ))),
+              onTap: loginViewModel.isLoading
+                  ? null
+                  : () {
+                      loginViewModel.login();
+                    },
+            ),
+          ),
+        );
       },
     );
   }
@@ -82,7 +92,6 @@ class LoginView extends StatelessWidget {
       key: loginViewModel.globalFormState,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
-        
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
@@ -98,17 +107,16 @@ class LoginView extends StatelessWidget {
   }
 
   TextFormField buildPasswordField(LoginViewModel loginViewModel) {
-      return TextFormField( 
-        style: TextStyle(color: Colors.white
-        ),
-        controller: loginViewModel.passwordController,
-        obscureText: true,
-        decoration: buildInputDecoration("Password", "Zett123!"),
-        validator: (value) {
-          if (value == null || value.isEmpty) return "Password can not be empty!";
-          return PasswordValidator.validate(value) ? null : "Invalid Password";
-        },
-      );
+    return TextFormField(
+      style: TextStyle(color: Colors.white),
+      controller: loginViewModel.passwordController,
+      obscureText: true,
+      decoration: buildInputDecoration("Password", "Zett123!"),
+      validator: (value) {
+        if (value == null || value.isEmpty) return "Password can not be empty!";
+        return PasswordValidator.validate(value) ? null : "Invalid Password";
+      },
+    );
   }
 
   TextFormField buildEmailField(LoginViewModel loginViewModel) {
@@ -130,7 +138,7 @@ class LoginView extends StatelessWidget {
       labelText: labelText,
       hintText: hintext,
       alignLabelWithHint: false,
-      contentPadding: EdgeInsets.symmetric(vertical:3, horizontal: 16),
+      contentPadding: EdgeInsets.symmetric(vertical: 3, horizontal: 16),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: BorderSide(
@@ -156,7 +164,6 @@ class LoginView extends StatelessWidget {
       fillColor: Color.fromRGBO(255, 255, 255, 0.15),
       hintStyle: TextStyle(color: Color.fromRGBO(203, 203, 203, 1)),
       labelStyle: TextStyle(color: Color.fromRGBO(203, 203, 203, 1)),
-      
     );
   }
 }

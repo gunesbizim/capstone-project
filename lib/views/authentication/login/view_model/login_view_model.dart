@@ -8,7 +8,6 @@ import 'package:mobx/mobx.dart';
 import 'package:capstone_project/core/constants/route_constants.dart';
 part 'login_view_model.g.dart';
 
-
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
 
 abstract class _LoginViewModelBase with Store, BaseViewModel {
@@ -29,6 +28,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
     emailController = TextEditingController();
     passwordController = TextEditingController();
   }
+
   @observable
   bool isLoading = false;
 
@@ -40,25 +40,25 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
     //isLoadingChange();
     print("test123123");
     print(globalFormState);
-    if(globalFormState.currentState!.validate()){
-          print("2");
+    if (globalFormState.currentState!.validate()) {
+      print("2");
 
-      final response = await loginService.signIn(email: emailController!.text, password: passwordController!.text);
-      if(response["userCredential"]==null){
-            print(response["message"]);
+      final response = await loginService.signIn(
+          email: emailController!.text, password: passwordController!.text);
+      if (response["userCredential"] != null) {
+        print(response["message"]);
 
         //TODO: Sow snackbar
-      //isLoadingChange(); zett@zett.com
-           print("4");
+        //isLoadingChange(); zett@zett.com
+        print("4");
 
         navigationService.navigateToPageClear(
-       path: RouteConstants.HOME_PAGE,
-       data: response["userCredential"]
-     );
-     }
-    }
-    else isLoadingChange();
-
+            path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
+      } else {
+        print(response["message"]);
+      }
+    } //else
+    //isLoadingChange();
   }
 
   @action
