@@ -21,8 +21,8 @@ class FlightButton extends StatelessWidget {
         buildWings(),
         Container(
           decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-          height: 147,
+            BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          height: 147,//todo calculate dynamically
           width: 147,
           child: Material(
             color: Colors.transparent,
@@ -44,6 +44,9 @@ class FlightButton extends StatelessWidget {
                       fontWeight: FontWeight.w100),
                 ),
               ),
+              onTap: (){
+
+              },
             ),
           ),
         )

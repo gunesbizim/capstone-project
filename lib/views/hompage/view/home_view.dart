@@ -1,7 +1,13 @@
+import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
+import 'package:capstone_project/core/components/home_button.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
+import 'package:capstone_project/views/authentication/login/view_model/login_view_model.dart';
+import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 class HomeView extends StatelessWidget {
   static const String _ppURL =
@@ -14,6 +20,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaQueryData queryData = MediaQuery.of(context);
+    print(queryData.size.height);
     return buildBaseContainer(context, queryData);
   }
 
@@ -29,6 +36,12 @@ class HomeView extends StatelessWidget {
   Scaffold buildScaffold(MediaQueryData queryData) {
     return Scaffold(
       backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.red.shade900 ,
+        foregroundColor: Colors.transparent,
+
+        actions: <Widget>[GestureDetector(child: Icon(Icons.logout_sharp,color: Colors.white,))],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -42,10 +55,8 @@ class HomeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [FlightButton()],
           ),
+          HomeButton(),
         ],
-      ),
-      appBar: AppBar(
-        actions: <Widget>[GestureDetector(child: Icon(Icons.logout_sharp))],
       ),
     );
   }
@@ -80,7 +91,9 @@ class HomeView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [],
+            children: [
+              
+            ],
           )),
     );
   }
@@ -103,11 +116,56 @@ class HomeView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [],
+            children: [
+               BaseView(
+                 viewModel: FlightLogViewModel(), 
+                 onPageBuilder: (BuildContext context, FlightLogViewModel value){
+                   return Observer(
+                     builder: (_){
+                       return Column(
+                         children: [
+                           const Text("Last Flight", style: TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 35)),
+                           Text(value.lastFlight,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 24),),
+                           TextButton(onPressed: (){
+                             value.getLastDate();
+                           }, child: Text("See Other"))
+                         ],
+                       );
+                     }
+                   );
+                 },
+                 onModelReady: (model){
+
+                 })
+            ],
           )),
     );
   }
-
+  Observer buildSeeAllFlights(LoginViewModel loginViewModel) {
+      return Observer(
+        builder: (_){
+          return Container(
+                  height: 20,
+                  width: 100,
+                  child: Material(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(30)),
+                    color: AppColors.primaryBlue,
+                    child: InkWell(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(30)),
+                      child: Text("See All"),
+                      onTap: loginViewModel.isLoading?
+                        null:
+                        () {
+                          loginViewModel.login();
+                        },
+                    ),
+                  ),
+                );
+        },
+      );
+  }
   Column buildUserNameFlightTime() {
     return Column(
       //Name and flight time, second row
