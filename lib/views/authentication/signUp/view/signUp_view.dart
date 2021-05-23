@@ -31,15 +31,22 @@ class SignupView extends StatelessWidget {
                           ),
                           ZettLogo(height: height * 0.3),
                           SizedBox(
-                            height: height * 0.03,
-                            child: Text("FLY HIGH"),
+                            height: height * 0.05,
+                            child: Text(
+                              "FLY HIGH",
+                              style: TextStyle(
+                                  color: AppColors.primaryBlue, fontSize: 16),
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Container(
-                                child: buildForm(value),
-                              ),
-                            ],
+                          Container(
+                            width: data.size.width * 0.75,
+                            child: Column(
+                              children: [
+                                Container(
+                                  child: buildForm(value, data),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -50,21 +57,34 @@ class SignupView extends StatelessWidget {
         });
   }
 
-  Form buildForm(SignupViewModel model) {
+  Form buildForm(SignupViewModel model, MediaQueryData data) {
     return Form(
       key: model.globalFormState,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
-          buildFullNameField(model),
-          buildEmailField(model),
-          buildPasswordField(model),
-          buildSignUpButton(model)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: buildFullNameField(model),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: buildEmailField(model),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: buildPasswordField(model),
+          ),
+          Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: buildSignUpButton(model, data)),
         ],
       ),
     );
   }
 
+//  WidgetsFlutterBinding.ensureInitialized();
+  //await Firebase.initializeApp();
   TextFormField buildEmailField(SignupViewModel signUpViewModel) {
     return TextFormField(
       controller: signUpViewModel.emailCntrl,
@@ -92,46 +112,59 @@ class SignupView extends StatelessWidget {
   Column buildPasswordField(SignupViewModel signUpViewModel) {
     return Column(
       children: [
-        TextFormField(
-          controller: signUpViewModel.pwCntrl,
-          obscureText: true,
-          decoration: buildInputDecoration("Password", "Zett123!"),
-          validator: (value) {
-            if (value == null || value.isEmpty)
-              return "Password can not be empty!";
-            return PasswordValidator.validate(value)
-                ? null
-                : "Invalid Password";
-          },
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: TextFormField(
+            controller: signUpViewModel.pwCntrl,
+            obscureText: true,
+            decoration: buildInputDecoration("Password", "Zett123!"),
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return "Password can not be empty!";
+              return PasswordValidator.validate(value)
+                  ? null
+                  : "Invalid Password";
+            },
+          ),
         ),
-        TextFormField(
-          controller: signUpViewModel.pw2Cntrl,
-          obscureText: true,
-          decoration: buildInputDecoration("Confirm Password", "Zett123!"),
-          validator: (value) {
-            if (value == null || value.isEmpty)
-              return "Confirm password can not be empty!";
-            return PasswordValidator.validate(value)
-                ? null
-                : "Invalid confirm password";
-          },
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: TextFormField(
+            controller: signUpViewModel.pw2Cntrl,
+            obscureText: true,
+            decoration: buildInputDecoration("Confirm Password", "Zett123!"),
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return "Confirm password can not be empty!";
+              return PasswordValidator.validate(value)
+                  ? null
+                  : "Invalid confirm password";
+            },
+          ),
         )
       ],
     );
   }
 
-  Observer buildSignUpButton(SignupViewModel signUpViewModel) {
+  Observer buildSignUpButton(
+      SignupViewModel signUpViewModel, MediaQueryData data) {
     return Observer(
       builder: (_) {
         return Container(
-          height: 20,
-          width: 100,
+          height: data.size.height * 0.05,
+          width: data.size.width * 0.27,
           child: Material(
             borderRadius: BorderRadius.all(Radius.circular(30)),
             color: AppColors.primaryBlue,
             child: InkWell(
               borderRadius: BorderRadius.all(Radius.circular(30)),
-              child: Text("SIGN UP"),
+              child: Center(
+                  child: Text("SIGN UP",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ))),
               onTap: signUpViewModel.isLoading
                   ? null
                   : () {
@@ -149,6 +182,7 @@ class SignupView extends StatelessWidget {
       labelText: labelText,
       hintText: hintext,
       alignLabelWithHint: false,
+      contentPadding: EdgeInsets.symmetric(vertical: 3, horizontal: 16),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         borderSide: BorderSide(
@@ -173,6 +207,7 @@ class SignupView extends StatelessWidget {
       filled: true,
       fillColor: Color.fromRGBO(255, 255, 255, 0.15),
       hintStyle: TextStyle(color: Color.fromRGBO(203, 203, 203, 1)),
+      labelStyle: TextStyle(color: Color.fromRGBO(203, 203, 203, 1)),
     );
   }
 }

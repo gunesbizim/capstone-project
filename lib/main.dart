@@ -1,42 +1,35 @@
-import 'package:capstone_project/services/FirebaseAuth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:capstone_project/core/components/control_pad/control_pad.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(ZettApp());
 }
 
-class MyApp extends StatelessWidget {
+class ZettApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<AuthenticationService>(
-          create: (_) => AuthenticationService(FirebaseAuth.instance),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-         fontFamily: 'RobotoThin'
-        ),
-        home: AuthenticationWrapper(),
-      ),
+    return MaterialApp(
+      title: 'Control Pad Example',
+      home: HomePage(),
     );
   }
 }
 
-class AuthenticationWrapper extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final firebaseUser = context.watch<User>();
-    if (firebaseUser != null) {
-      return Text("Signed in");
-    }
-    return Text("Not signed in");
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Control Pad Example'),
+      ),
+      body: Container(
+        child: JoystickView(
+          size: 200,
+        ),
+      ),
+    );
   }
 }
