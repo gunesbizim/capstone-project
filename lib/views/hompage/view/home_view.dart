@@ -1,24 +1,19 @@
 
+import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
 import 'package:capstone_project/core/components/home_button.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
-import 'package:capstone_project/core/constants/route_constants.dart';
-import 'package:capstone_project/services/navigation/navigation_service.dart';
-import 'package:capstone_project/views/authentication/login/view_model/login_view_model.dart';
+import 'package:capstone_project/core/constants/text_constants.dart';
+import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
+import 'package:capstone_project/views/hompage/view_model/profile/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 
 class HomeView extends StatelessWidget {
-  static const String _ppURL =
-      "https://teknokupur.net/wp-content/uploads/2020/07/4-2-scaled.jpg";
-  String _usersName = "Robert Downey Jr.";
-  String _flightTime = "30M 00S";
-  //TODO: update _isValidURL
-  bool _isValidURL = true;
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,34 +43,62 @@ class HomeView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: buildProfilePictureRow(queryData),
-          ),
-          buildUserNameFlightTime(),
+          buildProfileData(context,queryData),
+          SizedBox(height:queryData.size.height*0.013),
           buildThirdRow(context,queryData),
+          SizedBox(height:queryData.size.height*0.06),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [FlightButton()],
           ),
-          HomeButton(),
+          Expanded(
+                      child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Developed by Exarillion & Ocliptus",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w200),),
+              )]),
+          ),
         ],
       ),
     );
+  }
+
+  BaseView<ProfileViewModel> buildProfileData(BuildContext context, MediaQueryData queryData) {
+    return BaseView<ProfileViewModel>(
+      viewModel: ProfileViewModel(), onPageBuilder: (BuildContext context, ProfileViewModel model){
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: buildProfilePictureRow(queryData,model),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0,bottom:10.0),
+              child: buildUserNameFlightTime(model),
+            ),
+          ],
+        );
+      }, onModelReady: (model){
+        model.setContext(context);
+        model.init();
+
+      });
   }
 
   Row buildThirdRow(BuildContext context, MediaQueryData queryData) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        buildConnectedDroneCard(queryData),
+        buildConnectedDroneCard(context, queryData),
         SizedBox(width: queryData.size.width * 0.10),
         buildLasFlightCard(context,queryData)
       ],
     );
   }
 
-  Card buildConnectedDroneCard(MediaQueryData queryData) {
+  Card buildConnectedDroneCard(BuildContext context, MediaQueryData queryData) {
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -95,7 +118,16 @@ class HomeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              
+              Text("Status", style: TextConstants.home_screen_35),
+              BaseView<DroneConnectionViewModel>(
+                viewModel: DroneConnectionViewModel(), 
+                onPageBuilder: (BuildContext context, DroneConnectionViewModel viewModel){
+                  return Container();
+                },
+                onModelReady: (model){
+                  model.setContext(context);
+                  model.init();
+                })
             ],
           )),
     );
@@ -124,7 +156,7 @@ class HomeView extends StatelessWidget {
               BaseView<FlightLogViewModel>(//!Flight Log View Model initializaion
                  viewModel: FlightLogViewModel(), 
                  onPageBuilder: (BuildContext context, FlightLogViewModel value){
-                   return lastFlightObserver(context,value);
+                   return lastFlightObserver(context,value, queryData);
                  },
                  onModelReady: (model){
                    model.setContext(context);
@@ -137,25 +169,26 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value){
+  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value, MediaQueryData queryData){
     return Observer(
                      builder: (_){
                        return Column(
                          children: [
-                           const Text("Last Flight", style: TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 35)),
-                           Text(value.lastFlight,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 24),),
-                           buildSeeAllFlights(value)
+                           const Text("Last Flight", style: TextConstants.home_screen_35),
+                           Text(value.lastFlight,style: TextConstants.home_screen_24 ,),
+                           SizedBox(height:queryData.size.height*0.03),
+                           buildSeeAllFlights(value,queryData)
                          ],
                        );
                      }
                    );
   }
-  Observer buildSeeAllFlights(FlightLogViewModel flightLogWiewModel) {
+  Observer buildSeeAllFlights(FlightLogViewModel flightLogWiewModel,MediaQueryData queryData) {
       return Observer(
         builder: (_){
           return Container(
-                  height: 20,
-                  width: 100,
+                  height: queryData.size.height*0.034,
+                  width: queryData.size.width*0.24,
                   child: Material(
                     borderRadius:
                         BorderRadius.all(Radius.circular(30)),
@@ -164,8 +197,9 @@ class HomeView extends StatelessWidget {
                       borderRadius:
                           BorderRadius.all(Radius.circular(30)),
                       child: Center(
-                        child: Text("See All",
-                        style: TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 20,),),
+                        child: Text(
+                          "See All",
+                          style: TextConstants.home_screen_20,),
                       ),
                       onTap: flightLogWiewModel.isLoading?
                         null:
@@ -178,44 +212,53 @@ class HomeView extends StatelessWidget {
         },
       );
   }
-  Column buildUserNameFlightTime() {
+  Column buildUserNameFlightTime(ProfileViewModel model) {
     return Column(
       //Name and flight time, second row
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text(_usersName), Text("Flight Time: ${_flightTime}")],
+      children: [
+        Text(model.userName, style: TextConstants.home_screen_24,), 
+        Text("Flight Time: ${model.flightTime}",style: TextConstants.home_screen_14,)],
     );
   }
 
-  Row buildProfilePictureRow(MediaQueryData queryData) {
-    return Row(
-      //profile picture, first row
-      children: [
-        Row(
-          //left wing image
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Image(
-                image: AssetImage('assets/images/left_wing.png'),
-                //TODO: Calculate it in another way.
-                height: queryData.size.width * 0.32 * 1.05,
-                width: queryData.size.width * 0.32),
-          ],
-        ),
-        _isValidURL
-            ? ProfilePicture(ppURL: _ppURL, screenHeight: queryData.size.height)
-            : Container(), //if user hasa pp, display it otherwise display add picture
-        Row(
-          //right wing image
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image(
-                image: AssetImage('assets/images/right_wing.png'),
-                //TODO: Calculate it in another way.
-                height: queryData.size.width * 0.32 * 1.05,
-                width: queryData.size.width * 0.32),
-          ],
-        )
-      ],
-    );
+  Observer buildProfilePictureRow(MediaQueryData queryData,ProfileViewModel profileViewModel) {
+    return Observer(
+          builder: (BuildContext context){
+            return  Row(
+              //profile picture, first row
+              children: [
+                Row(
+                  //left wing image
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image(
+                        image: AssetImage('assets/images/left_wing.png'),
+                        //TODO: Calculate it in another way.
+                        height: queryData.size.width * 0.32 * 1.05,
+                        width: queryData.size.width * 0.32),
+                  ],
+                ),
+                  profileViewModel.hasPP?
+                  ProfilePicture(ppURL: "", screenHeight: queryData.size.height,imageFile: profileViewModel.image)
+                    //ProfilePicture(ppURL: profileViewModel.ppURL, screenHeight: queryData.size.height)
+                    :Container(child: ElevatedButton(child: Text("Add Photo"), onPressed: (){
+                      profileViewModel.selectImage();
+                    },),), //if user hasa pp, display it otherwise display add picture
+                Row(
+                  //right wing image
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image(
+                        image: AssetImage('assets/images/right_wing.png'),
+                        //TODO: Calculate it in another way.
+                        height: queryData.size.width * 0.32 * 1.05,
+                        width: queryData.size.width * 0.32),
+                  ],
+                )
+              ],
+            );
+          },
+    ); 
   }
 }

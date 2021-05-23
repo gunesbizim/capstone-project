@@ -1,5 +1,6 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
+import 'package:capstone_project/core/constants/text_constants.dart';
 import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +38,7 @@ class FlightButton extends StatelessWidget {
                 ),
                 child: Text(
                   "FLY",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 50,
-                      fontFamily: "Roboto",
-                      fontWeight: FontWeight.w100),
+                  style: TextConstants.home_screen_50,
                 ),
               ),
               onTap: (){
