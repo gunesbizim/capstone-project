@@ -9,12 +9,6 @@ class ZettLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-       shape: BoxShape.circle,
-       color: Colors.red, 
-      ),
-      height: height,
-    );
+    return Center(child: Image.asset("assets/images/logo.png"));
   }
 }

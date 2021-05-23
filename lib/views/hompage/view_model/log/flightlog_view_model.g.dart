@@ -24,6 +24,21 @@ mixin _$FlightLogViewModel on _FlightLogViewModelBase, Store {
     });
   }
 
+  final _$isLoadingAtom = Atom(name: '_FlightLogViewModelBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   final _$_FlightLogViewModelBaseActionController =
       ActionController(name: '_FlightLogViewModelBase');
 
@@ -50,9 +65,21 @@ mixin _$FlightLogViewModel on _FlightLogViewModelBase, Store {
   }
 
   @override
+  void loadList() {
+    final _$actionInfo = _$_FlightLogViewModelBaseActionController.startAction(
+        name: '_FlightLogViewModelBase.loadList');
+    try {
+      return super.loadList();
+    } finally {
+      _$_FlightLogViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-lastFlight: ${lastFlight}
+lastFlight: ${lastFlight},
+isLoading: ${isLoading}
     ''';
   }
 }

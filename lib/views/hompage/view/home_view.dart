@@ -4,6 +4,8 @@ import 'package:capstone_project/core/components/fly_button.dart';
 import 'package:capstone_project/core/components/home_button.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
+import 'package:capstone_project/core/constants/route_constants.dart';
+import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/login/view_model/login_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +69,7 @@ class HomeView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         buildConnectedDroneCard(queryData),
-        SizedBox(width: queryData.size.width * .10),
+        SizedBox(width: queryData.size.width * 0.10),
         buildLasFlightCard(context,queryData)
       ],
     );
@@ -100,6 +102,7 @@ class HomeView extends StatelessWidget {
   }
 
   Card buildLasFlightCard(BuildContext context, MediaQueryData queryData) {
+    print(queryData.size.width);
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -118,37 +121,36 @@ class HomeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               BaseView<FlightLogViewModel>(
+              BaseView<FlightLogViewModel>(//!Flight Log View Model initializaion
                  viewModel: FlightLogViewModel(), 
                  onPageBuilder: (BuildContext context, FlightLogViewModel value){
-                   return lastFlightObserver(value);
+                   return lastFlightObserver(context,value);
                  },
                  onModelReady: (model){
                    model.setContext(context);
                    model.init();
 
-                 })
-            ],
-          )),
+                 })            
+              ],
+          )
+          ),
     );
   }
 
-  Observer lastFlightObserver(FlightLogViewModel value){
+  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value){
     return Observer(
                      builder: (_){
                        return Column(
                          children: [
                            const Text("Last Flight", style: TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 35)),
                            Text(value.lastFlight,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 24),),
-                           TextButton(onPressed: (){
-                             value.getLastDate();
-                           }, child: Text("See Other"))
+                           buildSeeAllFlights(value)
                          ],
                        );
                      }
                    );
   }
-  Observer buildSeeAllFlights(LoginViewModel loginViewModel) {
+  Observer buildSeeAllFlights(FlightLogViewModel flightLogWiewModel) {
       return Observer(
         builder: (_){
           return Container(
@@ -161,11 +163,14 @@ class HomeView extends StatelessWidget {
                     child: InkWell(
                       borderRadius:
                           BorderRadius.all(Radius.circular(30)),
-                      child: Text("See All"),
-                      onTap: loginViewModel.isLoading?
+                      child: Center(
+                        child: Text("See All",
+                        style: TextStyle(color: Colors.white,fontWeight: FontWeight.w100,fontSize: 20,),),
+                      ),
+                      onTap: flightLogWiewModel.isLoading?
                         null:
                         () {
-                          loginViewModel.login();
+                          flightLogWiewModel.loadList();
                         },
                     ),
                   ),

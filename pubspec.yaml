@@ -38,6 +38,7 @@ dependencies:
   json_serializable: ^4.1.2
   provider: ^5.0.0
   flutter_mobx: ^2.0.0-nullsafety.3
+  flutter_svg: ^0.22.0
 
 
 dev_dependencies:
@@ -56,6 +57,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/images/logo.png
     - assets/images/left_wing.png
     - assets/images/right_wing.png
 

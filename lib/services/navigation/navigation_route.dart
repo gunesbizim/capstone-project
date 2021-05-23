@@ -1,4 +1,5 @@
 import 'package:capstone_project/core/constants/route_constants.dart';
+import 'package:capstone_project/views/flight_list/view/flight_list_view.dart';
 import 'package:capstone_project/views/hompage/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +15,8 @@ class NavigationRoute {
     switch (args.name) {
       case RouteConstants.HOME_PAGE:
         return normalNavigate(HomeView(),args);
+      case RouteConstants.LOGS:
+        return normalNavigate(FlightListView(), args);
       default: return MaterialPageRoute(
       builder: (context) => Scaffold(),//TODO: add error page
     );
