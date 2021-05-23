@@ -13,7 +13,7 @@ class SignupView extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData data = MediaQuery.of(context);
     double height = data.size.height;
-    return BaseView(
+    return BaseView<SignupViewModel>(
         viewModel: SignupViewModel(),
         onPageBuilder: (BuildContext context, SignupViewModel value) =>
             Container(
@@ -44,27 +44,30 @@ class SignupView extends StatelessWidget {
                         ],
                       ),
                     ))),
-        onModelReady: (model) {});
+        onModelReady: (model) {
+          model.setContext(context);
+          model.init();
+        });
   }
 
   Form buildForm(SignupViewModel model) {
     return Form(
-      
       key: model.globalFormState,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
-          buildFullNameField(),
-          buildEmailField(),
-          buildPasswordField(),
+          buildFullNameField(model),
+          buildEmailField(model),
+          buildPasswordField(model),
           buildSignUpButton(model)
         ],
       ),
     );
   }
 
-  TextFormField buildEmailField() {
+  TextFormField buildEmailField(SignupViewModel signUpViewModel) {
     return TextFormField(
+      controller: signUpViewModel.emailCntrl,
       decoration: buildInputDecoration("Email", "example@example.com"),
       validator: (value) {
         if (value == null || value.isEmpty) return "Email can not be empty!";
@@ -75,9 +78,9 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  TextFormField buildFullNameField() {
+  TextFormField buildFullNameField(SignupViewModel signUpViewModel) {
     return TextFormField(
-      obscureText: true,
+      controller: signUpViewModel.nameCntrl,
       decoration: buildInputDecoration("Full Name", "Zett Flies"),
       validator: (value) {
         if (value == null || value.isEmpty)
@@ -86,10 +89,11 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  Column buildPasswordField() {
+  Column buildPasswordField(SignupViewModel signUpViewModel) {
     return Column(
       children: [
         TextFormField(
+          controller: signUpViewModel.pwCntrl,
           obscureText: true,
           decoration: buildInputDecoration("Password", "Zett123!"),
           validator: (value) {
@@ -101,6 +105,7 @@ class SignupView extends StatelessWidget {
           },
         ),
         TextFormField(
+          controller: signUpViewModel.pw2Cntrl,
           obscureText: true,
           decoration: buildInputDecoration("Confirm Password", "Zett123!"),
           validator: (value) {
@@ -115,32 +120,29 @@ class SignupView extends StatelessWidget {
     );
   }
 
-  Observer  buildSignUpButton(SignupViewModel signUpViewModel) {
+  Observer buildSignUpButton(SignupViewModel signUpViewModel) {
     return Observer(
-      builder: (_){
+      builder: (_) {
         return Container(
-                height: 20,
-                width: 100,
-                child: Material(
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(30)),
-                  color: AppColors.primaryBlue,
-                  child: InkWell(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(30)),
-                    child: Text("SIGN UP"),
-                    //onTap: signUpViewModel.isLoading?
-                      //null:
-                      //() {
-                        //signUpViewModel.signUp();
-                      //},
-                  ),
-                ),
-              );
+          height: 20,
+          width: 100,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            color: AppColors.primaryBlue,
+            child: InkWell(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              child: Text("SIGN UP"),
+              onTap: signUpViewModel.isLoading
+                  ? null
+                  : () {
+                      signUpViewModel.signUp();
+                    },
+            ),
+          ),
+        );
       },
     );
   }
-
 
   InputDecoration buildInputDecoration(String labelText, String hintext) {
     return InputDecoration(
