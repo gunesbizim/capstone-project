@@ -1,3 +1,4 @@
+
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
 import 'package:capstone_project/core/components/home_button.dart';
@@ -29,11 +30,11 @@ class HomeView extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: AppColors.backgroundGradient,
       ),
-      child: buildScaffold(queryData),
+      child: buildScaffold(ctx, queryData),
     );
   }
 
-  Scaffold buildScaffold(MediaQueryData queryData) {
+  Scaffold buildScaffold(BuildContext context, MediaQueryData queryData) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -50,7 +51,7 @@ class HomeView extends StatelessWidget {
             child: buildProfilePictureRow(queryData),
           ),
           buildUserNameFlightTime(),
-          buildThirdRow(queryData),
+          buildThirdRow(context,queryData),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [FlightButton()],
@@ -61,13 +62,13 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Row buildThirdRow(MediaQueryData queryData) {
+  Row buildThirdRow(BuildContext context, MediaQueryData queryData) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         buildConnectedDroneCard(queryData),
         SizedBox(width: queryData.size.width * .10),
-        buildLasFlightCard(queryData)
+        buildLasFlightCard(context,queryData)
       ],
     );
   }
@@ -98,7 +99,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Card buildLasFlightCard(MediaQueryData queryData) {
+  Card buildLasFlightCard(BuildContext context, MediaQueryData queryData) {
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -117,10 +118,23 @@ class HomeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               BaseView(
+               BaseView<FlightLogViewModel>(
                  viewModel: FlightLogViewModel(), 
                  onPageBuilder: (BuildContext context, FlightLogViewModel value){
-                   return Observer(
+                   return lastFlightObserver(value);
+                 },
+                 onModelReady: (model){
+                   model.setContext(context);
+                   model.init();
+
+                 })
+            ],
+          )),
+    );
+  }
+
+  Observer lastFlightObserver(FlightLogViewModel value){
+    return Observer(
                      builder: (_){
                        return Column(
                          children: [
@@ -133,13 +147,6 @@ class HomeView extends StatelessWidget {
                        );
                      }
                    );
-                 },
-                 onModelReady: (model){
-
-                 })
-            ],
-          )),
-    );
   }
   Observer buildSeeAllFlights(LoginViewModel loginViewModel) {
       return Observer(

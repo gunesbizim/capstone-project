@@ -14,13 +14,15 @@ abstract class _FlightLogViewModelBase with Store, BaseViewModel{
 
   @override
   void setContext(BuildContext context) => this.context = context;
+
   @override
   void init() {
     print("init");
+    getLastDate();
   }
   @action
   void getLastDate(){
-    changeDate("dsfdgfh");
+    changeDate("23.05.2020");
   }
   @action
   void changeDate(String date){
