@@ -21,6 +21,7 @@ class AuthenticationService {
     try {
       var userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      print(userCredential);
       return {"message": 'Sign In Completed', "userCredential": userCredential};
     } on FirebaseAuthException catch (e) {
       return {"message": e.message, "userCredential": null};
