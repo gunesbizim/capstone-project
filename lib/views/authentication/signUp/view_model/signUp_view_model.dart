@@ -12,7 +12,7 @@ part 'signup_view_model.g.dart';
 class SignupViewModel = _SignupViewModelBase with _$SignupViewModel;
 
 abstract class _SignupViewModelBase with Store, BaseViewModel {
-   GlobalKey<FormState> globalFormState = GlobalKey();
+  GlobalKey<FormState> globalFormState = GlobalKey();
   GlobalKey<ScaffoldState> globalScaffoldState = GlobalKey();
   late AuthenticationService signUpService;
   late FireStoreService fireStoreService;
@@ -59,7 +59,8 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
           final FirebaseAuth auth = FirebaseAuth.instance;
           final User? user = auth.currentUser;
           final uid = user!.uid;
-          fireStoreService.setUserData(uid, nameCntrl!.text, emailCntrl!.text);
+          fireStoreService.setUserData(
+              uid, nameCntrl!.text, emailCntrl!.text, "No flight yet");
           //TODO: Sow snackbar
           //isLoadingChange(); zett@zett.com
           print("5");
