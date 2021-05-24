@@ -1,8 +1,7 @@
 
-import 'package:capstone_project/core/base/model/base_view_model.dart';
+
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
-import 'package:capstone_project/core/components/home_button.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
 import 'package:capstone_project/core/constants/text_constants.dart';
@@ -121,8 +120,19 @@ class HomeView extends StatelessWidget {
               Text("Status", style: TextConstants.home_screen_35),
               BaseView<DroneConnectionViewModel>(
                 viewModel: DroneConnectionViewModel(), 
-                onPageBuilder: (BuildContext context, DroneConnectionViewModel viewModel){
-                  return Container();
+                onPageBuilder: (BuildContext context, DroneConnectionViewModel dcvm){
+                  return Observer(
+                    builder: (_)  {
+                      return Column(
+                      children: [
+                        ElevatedButton(child: Text("Check Connection"),onPressed: () => dcvm.checkConnection(),),
+                        Text(dcvm.status
+                          //dcvm.status
+                          ),
+
+                      ],
+                    );}
+                  );
                 },
                 onModelReady: (model){
                   model.setContext(context);
@@ -156,7 +166,12 @@ class HomeView extends StatelessWidget {
               BaseView<FlightLogViewModel>(//!Flight Log View Model initializaion
                  viewModel: FlightLogViewModel(), 
                  onPageBuilder: (BuildContext context, FlightLogViewModel value){
-                   return lastFlightObserver(context,value, queryData);
+                   return Column(
+                     children: [
+                       lastFlightObserver(context,value, queryData),
+                      
+                     ],
+                   );
                  },
                  onModelReady: (model){
                    model.setContext(context);
@@ -177,7 +192,11 @@ class HomeView extends StatelessWidget {
                            const Text("Last Flight", style: TextConstants.home_screen_35),
                            Text(value.lastFlight,style: TextConstants.home_screen_24 ,),
                            SizedBox(height:queryData.size.height*0.03),
-                           buildSeeAllFlights(value,queryData)
+                           buildSeeAllFlights(value,queryData),
+                            ElevatedButton(child: Text("changeStatues"),
+                       onPressed: () {
+                          value.setLastFlight("31.31.3131");
+                          },)
                          ],
                        );
                      }
@@ -239,12 +258,14 @@ class HomeView extends StatelessWidget {
                         width: queryData.size.width * 0.32),
                   ],
                 ),
-                  profileViewModel.hasPP?
-                  ProfilePicture(ppURL: "", screenHeight: queryData.size.height,imageFile: profileViewModel.image)
+                  
+                  ProfilePicture(
+                    ppURL: profileViewModel.ppURL, 
+                    screenHeight: queryData.size.height,
+                    hasPP: profileViewModel.hasPP, 
+                    selectImage: profileViewModel.selectImage),
                     //ProfilePicture(ppURL: profileViewModel.ppURL, screenHeight: queryData.size.height)
-                    :Container(child: ElevatedButton(child: Text("Add Photo"), onPressed: (){
-                      profileViewModel.selectImage();
-                    },),), //if user hasa pp, display it otherwise display add picture
+                     //if user hasa pp, display it otherwise display add picture
                 Row(
                   //right wing image
                   mainAxisAlignment: MainAxisAlignment.start,

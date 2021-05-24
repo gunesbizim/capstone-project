@@ -11,8 +11,8 @@ part 'signup_view_model.g.dart';
 
 class SignupViewModel = _SignupViewModelBase with _$SignupViewModel;
 
-class _SignupViewModelBase with Store, BaseViewModel {
-  GlobalKey<FormState> globalFormState = GlobalKey();
+abstract class _SignupViewModelBase with Store, BaseViewModel {
+   GlobalKey<FormState> globalFormState = GlobalKey();
   GlobalKey<ScaffoldState> globalScaffoldState = GlobalKey();
   late AuthenticationService signUpService;
   late FireStoreService fireStoreService;
@@ -41,9 +41,10 @@ class _SignupViewModelBase with Store, BaseViewModel {
 
   @observable
   bool isLockOpen = false;
+
   @action
   Future<void> signUp() async {
-    //isLoadingChange();
+    isLoadingChange();
     print("Sign Up Test123123");
     print(globalFormState);
     if (globalFormState.currentState!.validate()) {
@@ -66,8 +67,8 @@ class _SignupViewModelBase with Store, BaseViewModel {
               path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
         }
       }
-    } //else
-    //isLoadingChange();
+    } else
+      isLoadingChange();
   }
 
   @action
