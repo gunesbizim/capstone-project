@@ -40,6 +40,7 @@ dependencies:
   flutter_mobx: ^2.0.0-nullsafety.3
   flutter_svg: ^0.22.0
   image_picker: ^0.7.5+2
+  animated_splash_screen: ^1.1.0
 
 
 dev_dependencies:
@@ -61,6 +62,8 @@ flutter:
     - assets/images/logo.png
     - assets/images/left_wing.png
     - assets/images/right_wing.png
+    - assets/images/launch_image.gif
+    - assets/images/launch_image.png
 
   fonts:
     - family: Roboto
