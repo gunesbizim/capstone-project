@@ -17,6 +17,8 @@ abstract class _FlightLogViewModelBase with Store, BaseViewModel{
 
   @observable
   String lastFlight = "No Flight";
+
+  
   @observable
   bool isLoading = false;
 
@@ -43,4 +45,7 @@ abstract class _FlightLogViewModelBase with Store, BaseViewModel{
     NavigationService.instance.navigateToPage(path: RouteConstants.LOGS,data: []);
 
   }
+
+  @action
+  void setLastFlight(String lf) => lastFlight = lf;
 }

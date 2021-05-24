@@ -79,5 +79,8 @@ class AppColors{
       primaryPurple,
       Colors.white
     ]);
-
+  static const RadialGradient  addPhotoGradient = RadialGradient(
+    center: Alignment.center,
+    colors: [primaryBlue,_primaryPurple056]
+  );
 }

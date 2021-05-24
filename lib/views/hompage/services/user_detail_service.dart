@@ -11,7 +11,6 @@ final FirebaseFirestore _fireStore;
 
   UserDetailService(this._fireStore);
 
-
   Future<Map<String,String>> getUserDetails() async{
     //TODO: fetch user data from firestore and return it.
     final user = FirebaseAuth.instance.currentUser;

@@ -76,6 +76,17 @@ mixin _$FlightLogViewModel on _FlightLogViewModelBase, Store {
   }
 
   @override
+  void setLastFlight(String lf) {
+    final _$actionInfo = _$_FlightLogViewModelBaseActionController.startAction(
+        name: '_FlightLogViewModelBase.setLastFlight');
+    try {
+      return super.setLastFlight(lf);
+    } finally {
+      _$_FlightLogViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 lastFlight: ${lastFlight},
