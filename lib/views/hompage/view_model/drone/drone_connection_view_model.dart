@@ -2,17 +2,21 @@
 import 'dart:io';
 
 import 'package:capstone_project/core/base/model/base_view_model.dart';
+import 'package:capstone_project/core/enums/drone_connection_status_type_enum.dart';
+import 'package:capstone_project/views/hompage/services/drone_connection_status_service.dart';
 import 'package:mobx/mobx.dart';
 part 'drone_connection_view_model.g.dart';
 
 class DroneConnectionViewModel = _DroneConnectionViewModelBase with _$DroneConnectionViewModel;
 
 abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
-  @observable
-  String status = "Connected";
+  late final DroneConnectionStatusService dcss;
 
   @observable
-  bool isLoading = false;
+  String status = "Not Connected";
+
+  @observable
+  bool isLoading = true;
 
 
   @override
@@ -20,15 +24,24 @@ abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
 
   @override 
   void init(){
-
+    dcss = DroneConnectionStatusService(setStatus: setStatus);
+    dcss.checkStatus();
   }
   
+  @observable
+  bool isConnected = false;
+
+  
+
   @action
-  void isConnected(){
-    
+  void setStatus(DroneConnectionStatusTypeEnum statusTypesEnum, String message ){
+    if(statusTypesEnum == DroneConnectionStatusTypeEnum.SUCCESS) 
+    {
+        isLoading = false;
+        status = message;
+        isConnected= true;
+    }
   }
-
-  
   @action
   Future checkConnection() async {
     setLoading();

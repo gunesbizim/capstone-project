@@ -13,6 +13,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeView extends StatelessWidget {
 
+  final DroneConnectionViewModel droneConnectionViewModel = new DroneConnectionViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +49,19 @@ class HomeView extends StatelessWidget {
           SizedBox(height:queryData.size.height*0.06),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [FlightButton()],
+            children: [
+              BaseView<DroneConnectionViewModel>(viewModel: droneConnectionViewModel,
+               onPageBuilder: (context, model){
+                 return FlightButton(droneConnectionViewModel: droneConnectionViewModel);
+               },
+                onModelReady:(model){
+                  model.setContext(context);
+                  model.init();
+                })
+            ],
           ),
           Expanded(
-                      child: Column(
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [Padding(
@@ -119,7 +129,7 @@ class HomeView extends StatelessWidget {
             children: [
               Text("Status", style: TextConstants.home_screen_35),
               BaseView<DroneConnectionViewModel>(
-                viewModel: DroneConnectionViewModel(), 
+                viewModel: droneConnectionViewModel, 
                 onPageBuilder: (BuildContext context, DroneConnectionViewModel dcvm){
                   return Column(
                       children: [
@@ -130,24 +140,22 @@ class HomeView extends StatelessWidget {
                         ),
                           Observer(builder: (_) {
                             return  dcvm.isLoading?
-                            Column(
-                              children: [
-                                SizedBox(height:queryData.size.height*0.01),
-                                
-                                SizedBox(height:queryData.size.height*0.01,
-                                width:queryData.size.height*0.01,
+                                SizedBox(height:queryData.size.height*0.026,
+                                width:queryData.size.height*0.026,
                                         
                                   child:CircularProgressIndicator(
                                     backgroundColor: Colors.transparent,
                                     color: AppColors.primaryBlue,
+                                    strokeWidth: 2,
                                   ),
-                                ),
-                                SizedBox(height:queryData.size.height*0.01),
-                              ],
-                            ):SizedBox(
-                              height:queryData.size.height*0.03);
+                                ):SizedBox(
+                                  height:queryData.size.height*0.026,
+                                width:queryData.size.height*0.026
+                                );
                           }),
-                          buildCheckDroneConnection(dcvm, queryData)                        
+                          SizedBox(
+                            height:queryData.size.height*0.034
+                          )
                       ],
                     );
                 },
@@ -244,35 +252,10 @@ class HomeView extends StatelessWidget {
         },
       );
   }
-    Observer buildCheckDroneConnection(DroneConnectionViewModel dcvm, MediaQueryData queryData) {
-      return Observer(
-        builder: (_){
-          return Container(
-                  height: queryData.size.height*0.034,
-                  width: queryData.size.width*0.24,
-                  child: Material(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(30)),
-                    color: AppColors.primaryBlue,
-                    child: InkWell(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(30)),
-                      child: Center(
-                        child: Text(
-                          "Check",
-                          style: TextConstants.home_screen_20,),
-                      ),
-                      onTap: dcvm.isLoading?
-                        null:
-                        () {
-                          dcvm.checkConnection();
-                        },
-                    ),
-                  ),
-                );
-        },
-      );
-  }
+  
+
+
+
   Column buildUserNameFlightTime(ProfileViewModel model) {
     return Column(
       //Name and flight time, second row

@@ -1,0 +1,4 @@
+enum DroneConnectionStatusTypeEnum{
+  ERROR,
+  SUCCESS
+}

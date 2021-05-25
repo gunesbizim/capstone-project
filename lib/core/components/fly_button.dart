@@ -1,53 +1,64 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
 import 'package:capstone_project/core/constants/text_constants.dart';
+import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class FlightButton extends StatelessWidget {
+
+  final DroneConnectionViewModel droneConnectionViewModel;
+
+  FlightButton({
+    required this.droneConnectionViewModel
+  });
+
   @override
   Widget build(BuildContext context) {
-    return BaseView<StartFlightViewModel>(
-        viewModel: StartFlightViewModel(), //TODO: Tidy up!!
-        onPageBuilder: (BuildContext buildContext, StartFlightViewModel value) {
-          return buildFlightButton(value);
-        },
-        onModelReady: (model) {});
+    return buildFlightButton(context);
   }
 
-  Widget buildFlightButton(StartFlightViewModel startFlightViewModel) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        buildWings(),
-        Container(
-          decoration:
-            BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-          height: 147,//todo calculate dynamically
-          width: 147,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              customBorder: CircleBorder(),
-              splashColor: AppColors.primaryPurple,
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  gradient: AppColors.flightButtonGradient,
-                  shape: BoxShape.circle,
+  Widget buildFlightButton(BuildContext context) {
+    return Observer(
+        builder: (_) =>  Stack(
+        alignment: Alignment.center,
+        children: [
+          buildWings(),
+          Container(
+            decoration:
+              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+            height: 147,//todo calculate dynamically
+            width: 147,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                customBorder: CircleBorder(),
+                splashColor: AppColors.primaryPurple,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.flightButtonGradient,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    "FLY",
+                    style: TextConstants.home_screen_50,
+                  ),
                 ),
-                child: Text(
-                  "FLY",
-                  style: TextConstants.home_screen_50,
-                ),
-              ),
-              onTap: (){
+                onTap: droneConnectionViewModel.isConnected? (){
 
-              },
+                }: (){
+                  final snackBar = SnackBar(content: Text('Drone is not connected!'));
+
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }),
+              ),
             ),
-          ),
-        )
-      ],
+        ],
+      ),
     );
   }
 

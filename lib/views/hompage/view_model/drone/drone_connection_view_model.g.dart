@@ -47,6 +47,22 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
     });
   }
 
+  final _$isConnectedAtom =
+      Atom(name: '_DroneConnectionViewModelBase.isConnected');
+
+  @override
+  bool get isConnected {
+    _$isConnectedAtom.reportRead();
+    return super.isConnected;
+  }
+
+  @override
+  set isConnected(bool value) {
+    _$isConnectedAtom.reportWrite(value, super.isConnected, () {
+      super.isConnected = value;
+    });
+  }
+
   final _$checkConnectionAsyncAction =
       AsyncAction('_DroneConnectionViewModelBase.checkConnection');
 
@@ -59,11 +75,12 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
       ActionController(name: '_DroneConnectionViewModelBase');
 
   @override
-  void isConnected() {
+  void setStatus(
+      DroneConnectionStatusTypeEnum statusTypesEnum, String message) {
     final _$actionInfo = _$_DroneConnectionViewModelBaseActionController
-        .startAction(name: '_DroneConnectionViewModelBase.isConnected');
+        .startAction(name: '_DroneConnectionViewModelBase.setStatus');
     try {
-      return super.isConnected();
+      return super.setStatus(statusTypesEnum, message);
     } finally {
       _$_DroneConnectionViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -85,6 +102,7 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
     return '''
 status: ${status},
 isLoading: ${isLoading},
+isConnected: ${isConnected},
 loadingState: ${loadingState}
     ''';
   }
