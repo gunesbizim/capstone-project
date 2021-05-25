@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/core/constants/route_constants.dart';
 import 'package:capstone_project/services/FirebaseAuth.dart';
@@ -22,14 +24,24 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
     firebaseService = AuthenticationService(FirebaseAuth.instance);
     navigationService = NavigationService.instance;
     updateEmail();
+    emailVerificationCheck();
   }
 
   @observable
   String email = "";
 
-  late bool _state;
+  late bool _state = false;
+  late Timer timer;
   Future<void> emailVerificationCheck() async {
-    await firebaseService.verifyEmail().then((value) => _state = value);
+    timer = Timer.periodic(Duration(seconds: 2), (timer) async {
+      await firebaseService.verifyEmail().then((value) => _state = value);
+      navigateToHomePage();
+      print(_state);
+    });
+  }
+
+  void disposeTimer() {
+    timer.cancel();
   }
 
   bool getState() {
@@ -42,9 +54,9 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
   }
 
   void navigateToHomePage() {
-    emailVerificationCheck();
     print(_state);
     if (_state) {
+      disposeTimer();
       navigationService.navigateToPageClear(
           path: RouteConstants.HOME_PAGE, data: 1);
     } else {}
