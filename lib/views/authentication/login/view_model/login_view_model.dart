@@ -2,6 +2,7 @@ import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/services/FirebaseAuth.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
+import 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +16,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   GlobalKey<ScaffoldState> globalScaffoldState = GlobalKey();
   late AuthenticationService loginService;
   late NavigationService navigationService;
+  late EmailVerificationViewModel emailVerif;
   TextEditingController? emailController;
   TextEditingController? passwordController;
 
@@ -35,6 +37,8 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   @observable
   bool isLockOpen = false;
 
+  late bool _state;
+
   @action
   Future<void> login() async {
     //isLoadingChange();
@@ -51,14 +55,24 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
         //TODO: Sow snackbar
         //isLoadingChange(); zett@zett.com
         print("4");
-
-        navigationService.navigateToPageClear(
-            path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
+        loginService.verifyEmail().then((value) => _state = value);
+        if (_state) {
+          navigationService.navigateToPageClear(
+              path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
+        } else {
+          navigationService.navigateToPageClear(
+              path: RouteConstants.VERIFICATION,
+              data: response["userCredential"]);
+        }
       } else {
         print(response["message"]);
       }
     } //else
     //isLoadingChange();
+  }
+
+  navigateToSignUp() {
+    navigationService.navigateToPage(path: RouteConstants.SIGNUP);
   }
 
   @action

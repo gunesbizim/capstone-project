@@ -12,4 +12,6 @@ class TextConstants {
       TextStyle(color: Colors.white, fontWeight: FontWeight.w100, fontSize: 20);
   static const TextStyle home_screen_14 =
       TextStyle(color: Colors.white, fontWeight: FontWeight.w100, fontSize: 14);
+  static const TextStyle home_screen_14_bold =
+      TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14);
 }

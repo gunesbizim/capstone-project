@@ -27,4 +27,25 @@ class AuthenticationService {
       return {"message": e.message, "userCredential": null};
     }
   }
+
+  Future<bool> verifyEmail() async {
+    try {
+      var user = await _firebaseAuth.currentUser;
+      user!.reload();
+      return user.emailVerified;
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return false;
+    }
+  }
+
+  Future<String> returnUserEmail() async {
+    try {
+      var user = await _firebaseAuth.currentUser;
+      String? email = user!.email;
+      return email!;
+    } on FirebaseAuthException catch (e) {
+      return e.message!;
+    }
+  }
 }
