@@ -9,6 +9,14 @@ part of 'drone_connection_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
+  Computed<bool>? _$loadingStateComputed;
+
+  @override
+  bool get loadingState =>
+      (_$loadingStateComputed ??= Computed<bool>(() => super.loadingState,
+              name: '_DroneConnectionViewModelBase.loadingState'))
+          .value;
+
   final _$statusAtom = Atom(name: '_DroneConnectionViewModelBase.status');
 
   @override
@@ -22,6 +30,29 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
     _$statusAtom.reportWrite(value, super.status, () {
       super.status = value;
     });
+  }
+
+  final _$isLoadingAtom = Atom(name: '_DroneConnectionViewModelBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  final _$checkConnectionAsyncAction =
+      AsyncAction('_DroneConnectionViewModelBase.checkConnection');
+
+  @override
+  Future<dynamic> checkConnection() {
+    return _$checkConnectionAsyncAction.run(() => super.checkConnection());
   }
 
   final _$_DroneConnectionViewModelBaseActionController =
@@ -39,11 +70,11 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
   }
 
   @override
-  void checkConnection() {
+  void setLoading() {
     final _$actionInfo = _$_DroneConnectionViewModelBaseActionController
-        .startAction(name: '_DroneConnectionViewModelBase.checkConnection');
+        .startAction(name: '_DroneConnectionViewModelBase.setLoading');
     try {
-      return super.checkConnection();
+      return super.setLoading();
     } finally {
       _$_DroneConnectionViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -52,7 +83,9 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
   @override
   String toString() {
     return '''
-status: ${status}
+status: ${status},
+isLoading: ${isLoading},
+loadingState: ${loadingState}
     ''';
   }
 }

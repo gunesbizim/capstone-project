@@ -34,7 +34,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.red.shade900 ,
+        backgroundColor: Colors.transparent ,
         foregroundColor: Colors.transparent,
 
         actions: <Widget>[GestureDetector(child: Icon(Icons.logout_sharp,color: Colors.white,))],
@@ -121,18 +121,35 @@ class HomeView extends StatelessWidget {
               BaseView<DroneConnectionViewModel>(
                 viewModel: DroneConnectionViewModel(), 
                 onPageBuilder: (BuildContext context, DroneConnectionViewModel dcvm){
-                  return Observer(
-                    builder: (_)  {
-                      return Column(
+                  return Column(
                       children: [
-                        ElevatedButton(child: Text("Check Connection"),onPressed: () => dcvm.checkConnection(),),
-                        Text(dcvm.status
-                          //dcvm.status
-                          ),
-
+                        Observer(
+                            builder: (_) => Text(dcvm.status,
+                            style: TextConstants.home_screen_24,
+                            ),
+                        ),
+                          Observer(builder: (_) {
+                            return  dcvm.isLoading?
+                            Column(
+                              children: [
+                                SizedBox(height:queryData.size.height*0.01),
+                                
+                                SizedBox(height:queryData.size.height*0.01,
+                                width:queryData.size.height*0.01,
+                                        
+                                  child:CircularProgressIndicator(
+                                    backgroundColor: Colors.transparent,
+                                    color: AppColors.primaryBlue,
+                                  ),
+                                ),
+                                SizedBox(height:queryData.size.height*0.01),
+                              ],
+                            ):SizedBox(
+                              height:queryData.size.height*0.03);
+                          }),
+                          buildCheckDroneConnection(dcvm, queryData)                        
                       ],
-                    );}
-                  );
+                    );
                 },
                 onModelReady: (model){
                   model.setContext(context);
@@ -193,10 +210,6 @@ class HomeView extends StatelessWidget {
                            Text(value.lastFlight,style: TextConstants.home_screen_24 ,),
                            SizedBox(height:queryData.size.height*0.03),
                            buildSeeAllFlights(value,queryData),
-                            ElevatedButton(child: Text("changeStatues"),
-                       onPressed: () {
-                          value.setLastFlight("31.31.3131");
-                          },)
                          ],
                        );
                      }
@@ -224,6 +237,35 @@ class HomeView extends StatelessWidget {
                         null:
                         () {
                           flightLogWiewModel.loadList();
+                        },
+                    ),
+                  ),
+                );
+        },
+      );
+  }
+    Observer buildCheckDroneConnection(DroneConnectionViewModel dcvm, MediaQueryData queryData) {
+      return Observer(
+        builder: (_){
+          return Container(
+                  height: queryData.size.height*0.034,
+                  width: queryData.size.width*0.24,
+                  child: Material(
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(30)),
+                    color: AppColors.primaryBlue,
+                    child: InkWell(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(30)),
+                      child: Center(
+                        child: Text(
+                          "Check",
+                          style: TextConstants.home_screen_20,),
+                      ),
+                      onTap: dcvm.isLoading?
+                        null:
+                        () {
+                          dcvm.checkConnection();
                         },
                     ),
                   ),

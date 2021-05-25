@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:mobx/mobx.dart';
 part 'drone_connection_view_model.g.dart';
@@ -5,8 +8,12 @@ part 'drone_connection_view_model.g.dart';
 class DroneConnectionViewModel = _DroneConnectionViewModelBase with _$DroneConnectionViewModel;
 
 abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
-    @observable
+  @observable
   String status = "Connected";
+
+  @observable
+  bool isLoading = false;
+
 
   @override
   void setContext(context) => this.context = context;
@@ -23,14 +30,27 @@ abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
 
   
   @action
-  void checkConnection(){
-    
+  Future checkConnection() async {
+    setLoading();
+    print(isLoading);
     if(status == "Not Connected" ){
-      status = "Connected";
+       await Future.delayed(
+      Duration(seconds:4),
+      () => 'Connected',
+      ).then((value) => status = value);
     }else if(status == "Connected"){
-      status ="Not Connected";
+      await Future.delayed(
+      Duration(seconds: 2),
+      () => "Not Connected",
+      ).then((value) => status =value);
     }
-    print(status);
+    setLoading();
+
   }
   
+  @action
+  void setLoading() => isLoading = !isLoading;
+
+  @computed 
+  bool get loadingState => isLoading;
 }
