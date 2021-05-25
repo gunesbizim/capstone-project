@@ -27,7 +27,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
   @observable
   String email = "";
 
-  bool _state = false;
+  late bool _state;
   Future<void> emailVerificationCheck() async {
     await firebaseService.verifyEmail().then((value) => _state = value);
   }
