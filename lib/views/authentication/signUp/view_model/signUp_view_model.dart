@@ -64,8 +64,10 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
           //TODO: Sow snackbar
           //isLoadingChange(); zett@zett.com
           print("5");
+          user.sendEmailVerification();
           navigationService.navigateToPageClear(
-              path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
+              path: RouteConstants.VERIFICATION,
+              data: response["userCredential"]);
         }
       }
     } else

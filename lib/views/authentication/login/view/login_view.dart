@@ -1,17 +1,21 @@
 import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
 import 'package:capstone_project/core/base/view/base_widget.dart';
+import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/login/view_model/login_view_model.dart';
 import 'package:capstone_project/views/authentication/validation.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:capstone_project/core/constants/text_constants.dart';
 
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //TODO: connect it with an upper widget
     MediaQueryData data = MediaQuery.of(context);
+    var navigationService = NavigationService.instance;
     double height = data.size.height;
     return BaseView<LoginViewModel>(
         viewModel: LoginViewModel(),
@@ -41,7 +45,8 @@ class LoginView extends StatelessWidget {
                           child: Column(
                             children: [
                               buildGeneralForm(value),
-                              buildLoginButton(data, value)
+                              buildLoginButton(data, value),
+                              buildDontHaveAnAccount(value),
                             ],
                           ),
                         )
@@ -103,6 +108,30 @@ class LoginView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Column buildDontHaveAnAccount(LoginViewModel value) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        RichText(
+          text: TextSpan(
+            style: TextConstants.home_screen_14_bold,
+            children: <TextSpan>[
+              TextSpan(
+                text: "Don't have an account ?",
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    value.navigateToSignUp();
+                  },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
