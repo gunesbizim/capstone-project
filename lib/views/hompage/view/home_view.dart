@@ -1,22 +1,25 @@
 
 
+import 'dart:math';
+
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
+import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
 import 'package:capstone_project/core/constants/text_constants.dart';
 import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
+import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/profile/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeView extends StatelessWidget {
-
-  final DroneConnectionViewModel droneConnectionViewModel = new DroneConnectionViewModel();
-
+  final DroneConnectionViewModel droneConnectionViewModel = DroneConnectionViewModel();
   @override
   Widget build(BuildContext context) {
+    
     MediaQueryData queryData = MediaQuery.of(context);
     print(queryData.size.height);
     return buildBaseContainer(context, queryData);
@@ -37,26 +40,38 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent ,
         foregroundColor: Colors.transparent,
-
-        actions: <Widget>[GestureDetector(child: Icon(Icons.logout_sharp,color: Colors.white,))],
-      ),
+        leading: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: SizedBox(
+            width:queryData.size.height*0.04
+          ),
+        ),
+        centerTitle: true,
+        title: ZettLogo(height:queryData.size.height*0.045),  
+        actions: <Widget>[Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(child: Icon(Icons.logout_sharp,color: Colors.white,size:queryData.size.height*0.04)),
+        )],
+        elevation: 0,
+      ),  
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildProfileData(context,queryData),
           SizedBox(height:queryData.size.height*0.013),
           buildThirdRow(context,queryData),
-          SizedBox(height:queryData.size.height*0.06),
+          SizedBox(height:queryData.size.height*0.13),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BaseView<DroneConnectionViewModel>(viewModel: droneConnectionViewModel,
+              BaseView<FlyViewModel>(viewModel: FlyViewModel(),
                onPageBuilder: (context, model){
-                 return FlightButton(droneConnectionViewModel: droneConnectionViewModel);
+                 return FlightButton(flyViewModel: model);
                },
                 onModelReady:(model){
                   model.setContext(context);
                   model.init();
+                  model.setDroneConnectionViewModel(this.droneConnectionViewModel);
                 })
             ],
           ),
@@ -74,26 +89,29 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  BaseView<ProfileViewModel> buildProfileData(BuildContext context, MediaQueryData queryData) {
-    return BaseView<ProfileViewModel>(
-      viewModel: ProfileViewModel(), onPageBuilder: (BuildContext context, ProfileViewModel model){
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: buildProfilePictureRow(queryData,model),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0,bottom:10.0),
-              child: buildUserNameFlightTime(model),
-            ),
-          ],
-        );
-      }, onModelReady: (model){
-        model.setContext(context);
-        model.init();
+  Row buildProfileData(BuildContext context, MediaQueryData queryData) {
+    return Row(
+      mainAxisAlignment:  MainAxisAlignment.center,
+      children:[ BaseView<ProfileViewModel>(
+        viewModel: ProfileViewModel(), onPageBuilder: (BuildContext context, ProfileViewModel model){
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: buildProfilePictureRow(queryData,model),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0,bottom:10.0),
+                child: buildUserNameFlightTime(model),
+              ),
+            ],
+          );
+        }, onModelReady: (model){
+          model.setContext(context);
+          model.init();
 
-      });
+        }),]
+    );
   }
 
   Row buildThirdRow(BuildContext context, MediaQueryData queryData) {
@@ -129,7 +147,7 @@ class HomeView extends StatelessWidget {
             children: [
               Text("Status", style: TextConstants.home_screen_35),
               BaseView<DroneConnectionViewModel>(
-                viewModel: droneConnectionViewModel, 
+                viewModel: this.droneConnectionViewModel,
                 onPageBuilder: (BuildContext context, DroneConnectionViewModel dcvm){
                   return Column(
                       children: [
@@ -244,6 +262,20 @@ class HomeView extends StatelessWidget {
                       onTap: flightLogWiewModel.isLoading?
                         null:
                         () {
+                          // for(int i = 1; i<=31; i++){
+                          //   print(i);
+                          //   int hour = 1+Random().nextInt(23);
+                          //   int min = 1+Random().nextInt(59);
+
+                          //   FirebaseFirestore.instance.collection("flights").add(
+                          //   {
+                          //     "flightStartTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour>=10?hour:"0"+hour.toString()}:${min>=10?min:"0"+min.toString()}:00"),
+                          //     "flightEndTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour+1>=10?hour+1:"0"+(hour+1).toString()}:${min>=10?min:"0"+min.toString()}:00"),
+                          //     "pilotId" : FirebaseAuth.instance.currentUser!.uid
+                          //   }
+                          //   );
+                          //   print(i);
+                          // }
                           flightLogWiewModel.loadList();
                         },
                     ),

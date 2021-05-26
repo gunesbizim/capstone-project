@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
-part 'profil_view_model.g.dart';
+part 'profile_view_model.g.dart';
 
 class ProfileViewModel = _ProfileViewModelBase with _$ProfileViewModel;
 
-abstract class _ProfileViewModelBase with Store, BaseViewModel {
-  
+abstract class _ProfileViewModelBase with Store, BaseViewModel{
+    
   @observable
   var image;
 
@@ -67,5 +67,4 @@ abstract class _ProfileViewModelBase with Store, BaseViewModel {
       print('No image selected.');
     }
   }
-  
 }

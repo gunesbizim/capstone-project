@@ -12,14 +12,14 @@ class AppColors{
   static const Color _buttonUpperBlue075 = Color.fromRGBO(50, 90, 176, 0.75);
   static const Color _primaryPurple092 = Color.fromRGBO(148, 21, 151, 0.92);
 
-  static const Color _backgroundUp = Color.fromRGBO(55, 21, 151, 0.9);
-  static const Color _backgroundDown = Color.fromRGBO(0, 129, 158, 1);
+  static const Color backgroundUp = Color.fromRGBO(55, 21, 151, 0.9);
+  static const Color backgroundDown = Color.fromRGBO(0, 129, 158, 1);
   static const LinearGradient backgroundGradient =  LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors:<Color>[
-      _backgroundUp,
-      _backgroundDown
+      backgroundUp,
+      backgroundDown
     ]);
 
 
@@ -83,4 +83,5 @@ class AppColors{
     center: Alignment.center,
     colors: [primaryBlue,_primaryPurple056]
   );
+
 }

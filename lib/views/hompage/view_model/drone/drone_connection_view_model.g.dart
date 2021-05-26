@@ -9,14 +9,6 @@ part of 'drone_connection_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
-  Computed<bool>? _$loadingStateComputed;
-
-  @override
-  bool get loadingState =>
-      (_$loadingStateComputed ??= Computed<bool>(() => super.loadingState,
-              name: '_DroneConnectionViewModelBase.loadingState'))
-          .value;
-
   final _$statusAtom = Atom(name: '_DroneConnectionViewModelBase.status');
 
   @override
@@ -102,8 +94,7 @@ mixin _$DroneConnectionViewModel on _DroneConnectionViewModelBase, Store {
     return '''
 status: ${status},
 isLoading: ${isLoading},
-isConnected: ${isConnected},
-loadingState: ${loadingState}
+isConnected: ${isConnected}
     ''';
   }
 }

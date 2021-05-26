@@ -8,10 +8,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class FlightButton extends StatelessWidget {
 
-  final DroneConnectionViewModel droneConnectionViewModel;
+  final FlyViewModel flyViewModel;
 
   FlightButton({
-    required this.droneConnectionViewModel
+    required this.flyViewModel
   });
 
   @override
@@ -46,7 +46,7 @@ class FlightButton extends StatelessWidget {
                     style: TextConstants.home_screen_50,
                   ),
                 ),
-                onTap: droneConnectionViewModel.isConnected? (){
+                onTap: flyViewModel.isConnected? (){
 
                 }: (){
                   final snackBar = SnackBar(content: Text('Drone is not connected!'));

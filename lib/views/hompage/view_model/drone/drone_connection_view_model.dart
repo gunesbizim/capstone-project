@@ -64,6 +64,5 @@ abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
   @action
   void setLoading() => isLoading = !isLoading;
 
-  @computed 
-  bool get loadingState => isLoading;
+  
 }
