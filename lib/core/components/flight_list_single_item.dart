@@ -1,4 +1,3 @@
-import 'package:capstone_project/core/constants/app_colors.dart';
 import 'package:capstone_project/views/flight_list/Model/flight_log_item_model.dart';
 import 'package:flutter/material.dart';
 

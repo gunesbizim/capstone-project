@@ -4,15 +4,13 @@ import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
 import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
-import 'package:capstone_project/core/constants/app_colors.dart';
-import 'package:capstone_project/core/constants/text_constants.dart';
-import 'package:capstone_project/services/FirebaseAuth.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
+import 'package:capstone_project/core/constants/values/text_constants.dart';
+import 'package:capstone_project/views/hompage/view_model/app_bar/app_bar_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/profile/profile_view_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -38,42 +36,20 @@ class HomeView extends StatelessWidget {
   Scaffold buildScaffold(BuildContext context, MediaQueryData queryData) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.transparent,
-        leading: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: SizedBox(width: queryData.size.height * 0.04),
-        ),
-        centerTitle: true,
-        title: ZettLogo(height: queryData.size.height * 0.045),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              child: Icon(Icons.logout_sharp,
-                  color: Colors.white, size: queryData.size.height * 0.04),
-              onTap: () => {
-                //TODO: LOGOUT
-              },
-            ),
-          )
-        ],
-        elevation: 0,
-      ),
+      appBar: buildAppBar(context, queryData),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildProfileData(context, queryData),
           SizedBox(height: queryData.size.height * 0.013),
-          buildThirdRow(context, queryData),
+          buildCards(context, queryData),
           SizedBox(height: queryData.size.height * 0.08),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               BaseView<FlyViewModel>(
                   viewModel: FlyViewModel(),
-                  onPageBuilder: (context, model) {
+                  onPageBuilder: (BuildContext context, FlyViewModel model) {
                     return FlightButton(flyViewModel: model);
                   },
                   onModelReady: (model) {
@@ -104,6 +80,44 @@ class HomeView extends StatelessWidget {
     );
   }
 
+ AppBar buildAppBar(BuildContext context, MediaQueryData queryData) {
+    
+    return AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.transparent,
+        leading: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: SizedBox(width: queryData.size.height * 0.04),
+        ),
+        centerTitle: true,
+        title: ZettLogo(height: queryData.size.height * 0.045),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:BaseView<AppBarViewModel>(
+              viewModel: AppBarViewModel(), 
+              onPageBuilder: (BuildContext context,AppBarViewModel model){
+                return GestureDetector(
+                      child: Icon(Icons.logout_sharp,
+                          color: Colors.white, size: queryData.size.height * 0.04),
+                      onTap: () {
+                        print("logging out");
+                        model.logOut();
+                      },
+                    );
+                
+              } , onModelReady: (model){
+                model.setContext(context);
+                model.init();
+            })
+          )
+        ],
+        elevation: 0,
+      );
+
+    
+  }
+
   Row buildProfileData(BuildContext context, MediaQueryData queryData) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       BaseView<ProfileViewModel>(
@@ -129,7 +143,24 @@ class HomeView extends StatelessWidget {
     ]);
   }
 
-  Row buildThirdRow(BuildContext context, MediaQueryData queryData) {
+  Column buildUserNameFlightTime(ProfileViewModel model) {
+    return Column(
+      //Name and flight time, second row
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          model.userName,
+          style: TextConstants.home_screen_24,
+        ),
+        Text(
+          "Flight Time: ${model.flightTime}",
+          style: TextConstants.home_screen_14,
+        )
+      ],
+    );
+  }
+
+  Row buildCards(BuildContext context, MediaQueryData queryData) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -241,8 +272,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value,
-      MediaQueryData queryData) {
+  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value, MediaQueryData queryData) {
     return Observer(builder: (_) {
       return Column(
         children: [
@@ -257,16 +287,8 @@ class HomeView extends StatelessWidget {
       );
     });
   }
-  List<String> formatDuration(Duration duration) {
-        String twoDigits(int n) => n.toString().padLeft(2, "0");
-        String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-        String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-
-      return [twoDigits(duration.inHours),twoDigitMinutes,twoDigitSeconds];
-      }
-
-  Observer buildSeeAllFlights(
-      FlightLogViewModel flightLogWiewModel, MediaQueryData queryData) {
+ 
+  Observer buildSeeAllFlights(FlightLogViewModel flightLogWiewModel, MediaQueryData queryData) {
     return Observer(
       builder: (_) {
         return Container(
@@ -286,20 +308,6 @@ class HomeView extends StatelessWidget {
               onTap: flightLogWiewModel.isLoading
                   ? null
                   : () {
-                      // for(int i = 1; i<=31; i++){
-                      //   print(i);
-                      //   int hour = 1+Random().nextInt(23);
-                      //   int min = 1+Random().nextInt(59);
-
-                      //   FirebaseFirestore.instance.collection("flights").add(
-                      //   {
-                      //     "flightStartTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour>=10?hour:"0"+hour.toString()}:${min>=10?min:"0"+min.toString()}:00"),
-                      //     "flightEndTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour+1>=10?hour+1:"0"+(hour+1).toString()}:${min>=10?min:"0"+min.toString()}:00"),
-                      //     "pilotId" : FirebaseAuth.instance.currentUser!.uid
-                      //   }
-                      //   );
-                      //   print(i);
-                      // }
                       flightLogWiewModel.loadList();
                     },
             ),
@@ -309,25 +317,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Column buildUserNameFlightTime(ProfileViewModel model) {
-    return Column(
-      //Name and flight time, second row
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          model.userName,
-          style: TextConstants.home_screen_24,
-        ),
-        Text(
-          "Flight Time: ${model.flightTime}",
-          style: TextConstants.home_screen_14,
-        )
-      ],
-    );
-  }
-
-  Observer buildProfilePictureRow(
-      MediaQueryData queryData, ProfileViewModel profileViewModel) {
+  Observer buildProfilePictureRow(MediaQueryData queryData, ProfileViewModel profileViewModel) {
     return Observer(
       builder: (BuildContext context) {
         return Row(

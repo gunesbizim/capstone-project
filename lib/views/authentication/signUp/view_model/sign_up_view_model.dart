@@ -1,13 +1,11 @@
 import 'package:capstone_project/core/base/model/base_view_model.dart';
-import 'package:capstone_project/core/constants/route_constants.dart';
-import 'package:capstone_project/services/FireStore.dart';
-import 'package:capstone_project/services/FirebaseAuth.dart';
+import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/fire_store_service.dart';
+import 'package:capstone_project/services/authentication_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-part 'signup_view_model.g.dart';
+part 'sign_up_view_model.g.dart';
 
 class SignupViewModel = _SignupViewModelBase with _$SignupViewModel;
 
@@ -21,14 +19,14 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
   TextEditingController? pwCntrl;
   TextEditingController? pw2Cntrl;
   TextEditingController? nameCntrl;
-
+  AuthenticationService _authService = AuthenticationService.instance;
   @override
   void setContext(BuildContext context) => this.context = context;
   @override
   void init() {
     print("init2");
-    signUpService = AuthenticationService(FirebaseAuth.instance);
-    fireStoreService = FireStoreService(FirebaseFirestore.instance);
+    signUpService = AuthenticationService.instance;
+    fireStoreService = FireStoreService.instance;
     navigationService = NavigationService.instance;
     emailCntrl = TextEditingController();
     pwCntrl = TextEditingController();
@@ -56,18 +54,16 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
             email: emailCntrl!.text, password: pwCntrl!.text);
         print('4');
         if (response["userCredential"] != null) {
-          final FirebaseAuth auth = FirebaseAuth.instance;
-          final User? user = auth.currentUser;
-          final uid = user!.uid;
+
           fireStoreService.setUserData(
-              id:uid, 
+              id:_authService.user!.uid, 
               name: nameCntrl!.text,
               email: emailCntrl!.text, 
               lastFlightId: "No flight yet");
           //TODO: Sow snackbar
           //isLoadingChange(); zett@zett.com
           print("5");
-          user.sendEmailVerification();
+          _authService.user!.sendEmailVerification();
           navigationService.navigateToPageClear(
               path: RouteConstants.VERIFICATION,
               data: response["userCredential"]);
@@ -85,5 +81,5 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
   @action
   void isLockStateChange() {
     isLockOpen = !isLockOpen;
-  }
+  }  
 }

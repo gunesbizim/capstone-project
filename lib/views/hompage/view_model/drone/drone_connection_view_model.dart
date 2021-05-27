@@ -24,7 +24,8 @@ abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
 
   @override 
   void init(){
-    dcss = DroneConnectionStatusService(setStatus: setStatus);
+    dcss = DroneConnectionStatusService.instance;
+    dcss.setStatus = setStatus;
     dcss.checkStatus();
   }
   

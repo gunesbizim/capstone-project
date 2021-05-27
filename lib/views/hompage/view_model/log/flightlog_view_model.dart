@@ -2,8 +2,8 @@
 import 'dart:ffi';
 
 import 'package:capstone_project/core/base/model/base_view_model.dart';
-import 'package:capstone_project/core/constants/route_constants.dart';
-import 'package:capstone_project/services/FireStore.dart';
+import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ part 'flightlog_view_model.g.dart';
 class FlightLogViewModel = _FlightLogViewModelBase with _$FlightLogViewModel;
 
 abstract class _FlightLogViewModelBase with Store, BaseViewModel{
-  late FireStoreService fireStore;
+  late FireStoreService fireStoreService;
 
   @observable
   String lastFlight = "No Flight";
@@ -27,7 +27,7 @@ abstract class _FlightLogViewModelBase with Store, BaseViewModel{
 
   @override
   void init() {
-    fireStore = FireStoreService(FirebaseFirestore.instance);
+    fireStoreService = FireStoreService.instance;
     getLastDate();
   }
   @action

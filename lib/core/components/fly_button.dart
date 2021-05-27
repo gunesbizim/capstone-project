@@ -1,6 +1,7 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
-import 'package:capstone_project/core/constants/app_colors.dart';
-import 'package:capstone_project/core/constants/text_constants.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
+import 'package:capstone_project/core/constants/values/text_constants.dart';
+import 'package:capstone_project/views/flight_controller/services/flight_data_service.dart';
 import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:flutter/material.dart';
@@ -47,8 +48,11 @@ class FlightButton extends StatelessWidget {
                     ),
                   ),
                   onTap: flyViewModel.isConnected
-                      ? () {}
-                      : () {
+                      ? () {//FlightDataService.instance.generateMockData();
+                        flyViewModel.startFlight();
+                      }
+                      : () {                        
+
                           final snackBar = SnackBar(
                               content: Text('Drone is not connected!'));
 

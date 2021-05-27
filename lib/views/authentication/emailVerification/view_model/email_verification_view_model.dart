@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:capstone_project/core/base/model/base_view_model.dart';
-import 'package:capstone_project/core/constants/route_constants.dart';
-import 'package:capstone_project/services/FirebaseAuth.dart';
+import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/authentication_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'email_verification_view_model.g.dart';
@@ -13,7 +12,7 @@ class EmailVerificationViewModel = _EmailVerificationViewModelBase
     with _$EmailVerificationViewModel;
 
 abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
-  late AuthenticationService firebaseService;
+  late AuthenticationService authenticationService;
   late NavigationService navigationService;
 
   @override
@@ -21,7 +20,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
-    firebaseService = AuthenticationService(FirebaseAuth.instance);
+    authenticationService = AuthenticationService.instance;
     navigationService = NavigationService.instance;
     updateEmail();
     emailVerificationCheck();
@@ -34,7 +33,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
   late Timer timer;
   Future<void> emailVerificationCheck() async {
     timer = Timer.periodic(Duration(seconds: 2), (timer) async {
-      await firebaseService.verifyEmail().then((value) => _state = value);
+      await authenticationService.verifyEmail().then((value) => _state = value);
       navigateToHomePage();
       print(_state);
     });
@@ -50,7 +49,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
 
   @action
   void updateEmail() {
-    firebaseService.returnUserEmail().then((value) => email = value);
+    authenticationService.returnUserEmail().then((value) => email = value);
   }
 
   void navigateToHomePage() {

@@ -84,6 +84,14 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
     });
   }
 
+  final _$getUserDetailsAsyncAction =
+      AsyncAction('_ProfileViewModelBase.getUserDetails');
+
+  @override
+  Future<dynamic> getUserDetails() {
+    return _$getUserDetailsAsyncAction.run(() => super.getUserDetails());
+  }
+
   final _$selectImageAsyncAction =
       AsyncAction('_ProfileViewModelBase.selectImage');
 

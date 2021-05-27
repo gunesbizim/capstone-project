@@ -1,6 +1,5 @@
 
-import 'package:capstone_project/core/constants/app_colors.dart';
-import 'package:capstone_project/services/navigation/navigation_service.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
 import 'package:flutter/material.dart';
 //TODO: Solve the Inkwell Problem
 class HomeButton extends StatelessWidget {

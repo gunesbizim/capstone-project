@@ -2,8 +2,8 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/flight_list_single_item.dart';
 import 'package:capstone_project/core/components/logo.dart';
-import 'package:capstone_project/core/constants/app_colors.dart';
-import 'package:capstone_project/core/constants/text_constants.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
+import 'package:capstone_project/core/constants/values/text_constants.dart';
 import 'package:capstone_project/views/flight_list/view_model/flight_list_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

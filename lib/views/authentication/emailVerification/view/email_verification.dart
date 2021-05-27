@@ -1,8 +1,8 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/logo.dart';
-import 'package:capstone_project/core/constants/app_colors.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
+import 'package:capstone_project/services/authentication_service.dart';
 import 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -108,9 +108,7 @@ class EmailVerificationView extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  final FirebaseAuth auth = FirebaseAuth.instance;
-                  final User? user = auth.currentUser;
-                  user!.sendEmailVerification();
+                  AuthenticationService.instance.user!.sendEmailVerification();
                 },
               ),
             )),

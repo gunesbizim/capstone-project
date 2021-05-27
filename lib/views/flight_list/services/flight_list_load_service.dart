@@ -1,27 +1,30 @@
-import 'package:capstone_project/core/constants/sorting_constants.dart';
+import 'package:capstone_project/core/constants/values/sorting_constants.dart';
+import 'package:capstone_project/services/authentication_service.dart';
+import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/views/flight_list/Model/flight_log_item_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 class FlightListLoadService{
+  static final FlightListLoadService instance = FlightListLoadService._init();
   late QuerySnapshot collectionState;
   late ObservableList<FlightLogItemModel> flights;
-  late bool isDecending;
-  late String fieldName;
-  FlightListLoadService({
-    required this.flights
-  });
-
+  late bool isDescending;
+  late String orderBy;
+  FlightListLoadService._init();
+  AuthenticationService _authService = AuthenticationService.instance;
+  FireStoreService _fireStoreService = FireStoreService.instance;
   Future<void> getDocuments(String dropDownValue) async {
     setSearchCriteria(dropDownValue);
-
-    var collection = FirebaseFirestore.instance
-        .collection('flights').where("pilotId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .orderBy(fieldName,descending: isDecending)
-        .limit(15);
-    print('getDocuments');
+    var collection = _fireStoreService.getLimitedCollection(
+      collectionName: "flights",
+      whereField: "pilotId",
+      orderBy: orderBy,
+      isDescending: isDescending,
+      limit: 15
+    );
+        
     fetchDocuments(collection,true);
   }
 
@@ -33,11 +36,15 @@ class FlightListLoadService{
 
     setSearchCriteria(dropDownValue);
     
-        var collection = FirebaseFirestore.instance
-            .collection('flights').where("pilotId", isEqualTo: FirebaseAuth.instance.currentUser!.uid).orderBy(fieldName,descending: isDecending)
-            .startAfterDocument(lastVisible).limit(8);
-    
-        fetchDocuments(collection,false);
+    var collection = _fireStoreService.getLimitedCollection(
+      collectionName: "flights",
+      whereField: "pilotId",
+      orderBy: orderBy,
+      isDescending: isDescending,
+      limit: 8
+    );
+
+    fetchDocuments(collection,false);
   }
 
   void fetchDocuments(Query collection,bool isNew){
@@ -46,42 +53,35 @@ class FlightListLoadService{
           collectionState = querySnapshot; // store collection state to set where to start next
           querySnapshot.docs.forEach((element) { 
             DateTime start = DateTime.parse(element["flightStartTime"].toDate().toString());
-            DateTime end =DateTime.parse(element["flightEndTime"].toDate().toString());
-            Duration duration = end.difference(start);
             String startString = DateFormat("dd-MM-yyyy").format(start);
             String timeString = DateFormat(DateFormat.HOUR24_MINUTE_SECOND).format(start);
-            Duration d = Duration();
-            String durationString = formatDuration(duration);
+            String durationString = "${element["duration"]["hours"]}:${element["duration"]["minutes"]}:${element["duration"]["seconds"]}";
+            print(durationString);
             flights.add(FlightLogItemModel(date: startString, time: timeString, duration: durationString));
           });
         });
       }
-      String formatDuration(Duration duration) {
-        String twoDigits(int n) => n.toString().padLeft(2, "0");
-        String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-        String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-      return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-      }
+ 
     
-      void setSearchCriteria(String dropDownValue) {
-        if(dropDownValue == SortingConstants.FLIGHT_DATE_ASCENDING.name){
-          isDecending = false;
-          fieldName = "flightStartTime";
-          print("current field name: $fieldName");
+  void setSearchCriteria(String dropDownValue) {
+    if(dropDownValue == SortingConstants.FLIGHT_DATE_ASCENDING.name){
+      isDescending = false;
+      orderBy = "flightStartTime";
+      print("current field name: $orderBy");
 
-        } else if(dropDownValue == SortingConstants.FLIGHT_DATE_DESCENDING.name){
-          isDecending = true;
-          fieldName = "flightStartTime";
-          print("current field name: $fieldName");
-        } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_ASCENDING.name){
-          isDecending = false;
-          fieldName = "duration";
-          print("current field name: $fieldName");
-        } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_DESCENDING.name){
-          isDecending = true;
-          fieldName = "duration";      
-          print("current field name: $fieldName");
-        }   
-      }
+    } else if(dropDownValue == SortingConstants.FLIGHT_DATE_DESCENDING.name){
+      isDescending = true;
+      orderBy = "flightStartTime";
+      print("current field name: $orderBy");
+    } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_ASCENDING.name){
+      isDescending = false;
+      orderBy = "duration";
+      print("current field name: $orderBy");
+    } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_DESCENDING.name){
+      isDescending = true;
+      orderBy = "duration";      
+      print("current field name: $orderBy");
+    }   
+  }
 
 }

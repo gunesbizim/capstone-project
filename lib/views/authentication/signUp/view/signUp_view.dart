@@ -1,8 +1,8 @@
 import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/base/view/base_widget.dart';
-import 'package:capstone_project/core/constants/app_colors.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
+import 'package:capstone_project/views/authentication/signUp/view_model/sign_up_view_model.dart';
 import 'package:capstone_project/views/authentication/validation.dart';
-import 'package:capstone_project/views/authentication/signUp/view_model/signUp_view_model.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

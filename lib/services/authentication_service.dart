@@ -1,10 +1,16 @@
+import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationService {
-  final FirebaseAuth _firebaseAuth;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final NavigationService navigationService = NavigationService.instance;
+  User? get  user{
+    return _firebaseAuth.currentUser;
+  }
 
-  AuthenticationService(this._firebaseAuth);
-
+  static final AuthenticationService instance = AuthenticationService._init();
+  AuthenticationService._init();
   //Stream<User> get authStateChanges =>_firebaseAuth.authStateChanges();
 
   Future<Map> signIn({required String email, required String password}) async {
@@ -35,8 +41,8 @@ class AuthenticationService {
 
   Future<void> logOut() async {
     try {
-      var user = _firebaseAuth;
-      user.signOut();
+      _firebaseAuth.signOut(); // signs out the #user
+      navigationService.navigateToPageClear(path: RouteConstants.SIGNIN,data:[]);
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }
@@ -44,10 +50,10 @@ class AuthenticationService {
 
   Future<bool> verifyEmail() async {
     try {
-      var user = _firebaseAuth.currentUser;
+     
       print(user!.email);
-      user.reload();
-      return user.emailVerified;
+      user!.reload();
+      return user!.emailVerified;
     } on FirebaseAuthException catch (e) {
       print(e.message);
       return false;
@@ -56,7 +62,7 @@ class AuthenticationService {
 
   Future<String> returnUserEmail() async {
     try {
-      var user = await _firebaseAuth.currentUser;
+      var user = _firebaseAuth.currentUser;
       String? email = user!.email;
       return email!;
     } on FirebaseAuthException catch (e) {

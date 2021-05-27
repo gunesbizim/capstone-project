@@ -9,20 +9,21 @@ import 'package:flutter/services.dart';
 
 class DroneConnectionStatusService {
 
+  static final DroneConnectionStatusService instance = DroneConnectionStatusService._init();
+
   late Function setStatus;
   late Connectivity _connectivity = new Connectivity();
   ConnectivityResult? _result;
-  DroneConnectionStatusService({
-    required this.setStatus,
-  });
 
-  late final Timer _timer;
+  //late final Timer _timer;
   final String = "";
 
   int counter = 0;
+  DroneConnectionStatusService._init();
 
   void checkStatus() async{
-     _timer  = Timer.periodic(
+     //_timer  = 
+     Timer.periodic(
       Duration(milliseconds: 50),
       (Timer t) async{
         if(counter ==100){

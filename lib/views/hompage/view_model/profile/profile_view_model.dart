@@ -33,23 +33,23 @@ abstract class _ProfileViewModelBase with Store, BaseViewModel{
 
   @override
   void init(){
-    userDetailService = UserDetailService(
-      userName: userName,
-      flightTime: flightTime,
-      hasPP: hasPP,
-      ppURL: ppURL
-    );
-    userDetailService.init();
+    userDetailService = UserDetailService();
     getUserDetails();
   }
 
   @action
   Future getUserDetails() async {
     print("before: $userName");
-    await userDetailService.getUserDetails();
+    await userDetailService.getUserDetails().then((result){
+      userName = result["userName"]!;
+      ppURL = result["ppURL"]!;
+      flightTime = result["flightTime"]!;
+    });
     print("after: $userName");
     }
   
   @action
-  Future selectImage(ProfilePictureEnums mode)async => userDetailService.selectImage(mode, hasPP,ppURL);
+  Future selectImage(ProfilePictureEnums mode)async{
+    userDetailService.selectImage(mode).then((value) => ppURL = value);
+    } 
 }

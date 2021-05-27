@@ -1,4 +1,6 @@
 import 'package:capstone_project/core/base/model/base_view_model.dart';
+import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
 
 import 'package:mobx/mobx.dart';
@@ -23,5 +25,8 @@ abstract class _FlyViewModelBase  with BaseViewModel, Store {
   @computed
   bool get isConnected => droneConnectionViewModel.isConnected;
   
+  void startFlight(){
+    NavigationService.instance.navigateToPage(path: RouteConstants.FLIGHT_CONTROLLER,data: []);
+  }
   
 }

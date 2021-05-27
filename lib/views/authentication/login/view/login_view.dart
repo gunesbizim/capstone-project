@@ -1,14 +1,13 @@
 import 'package:capstone_project/core/components/logo.dart';
-import 'package:capstone_project/core/constants/app_colors.dart';
+import 'package:capstone_project/core/constants/values/app_colors.dart';
 import 'package:capstone_project/core/base/view/base_widget.dart';
-import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/login/view_model/login_view_model.dart';
 import 'package:capstone_project/views/authentication/validation.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:capstone_project/core/constants/text_constants.dart';
+import 'package:capstone_project/core/constants/values/text_constants.dart';
 
 class LoginView extends StatelessWidget {
   @override

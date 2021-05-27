@@ -1,12 +1,10 @@
 import 'package:capstone_project/core/base/model/base_view_model.dart';
-import 'package:capstone_project/core/base/view/base_widget.dart';
-import 'package:capstone_project/services/FirebaseAuth.dart';
+import 'package:capstone_project/services/authentication_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:capstone_project/core/constants/route_constants.dart';
+import 'package:capstone_project/core/constants/values/route_constants.dart';
 part 'login_view_model.g.dart';
 
 class LoginViewModel = _LoginViewModelBase with _$LoginViewModel;
@@ -25,7 +23,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   @override
   void init() {
     print("init");
-    loginService = AuthenticationService(FirebaseAuth.instance);
+    loginService = AuthenticationService.instance;
     navigationService = NavigationService.instance;
     emailController = TextEditingController();
     passwordController = TextEditingController();
