@@ -11,9 +11,14 @@ class AuthenticationService {
     try {
       var userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return {"message": 'Sign In Completed', "userCredential": userCredential};
+      bool state = await verifyEmail();
+      return {
+        "message": 'Sign In Completed',
+        "userCredential": userCredential,
+        "state": state,
+      };
     } on FirebaseAuthException catch (e) {
-      return {"message": e.message, "userCredential": null};
+      return {"message": e.message, "userCredential": null, "state": false};
     }
   }
 
@@ -28,10 +33,20 @@ class AuthenticationService {
     }
   }
 
+  Future<void> logOut() async {
+    try {
+      var user = _firebaseAuth;
+      user.signOut();
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  }
+
   Future<bool> verifyEmail() async {
     try {
-      var user = await _firebaseAuth.currentUser;
-      user!.reload();
+      var user = _firebaseAuth.currentUser;
+      print(user!.email);
+      user.reload();
       return user.emailVerified;
     } on FirebaseAuthException catch (e) {
       print(e.message);

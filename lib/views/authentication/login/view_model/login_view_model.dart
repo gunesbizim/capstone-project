@@ -37,26 +37,16 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   @observable
   bool isLockOpen = false;
 
-  late bool _state;
-
   @action
   Future<void> login() async {
-    //isLoadingChange();
-    print("test123123");
-    print(globalFormState);
     if (globalFormState.currentState!.validate()) {
-      print("2");
-
       final response = await loginService.signIn(
           email: emailController!.text, password: passwordController!.text);
       if (response["userCredential"] != null) {
         print(response["message"]);
-
-        //TODO: Sow snackbar
-        //isLoadingChange(); zett@zett.com
-        print("4");
-        loginService.verifyEmail().then((value) => _state = value);
-        if (_state) {
+        print(await response["state"]);
+        bool state = response["state"];
+        if (state) {
           navigationService.navigateToPageClear(
               path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
         } else {
@@ -68,7 +58,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
         print(response["message"]);
       }
     } //else
-    //isLoadingChange();
+    isLoadingChange();
   }
 
   navigateToSignUp() {
