@@ -19,32 +19,17 @@ class FlightListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     MediaQueryData queryData = MediaQuery.of(context);
     return BaseView<FlightListViewModel>(
       viewModel: FlightListViewModel(),
-    onPageBuilder: (context, flightListViewModel) => Container(
+      onPageBuilder: (context, flightListViewModel) => Container(
         decoration: BoxDecoration(
           gradient: AppColors.backgroundGradient,
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent ,
-            foregroundColor: Colors.transparent,
-            leading: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SizedBox(
-                width:queryData.size.height*0.04
-              ),
-            ),
-            centerTitle: true,
-            title: ZettLogo(height:queryData.size.height*0.045),  
-            actions: <Widget>[Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(child: Icon(Icons.logout_sharp,color: Colors.white,size:queryData.size.height*0.04)),
-            )],
-            elevation: 0,
-          ),  
+          appBar: buildAppBar(queryData, flightListViewModel),  
           body: Column(
             children: [
               Center(child:Text("All Flights", style: TextConstants.home_screen_35)),
@@ -69,11 +54,46 @@ class FlightListView extends StatelessWidget {
         )
       ),
        onModelReady: (model){
+         print("flvm on onmodelready");
          model.setContext(context);
          model.init();
        }
        
     );
   }
+
+  AppBar buildAppBar(MediaQueryData queryData, FlightListViewModel flightListViewModel) {
+    return AppBar(
+          backgroundColor: Colors.transparent ,
+          foregroundColor: Colors.transparent,
+          leading: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: SizedBox(
+              width:queryData.size.height*0.04
+            ),
+          ),
+          centerTitle: true,
+          title: ZettLogo(height:queryData.size.height*0.045),  
+          actions: <Widget>[Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:  Observer(
+              builder: (_){
+                print("dropdown observer builder");
+                print(flightListViewModel.dropdownWidgetList);
+                for (var i in flightListViewModel.dropdownWidgetList){
+                  print(i.value);
+                }
+                return DropdownButton(
+                value: flightListViewModel.dropDownValue,
+                items: flightListViewModel.dropdownWidgetList,
+                onChanged: flightListViewModel.dropDownValueChanged,
+                );
+              },
+              )
+          )],
+          elevation: 0,
+        );
+  }
+  
 }
 

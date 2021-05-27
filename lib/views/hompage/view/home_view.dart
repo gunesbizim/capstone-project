@@ -12,6 +12,8 @@ import 'package:capstone_project/views/hompage/view_model/drone/drone_connection
 import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/profile/profile_view_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -264,14 +266,23 @@ class HomeView extends StatelessWidget {
                         () {
                           // for(int i = 1; i<=31; i++){
                           //   print(i);
-                          //   int hour = 1+Random().nextInt(23);
+                          //   int startHour = 1+Random().nextInt(13);
                           //   int min = 1+Random().nextInt(59);
-
+                          //   int endHour = startHour + Random().nextInt(11);
+                          //   var start = DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${startHour>=10?startHour:"0"+startHour.toString()}:${min>=10?min:"0"+min.toString()}:00");
+                          //   var end = DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${endHour>=10?endHour:"0"+endHour.toString()}:${min>=10?min:"0"+min.toString()}:00");
+                          //   List<String> duration = formatDuration( end.difference(start));
+                            
                           //   FirebaseFirestore.instance.collection("flights").add(
                           //   {
-                          //     "flightStartTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour>=10?hour:"0"+hour.toString()}:${min>=10?min:"0"+min.toString()}:00"),
-                          //     "flightEndTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour+1>=10?hour+1:"0"+(hour+1).toString()}:${min>=10?min:"0"+min.toString()}:00"),
-                          //     "pilotId" : FirebaseAuth.instance.currentUser!.uid
+                          //     "flightStartTime" : start,
+                          //     "flightEndTime" : end,
+                          //     "pilotId" : FirebaseAuth.instance.currentUser!.uid,
+                          //     "duration" : {
+                          //       "hours":duration[0],
+                          //       "minutes":duration[1],
+                          //       "seconds":duration[2]
+                          //     }
                           //   }
                           //   );
                           //   print(i);
@@ -284,7 +295,13 @@ class HomeView extends StatelessWidget {
         },
       );
   }
-  
+  List<String> formatDuration(Duration duration) {
+        String twoDigits(int n) => n.toString().padLeft(2, "0");
+        String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+        String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+
+      return [twoDigits(duration.inHours),twoDigitMinutes,twoDigitSeconds];
+      }
 
 
 
