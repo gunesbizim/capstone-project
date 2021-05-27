@@ -15,8 +15,8 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     //TODO: connect it with an upper widget
     MediaQueryData data = MediaQuery.of(context);
-    var navigationService = NavigationService.instance;
     double height = data.size.height;
+    double width = data.size.width;
     return BaseView<LoginViewModel>(
         viewModel: LoginViewModel(),
         onPageBuilder: (BuildContext context, LoginViewModel value) =>
@@ -30,6 +30,7 @@ class LoginView extends StatelessWidget {
                       children: [
                         SizedBox(
                           height: height * 0.13,
+                          width: width * 1,
                         ),
                         ZettLogo(height: height * 0.30),
                         SizedBox(

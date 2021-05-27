@@ -1,5 +1,3 @@
-
-
 import 'dart:math';
 
 import 'package:capstone_project/core/base/view/base_widget.dart';
@@ -8,6 +6,7 @@ import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/components/profile_picture.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
 import 'package:capstone_project/core/constants/text_constants.dart';
+import 'package:capstone_project/services/FirebaseAuth.dart';
 import 'package:capstone_project/views/hompage/view_model/drone/drone_connection_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/fly/fly_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
@@ -16,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeView extends StatelessWidget {
-  final DroneConnectionViewModel droneConnectionViewModel = DroneConnectionViewModel();
+  final DroneConnectionViewModel droneConnectionViewModel =
+      DroneConnectionViewModel();
   @override
   Widget build(BuildContext context) {
-    
     MediaQueryData queryData = MediaQuery.of(context);
     print(queryData.size.height);
     return buildBaseContainer(context, queryData);
@@ -38,51 +37,65 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent ,
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.transparent,
         leading: Padding(
           padding: EdgeInsets.all(8.0),
-          child: SizedBox(
-            width:queryData.size.height*0.04
-          ),
+          child: SizedBox(width: queryData.size.height * 0.04),
         ),
         centerTitle: true,
-        title: ZettLogo(height:queryData.size.height*0.045),  
-        actions: <Widget>[Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(child: Icon(Icons.logout_sharp,color: Colors.white,size:queryData.size.height*0.04)),
-        )],
+        title: ZettLogo(height: queryData.size.height * 0.045),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              child: Icon(Icons.logout_sharp,
+                  color: Colors.white, size: queryData.size.height * 0.04),
+              onTap: () => {
+                //TODO: LOGOUT
+              },
+            ),
+          )
+        ],
         elevation: 0,
-      ),  
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          buildProfileData(context,queryData),
-          SizedBox(height:queryData.size.height*0.013),
-          buildThirdRow(context,queryData),
-          SizedBox(height:queryData.size.height*0.13),
+          buildProfileData(context, queryData),
+          SizedBox(height: queryData.size.height * 0.013),
+          buildThirdRow(context, queryData),
+          SizedBox(height: queryData.size.height * 0.08),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BaseView<FlyViewModel>(viewModel: FlyViewModel(),
-               onPageBuilder: (context, model){
-                 return FlightButton(flyViewModel: model);
-               },
-                onModelReady:(model){
-                  model.setContext(context);
-                  model.init();
-                  model.setDroneConnectionViewModel(this.droneConnectionViewModel);
-                })
+              BaseView<FlyViewModel>(
+                  viewModel: FlyViewModel(),
+                  onPageBuilder: (context, model) {
+                    return FlightButton(flyViewModel: model);
+                  },
+                  onModelReady: (model) {
+                    model.setContext(context);
+                    model.init();
+                    model.setDroneConnectionViewModel(
+                        this.droneConnectionViewModel);
+                  })
             ],
           ),
           Expanded(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Developed by Exarillion & Ocliptus",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w200),),
-              )]),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Developed by Exarillion & Ocliptus",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w200),
+                    ),
+                  )
+                ]),
           ),
         ],
       ),
@@ -90,28 +103,28 @@ class HomeView extends StatelessWidget {
   }
 
   Row buildProfileData(BuildContext context, MediaQueryData queryData) {
-    return Row(
-      mainAxisAlignment:  MainAxisAlignment.center,
-      children:[ BaseView<ProfileViewModel>(
-        viewModel: ProfileViewModel(), onPageBuilder: (BuildContext context, ProfileViewModel model){
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: buildProfilePictureRow(queryData,model),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 5.0,bottom:10.0),
-                child: buildUserNameFlightTime(model),
-              ),
-            ],
-          );
-        }, onModelReady: (model){
-          model.setContext(context);
-          model.init();
-
-        }),]
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      BaseView<ProfileViewModel>(
+          viewModel: ProfileViewModel(),
+          onPageBuilder: (BuildContext context, ProfileViewModel model) {
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: buildProfilePictureRow(queryData, model),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                  child: buildUserNameFlightTime(model),
+                ),
+              ],
+            );
+          },
+          onModelReady: (model) {
+            model.setContext(context);
+            model.init();
+          }),
+    ]);
   }
 
   Row buildThirdRow(BuildContext context, MediaQueryData queryData) {
@@ -120,7 +133,7 @@ class HomeView extends StatelessWidget {
       children: [
         buildConnectedDroneCard(context, queryData),
         SizedBox(width: queryData.size.width * 0.10),
-        buildLasFlightCard(context,queryData)
+        buildLasFlightCard(context, queryData)
       ],
     );
   }
@@ -147,40 +160,40 @@ class HomeView extends StatelessWidget {
             children: [
               Text("Status", style: TextConstants.home_screen_35),
               BaseView<DroneConnectionViewModel>(
-                viewModel: this.droneConnectionViewModel,
-                onPageBuilder: (BuildContext context, DroneConnectionViewModel dcvm){
-                  return Column(
+                  viewModel: this.droneConnectionViewModel,
+                  onPageBuilder:
+                      (BuildContext context, DroneConnectionViewModel dcvm) {
+                    return Column(
                       children: [
                         Observer(
-                            builder: (_) => Text(dcvm.status,
+                          builder: (_) => Text(
+                            dcvm.status,
                             style: TextConstants.home_screen_24,
-                            ),
+                          ),
                         ),
-                          Observer(builder: (_) {
-                            return  dcvm.isLoading?
-                                SizedBox(height:queryData.size.height*0.026,
-                                width:queryData.size.height*0.026,
-                                        
-                                  child:CircularProgressIndicator(
+                        Observer(builder: (_) {
+                          return dcvm.isLoading
+                              ? SizedBox(
+                                  height: queryData.size.height * 0.026,
+                                  width: queryData.size.height * 0.026,
+                                  child: CircularProgressIndicator(
                                     backgroundColor: Colors.transparent,
                                     color: AppColors.primaryBlue,
                                     strokeWidth: 2,
                                   ),
-                                ):SizedBox(
-                                  height:queryData.size.height*0.026,
-                                width:queryData.size.height*0.026
-                                );
-                          }),
-                          SizedBox(
-                            height:queryData.size.height*0.034
-                          )
+                                )
+                              : SizedBox(
+                                  height: queryData.size.height * 0.026,
+                                  width: queryData.size.height * 0.026);
+                        }),
+                        SizedBox(height: queryData.size.height * 0.034)
                       ],
                     );
-                },
-                onModelReady: (model){
-                  model.setContext(context);
-                  model.init();
-                })
+                  },
+                  onModelReady: (model) {
+                    model.setContext(context);
+                    model.init();
+                  })
             ],
           )),
     );
@@ -206,137 +219,144 @@ class HomeView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              BaseView<FlightLogViewModel>(//!Flight Log View Model initializaion
-                 viewModel: FlightLogViewModel(), 
-                 onPageBuilder: (BuildContext context, FlightLogViewModel value){
-                   return Column(
-                     children: [
-                       lastFlightObserver(context,value, queryData),
-                      
-                     ],
-                   );
-                 },
-                 onModelReady: (model){
-                   model.setContext(context);
-                   model.init();
-
-                 })            
-              ],
-          )
-          ),
+              BaseView<FlightLogViewModel>(
+                  //!Flight Log View Model initializaion
+                  viewModel: FlightLogViewModel(),
+                  onPageBuilder:
+                      (BuildContext context, FlightLogViewModel value) {
+                    return Column(
+                      children: [
+                        lastFlightObserver(context, value, queryData),
+                      ],
+                    );
+                  },
+                  onModelReady: (model) {
+                    model.setContext(context);
+                    model.init();
+                  })
+            ],
+          )),
     );
   }
 
-  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value, MediaQueryData queryData){
-    return Observer(
-                     builder: (_){
-                       return Column(
-                         children: [
-                           const Text("Last Flight", style: TextConstants.home_screen_35),
-                           Text(value.lastFlight,style: TextConstants.home_screen_24 ,),
-                           SizedBox(height:queryData.size.height*0.03),
-                           buildSeeAllFlights(value,queryData),
-                         ],
-                       );
-                     }
-                   );
-  }
-  Observer buildSeeAllFlights(FlightLogViewModel flightLogWiewModel,MediaQueryData queryData) {
-      return Observer(
-        builder: (_){
-          return Container(
-                  height: queryData.size.height*0.034,
-                  width: queryData.size.width*0.24,
-                  child: Material(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(30)),
-                    color: AppColors.primaryBlue,
-                    child: InkWell(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(30)),
-                      child: Center(
-                        child: Text(
-                          "See All",
-                          style: TextConstants.home_screen_20,),
-                      ),
-                      onTap: flightLogWiewModel.isLoading?
-                        null:
-                        () {
-                          // for(int i = 1; i<=31; i++){
-                          //   print(i);
-                          //   int hour = 1+Random().nextInt(23);
-                          //   int min = 1+Random().nextInt(59);
-
-                          //   FirebaseFirestore.instance.collection("flights").add(
-                          //   {
-                          //     "flightStartTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour>=10?hour:"0"+hour.toString()}:${min>=10?min:"0"+min.toString()}:00"),
-                          //     "flightEndTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour+1>=10?hour+1:"0"+(hour+1).toString()}:${min>=10?min:"0"+min.toString()}:00"),
-                          //     "pilotId" : FirebaseAuth.instance.currentUser!.uid
-                          //   }
-                          //   );
-                          //   print(i);
-                          // }
-                          flightLogWiewModel.loadList();
-                        },
-                    ),
-                  ),
-                );
-        },
+  Observer lastFlightObserver(BuildContext context, FlightLogViewModel value,
+      MediaQueryData queryData) {
+    return Observer(builder: (_) {
+      return Column(
+        children: [
+          const Text("Last Flight", style: TextConstants.home_screen_35),
+          Text(
+            value.lastFlight,
+            style: TextConstants.home_screen_24,
+          ),
+          SizedBox(height: queryData.size.height * 0.03),
+          buildSeeAllFlights(value, queryData),
+        ],
       );
+    });
   }
-  
 
+  Observer buildSeeAllFlights(
+      FlightLogViewModel flightLogWiewModel, MediaQueryData queryData) {
+    return Observer(
+      builder: (_) {
+        return Container(
+          height: queryData.size.height * 0.034,
+          width: queryData.size.width * 0.24,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            color: AppColors.primaryBlue,
+            child: InkWell(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              child: Center(
+                child: Text(
+                  "See All",
+                  style: TextConstants.home_screen_20,
+                ),
+              ),
+              onTap: flightLogWiewModel.isLoading
+                  ? null
+                  : () {
+                      // for(int i = 1; i<=31; i++){
+                      //   print(i);
+                      //   int hour = 1+Random().nextInt(23);
+                      //   int min = 1+Random().nextInt(59);
 
+                      //   FirebaseFirestore.instance.collection("flights").add(
+                      //   {
+                      //     "flightStartTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour>=10?hour:"0"+hour.toString()}:${min>=10?min:"0"+min.toString()}:00"),
+                      //     "flightEndTime" : DateTime.parse("2020-03-${i>=10?i:"0"+i.toString()} ${hour+1>=10?hour+1:"0"+(hour+1).toString()}:${min>=10?min:"0"+min.toString()}:00"),
+                      //     "pilotId" : FirebaseAuth.instance.currentUser!.uid
+                      //   }
+                      //   );
+                      //   print(i);
+                      // }
+                      flightLogWiewModel.loadList();
+                    },
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Column buildUserNameFlightTime(ProfileViewModel model) {
     return Column(
       //Name and flight time, second row
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(model.userName, style: TextConstants.home_screen_24,), 
-        Text("Flight Time: ${model.flightTime}",style: TextConstants.home_screen_14,)],
+        Text(
+          model.userName,
+          style: TextConstants.home_screen_24,
+        ),
+        Text(
+          "Flight Time: ${model.flightTime}",
+          style: TextConstants.home_screen_14,
+        )
+      ],
     );
   }
 
-  Observer buildProfilePictureRow(MediaQueryData queryData,ProfileViewModel profileViewModel) {
+  Observer buildProfilePictureRow(
+      MediaQueryData queryData, ProfileViewModel profileViewModel) {
     return Observer(
-          builder: (BuildContext context){
-            return  Row(
-              //profile picture, first row
+      builder: (BuildContext context) {
+        return Row(
+          //profile picture, first row
+          children: [
+            Row(
+              //left wing image
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  //left wing image
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Image(
-                        image: AssetImage('assets/images/left_wing.png'),
-                        //TODO: Calculate it in another way.
-                        height: queryData.size.width * 0.32 * 1.05,
-                        width: queryData.size.width * 0.32),
-                  ],
-                ),
-                  
-                  ProfilePicture(
-                    ppURL: profileViewModel.ppURL, 
-                    screenHeight: queryData.size.height,
-                    hasPP: profileViewModel.hasPP, 
-                    selectImage: profileViewModel.selectImage),
-                    //ProfilePicture(ppURL: profileViewModel.ppURL, screenHeight: queryData.size.height)
-                     //if user hasa pp, display it otherwise display add picture
-                Row(
-                  //right wing image
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image(
-                        image: AssetImage('assets/images/right_wing.png'),
-                        //TODO: Calculate it in another way.
-                        height: queryData.size.width * 0.32 * 1.05,
-                        width: queryData.size.width * 0.32),
-                  ],
-                )
+                Image(
+                    image: AssetImage('assets/images/left_wing.png'),
+                    //TODO: Calculate it in another way.
+                    height: queryData.size.width * 0.32 * 1.05,
+                    width: queryData.size.width * 0.32),
               ],
-            );
-          },
-    ); 
+            ),
+
+            ProfilePicture(
+                ppURL: profileViewModel.ppURL,
+                screenHeight: queryData.size.height,
+                hasPP: profileViewModel.hasPP,
+                selectImage: profileViewModel.selectImage),
+            //ProfilePicture(ppURL: profileViewModel.ppURL, screenHeight: queryData.size.height)
+            //if user hasa pp, display it otherwise display add picture
+            Row(
+              //right wing image
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image(
+                    image: AssetImage('assets/images/right_wing.png'),
+                    //TODO: Calculate it in another way.
+                    height: queryData.size.width * 0.32 * 1.05,
+                    width: queryData.size.width * 0.32),
+              ],
+            )
+          ],
+        );
+      },
+    );
   }
 }

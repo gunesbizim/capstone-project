@@ -13,6 +13,7 @@ class SignupView extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData data = MediaQuery.of(context);
     double height = data.size.height;
+    double width = data.size.width;
     return BaseView<SignupViewModel>(
         viewModel: SignupViewModel(),
         onPageBuilder: (BuildContext context, SignupViewModel value) =>
@@ -28,6 +29,7 @@ class SignupView extends StatelessWidget {
                         children: [
                           SizedBox(
                             height: height * 0.13,
+                            width: width * 1,
                           ),
                           ZettLogo(height: height * 0.3),
                           SizedBox(

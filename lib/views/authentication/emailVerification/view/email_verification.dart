@@ -1,10 +1,8 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/constants/app_colors.dart';
-import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

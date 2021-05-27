@@ -7,56 +7,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class FlightButton extends StatelessWidget {
-
   final FlyViewModel flyViewModel;
 
-  FlightButton({
-    required this.flyViewModel
-  });
+  FlightButton({required this.flyViewModel});
 
   @override
   Widget build(BuildContext context) {
-    return buildFlightButton(context);
+    MediaQueryData data = MediaQuery.of(context);
+    return buildFlightButton(context, data);
   }
 
-  Widget buildFlightButton(BuildContext context) {
+  Widget buildFlightButton(BuildContext context, MediaQueryData data) {
+    double width = data.size.width;
+    double height = data.size.height;
     return Observer(
-        builder: (_) =>  Stack(
+      builder: (_) => Stack(
         alignment: Alignment.center,
         children: [
           buildWings(),
           Container(
             decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-            height: 147,//todo calculate dynamically
-            width: 147,
+                BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+            height: height * 0.19, //todo calculate dynamically
+            width: width * 0.4,
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                customBorder: CircleBorder(),
-                splashColor: AppColors.primaryPurple,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.flightButtonGradient,
-                    shape: BoxShape.circle,
+                  customBorder: CircleBorder(),
+                  splashColor: AppColors.primaryPurple,
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      gradient: AppColors.flightButtonGradient,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      "FLY",
+                      style: TextConstants.home_screen_50,
+                    ),
                   ),
-                  child: Text(
-                    "FLY",
-                    style: TextConstants.home_screen_50,
-                  ),
-                ),
-                onTap: flyViewModel.isConnected? (){
+                  onTap: flyViewModel.isConnected
+                      ? () {}
+                      : () {
+                          final snackBar = SnackBar(
+                              content: Text('Drone is not connected!'));
 
-                }: (){
-                  final snackBar = SnackBar(content: Text('Drone is not connected!'));
-
-                  // Find the ScaffoldMessenger in the widget tree
-                  // and use it to show a SnackBar.
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }),
-              ),
+                          // Find the ScaffoldMessenger in the widget tree
+                          // and use it to show a SnackBar.
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }),
             ),
+          ),
         ],
       ),
     );
