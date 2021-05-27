@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/core/enums/profile_picture_enum.dart';
 import 'package:capstone_project/views/hompage/services/user_detail_service.dart';
@@ -10,7 +8,7 @@ part 'profile_view_model.g.dart';
 class ProfileViewModel = _ProfileViewModelBase with _$ProfileViewModel;
 
 abstract class _ProfileViewModelBase with Store, BaseViewModel{
-    
+  final String filePath = "package:capstone_project/views/hompage/view_model/profile/profile_view_model.dart";
   @observable
   var image;
 
@@ -33,19 +31,20 @@ abstract class _ProfileViewModelBase with Store, BaseViewModel{
 
   @override
   void init(){
-    userDetailService = UserDetailService();
+    userDetailService = UserDetailService.instance;
+    print("Profile View Model initialized");
     getUserDetails();
   }
 
   @action
   Future getUserDetails() async {
-    print("before: $userName");
+    print("$filePath: Getting user details");
     await userDetailService.getUserDetails().then((result){
+      print("$filePath: Assigning profile data to observable variables");
       userName = result["userName"]!;
       ppURL = result["ppURL"]!;
       flightTime = result["flightTime"]!;
     });
-    print("after: $userName");
     }
   
   @action

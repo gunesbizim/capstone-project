@@ -77,7 +77,6 @@ class JoystickView extends StatelessWidget {
         lastPosition, innerCircleSize, actualSize, Offset(0, 0));
 
     DateTime? _callbackTimestamp = DateTimeConstants.timeCheck;
-    ;
 
     return Center(
       child: StatefulBuilder(

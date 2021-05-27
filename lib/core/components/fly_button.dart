@@ -48,7 +48,8 @@ class FlightButton extends StatelessWidget {
                     ),
                   ),
                   onTap: flyViewModel.isConnected
-                      ? () {//FlightDataService.instance.generateMockData();
+                      ? () {
+                        FlightDataService.instance.generateMockData();
                         flyViewModel.startFlight();
                       }
                       : () {                        

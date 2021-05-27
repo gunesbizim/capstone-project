@@ -15,22 +15,24 @@ class DroneConnectionStatusService {
   late Connectivity _connectivity = new Connectivity();
   ConnectivityResult? _result;
 
-  //late final Timer _timer;
-  final String = "";
+  late Timer _timer;
 
   int counter = 0;
   DroneConnectionStatusService._init();
 
-  void checkStatus() async{
-     //_timer  = 
+  Future checkStatus() async{
+    print("Checking Status");
+     _timer  = 
      Timer.periodic(
       Duration(milliseconds: 50),
       (Timer t) async{
+        print(counter);
         if(counter ==100){
+          print("Timer is finished with count of 100");
           setStatus(DroneConnectionStatusTypeEnum.SUCCESS,"Hell yeah");
           t.cancel();
         }
-        // try {
+                // try {
         //  _result = await _connectivity.checkConnectivity();
         //  setStatus(DroneConnectionStatusTypeEnum.SUCCESS,"hell yeah");
         // } on PlatformException catch (e) {

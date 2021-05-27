@@ -10,7 +10,7 @@ part 'drone_connection_view_model.g.dart';
 class DroneConnectionViewModel = _DroneConnectionViewModelBase with _$DroneConnectionViewModel;
 
 abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
-  late final DroneConnectionStatusService dcss;
+  late DroneConnectionStatusService dcss;
 
   @observable
   String status = "Not Connected";
@@ -27,17 +27,17 @@ abstract class _DroneConnectionViewModelBase with Store, BaseViewModel{
     dcss = DroneConnectionStatusService.instance;
     dcss.setStatus = setStatus;
     dcss.checkStatus();
-  }
+    }
   
   @observable
   bool isConnected = false;
 
-  
 
   @action
   void setStatus(DroneConnectionStatusTypeEnum statusTypesEnum, String message ){
     if(statusTypesEnum == DroneConnectionStatusTypeEnum.SUCCESS) 
     {
+        print("Drone connection succeded");
         isLoading = false;
         status = message;
         isConnected= true;

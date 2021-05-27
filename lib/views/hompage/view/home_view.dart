@@ -15,6 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeView extends StatelessWidget {
+
+  final String filePath = "package:capstone_project/views/hompage/view/home_view.dart:";
+
   final DroneConnectionViewModel droneConnectionViewModel =
       DroneConnectionViewModel();
   @override
@@ -55,28 +58,28 @@ class HomeView extends StatelessWidget {
                   onModelReady: (model) {
                     model.setContext(context);
                     model.init();
-                    model.setDroneConnectionViewModel(
-                        this.droneConnectionViewModel);
                   })
             ],
           ),
-          Expanded(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Developed by Exarillion & Ocliptus",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w200),
-                    ),
-                  )
-                ]),
-          ),
+           Expanded(
+                        child: Column(
+               mainAxisAlignment: MainAxisAlignment.end,
+               children: [
+                 Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Developed by Exarillion & Ocliptus",
+                            style: TextStyle(
+                                color: Colors.white, fontWeight: FontWeight.w200),
+                          ),
+                        ),
+               ],
+             ),
+           )
         ],
       ),
+      
+
     );
   }
 
@@ -123,6 +126,7 @@ class HomeView extends StatelessWidget {
       BaseView<ProfileViewModel>(
           viewModel: ProfileViewModel(),
           onPageBuilder: (BuildContext context, ProfileViewModel model) {
+            print("$filePath Building Profile Data");
             return Column(
               children: [
                 Padding(
@@ -143,8 +147,10 @@ class HomeView extends StatelessWidget {
     ]);
   }
 
-  Column buildUserNameFlightTime(ProfileViewModel model) {
-    return Column(
+  Observer buildUserNameFlightTime(ProfileViewModel model) {
+    print("$filePath Building User's name and Flight Time");
+    return Observer(builder: (_){
+      return Column(
       //Name and flight time, second row
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -158,9 +164,11 @@ class HomeView extends StatelessWidget {
         )
       ],
     );
+    });
   }
 
   Row buildCards(BuildContext context, MediaQueryData queryData) {
+    print("$filePath Building Cards");
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -196,15 +204,22 @@ class HomeView extends StatelessWidget {
                   viewModel: this.droneConnectionViewModel,
                   onPageBuilder:
                       (BuildContext context, DroneConnectionViewModel dcvm) {
+                    print("$filePath Building connected drone card.");                    
                     return Column(
                       children: [
                         Observer(
-                          builder: (_) => Text(
+                          builder: (_) {
+
+                            print("$filePath Building drone status.");                    
+
+                            return Text(
                             dcvm.status,
                             style: TextConstants.home_screen_24,
-                          ),
+                          );
+                          },
                         ),
                         Observer(builder: (_) {
+                          print("$filePath Building drone status progress indicator.");                    
                           return dcvm.isLoading
                               ? SizedBox(
                                   height: queryData.size.height * 0.026,
@@ -257,6 +272,10 @@ class HomeView extends StatelessWidget {
                   viewModel: FlightLogViewModel(),
                   onPageBuilder:
                       (BuildContext context, FlightLogViewModel value) {
+                    
+                    print("$filePath Building last flight card");                    
+                    
+
                     return Column(
                       children: [
                         lastFlightObserver(context, value, queryData),
@@ -274,6 +293,7 @@ class HomeView extends StatelessWidget {
 
   Observer lastFlightObserver(BuildContext context, FlightLogViewModel value, MediaQueryData queryData) {
     return Observer(builder: (_) {
+      print("$filePath Building last flight observer");                    
       return Column(
         children: [
           const Text("Last Flight", style: TextConstants.home_screen_35),
@@ -291,6 +311,7 @@ class HomeView extends StatelessWidget {
   Observer buildSeeAllFlights(FlightLogViewModel flightLogWiewModel, MediaQueryData queryData) {
     return Observer(
       builder: (_) {
+        print("$filePath Building see all flights button");                    
         return Container(
           height: queryData.size.height * 0.034,
           width: queryData.size.width * 0.24,
@@ -320,6 +341,7 @@ class HomeView extends StatelessWidget {
   Observer buildProfilePictureRow(MediaQueryData queryData, ProfileViewModel profileViewModel) {
     return Observer(
       builder: (BuildContext context) {
+        print("$filePath Building Profile Picture Row");
         return Row(
           //profile picture, first row
           children: [

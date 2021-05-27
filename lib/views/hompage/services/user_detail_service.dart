@@ -13,6 +13,8 @@ import 'package:path/path.dart' as p;
 
 class UserDetailService with  ChangeNotifier{
   
+  final String filePath = "package:capstone_project/views/hompage/services/user_detail_service.dart:";
+
   String url = "";
 
   final _picker = ImagePicker();
@@ -20,13 +22,16 @@ class UserDetailService with  ChangeNotifier{
   late File? _image;
   late Reference storageReference;
   FireStoreService _fireStoreService = FireStoreService.instance;
-
+  static final UserDetailService instance = UserDetailService._init();
+  UserDetailService._init();
 
 
   Future<Map<String, String>> getUserDetails() async{
+    print("$filePath Getting user details from Firestore Service");
     return await _fireStoreService.getUserDetails();
   }
   Future _setProfilePicture(ProfilePictureEnums mode) async{  
+      print("$filePath Setting profile pictur");
       if(mode == ProfilePictureEnums.UPDATE){
         //update existing image in firestore
         await storageReference.delete();

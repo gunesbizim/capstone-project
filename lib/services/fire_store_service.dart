@@ -2,10 +2,10 @@ import 'package:capstone_project/core/constants/functions/duratio_parser.dart';
 import 'package:capstone_project/services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:duration/duration.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class FireStoreService {
+  final String filePath = "package:capstone_project/services/fire_store_service.dart:";
+
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   static final FireStoreService instance = FireStoreService._init();
   final AuthenticationService authService = AuthenticationService.instance;
@@ -45,20 +45,26 @@ class FireStoreService {
       "duration": duration
     }; 
     await flightsRef.add(flight);
+    Duration durationToAdd = _parseDurationFromMap(duration["hours"], duration["minutes"], duration["secons"]);
+    await _addDuration(durationToAdd);
   }
   Future<Duration> getFlightTime() async{
     Duration duration = Duration();
     try{
       await pilotsRef.where("id",isEqualTo: authService.user!.uid ).get().then((querySnapshot){
         querySnapshot.docs.forEach((singleUser) {
-          duration = Duration(
-            hours: int.parse(singleUser["duration"]["hours"]),
-            minutes: int.parse(singleUser["duration"]["minutes"]), 
-            seconds: int.parse(singleUser["duration"]["seconds"]));
+          duration = _parseDurationFromMap(singleUser["duration"]["hours"],singleUser["duration"]["minutes"],singleUser["duration"]["seconds"]);
         });
       });
     } on Exception {}
     return duration;
+  }
+
+  Duration _parseDurationFromMap(String? hours, String? minutes, String? seconds) {
+    return Duration(
+          hours: int.parse(hours!),
+          minutes: int.parse(minutes!), 
+          seconds: int.parse(seconds!));
   }
   Future _addDuration(Duration durationToAdd) async {
     await getFlightTime().then((value){ 
@@ -82,8 +88,7 @@ class FireStoreService {
 
   
   Future<Map<String, String>> getUserDetails() async{
-    print("**********************USER DETAILS**********************");//hazarcandogabakan@gmail.com
-    print("**********************${authService.user!.uid}**********************");
+    print("$filePath Getting user details from Fire Store");
     Map<String, String> result = {
           "userName" : "No User Found!",
           "flightTime" : "00:00:00",
