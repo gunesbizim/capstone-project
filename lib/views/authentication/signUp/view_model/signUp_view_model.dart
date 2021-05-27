@@ -60,7 +60,10 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
           final User? user = auth.currentUser;
           final uid = user!.uid;
           fireStoreService.setUserData(
-              uid, nameCntrl!.text, emailCntrl!.text, "No flight yet");
+              id:uid, 
+              name: nameCntrl!.text,
+              email: emailCntrl!.text, 
+              lastFlightId: "No flight yet");
           //TODO: Sow snackbar
           //isLoadingChange(); zett@zett.com
           print("5");

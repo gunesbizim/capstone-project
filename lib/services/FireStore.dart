@@ -6,20 +6,23 @@ class FireStoreService {
 
   FireStoreService(this._fireStore);
 
-  Future<void> setUserData(
-      String id, String name, String email, String lastFlightId) async {
+  Future<void> setUserData({ 
+      required String id,
+      required String name,
+      required String email,
+      String lastFlightId = "",
+      String ppURL = "",
+      String flightTime = "00:00:00"
+      }) async {
     final CollectionReference pilotsRef = _fireStore.collection('pilots');
     Map<String, String> pilot = {
       "id": id,
       "fullName": name,
       "email": email,
-      "lastFlightId": lastFlightId
+      "lastFlightId": lastFlightId,
+      "ppURL": ppURL,
+      "flightTime": flightTime
     };
     await pilotsRef.doc(id).set(pilot);
-  }
-
-  void fetchFlightList() {
-    final firebaseUser = FirebaseAuth.instance.currentUser;
-    final result = {};
   }
 }

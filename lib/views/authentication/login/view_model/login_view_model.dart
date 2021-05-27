@@ -39,6 +39,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
 
   @action
   Future<void> login() async {
+    isLoadingChange();
     if (globalFormState.currentState!.validate()) {
       final response = await loginService.signIn(
           email: emailController!.text, password: passwordController!.text);

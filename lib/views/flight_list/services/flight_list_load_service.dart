@@ -22,7 +22,7 @@ class FlightListLoadService{
         .orderBy(fieldName,descending: isDecending)
         .limit(15);
     print('getDocuments');
-    fetchDocuments(collection);
+    fetchDocuments(collection,true);
   }
 
   Future<void> getDocumentsNext(String dropDownValue) async {
@@ -37,9 +37,11 @@ class FlightListLoadService{
             .collection('flights').where("pilotId", isEqualTo: FirebaseAuth.instance.currentUser!.uid).orderBy(fieldName,descending: isDecending)
             .startAfterDocument(lastVisible).limit(8);
     
-        fetchDocuments(collection);
-      }
-     fetchDocuments(Query collection){
+        fetchDocuments(collection,false);
+  }
+
+  void fetchDocuments(Query collection,bool isNew){
+        if(isNew) flights.clear();
         collection.get().then((querySnapshot) {
           collectionState = querySnapshot; // store collection state to set where to start next
           querySnapshot.docs.forEach((element) { 
@@ -48,6 +50,7 @@ class FlightListLoadService{
             Duration duration = end.difference(start);
             String startString = DateFormat("dd-MM-yyyy").format(start);
             String timeString = DateFormat(DateFormat.HOUR24_MINUTE_SECOND).format(start);
+            Duration d = Duration();
             String durationString = formatDuration(duration);
             flights.add(FlightLogItemModel(date: startString, time: timeString, duration: durationString));
           });
@@ -64,15 +67,20 @@ class FlightListLoadService{
         if(dropDownValue == SortingConstants.FLIGHT_DATE_ASCENDING.name){
           isDecending = false;
           fieldName = "flightStartTime";
+          print("current field name: $fieldName");
+
         } else if(dropDownValue == SortingConstants.FLIGHT_DATE_DESCENDING.name){
           isDecending = true;
           fieldName = "flightStartTime";
+          print("current field name: $fieldName");
         } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_ASCENDING.name){
           isDecending = false;
           fieldName = "duration";
+          print("current field name: $fieldName");
         } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_DESCENDING.name){
           isDecending = true;
           fieldName = "duration";      
+          print("current field name: $fieldName");
         }   
       }
 

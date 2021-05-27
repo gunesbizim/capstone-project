@@ -58,6 +58,7 @@ abstract class _FlightListViewModelBase with BaseViewModel, Store {
     getDocuments();
   }
 
+
   @action
   Future<void> getDocumentsNext() => flightListLoadService.getDocumentsNext(dropDownValue);
 
@@ -66,7 +67,10 @@ abstract class _FlightListViewModelBase with BaseViewModel, Store {
 
   @action 
   void dropDownValueChanged(var value){
-    print(value);
+    print("------------------------------------------");
+    print("dropdown value: $value");
     dropDownValue = value;
+    getDocuments();
+
   }
  }

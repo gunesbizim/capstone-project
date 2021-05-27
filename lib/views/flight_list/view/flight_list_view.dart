@@ -36,7 +36,9 @@ class FlightListView extends StatelessWidget {
               Expanded(
                 child:RefreshIndicator(
                   child: Observer(
-                    builder: (context) => ListView.builder(
+                    builder: (context){
+                      print("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+                      return ListView.builder(
                       physics: AlwaysScrollableScrollPhysics(),
                       controller: flightListViewModel.scrollController,
                       itemCount: flightListViewModel.flights.length,
@@ -44,7 +46,8 @@ class FlightListView extends StatelessWidget {
                         print("index: ${index}");
                         return FlightListSingleItem(queryData: queryData, data: flightListViewModel.flights[index]);
                       },
-                    ),
+                    );
+                    }
                   ),
                   onRefresh: flightListViewModel.getDocuments
                 )
@@ -78,11 +81,8 @@ class FlightListView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child:  Observer(
               builder: (_){
-                print("dropdown observer builder");
-                print(flightListViewModel.dropdownWidgetList);
-                for (var i in flightListViewModel.dropdownWidgetList){
-                  print(i.value);
-                }
+                print("++++++++++++++++++++");
+                print(flightListViewModel.dropDownValue);
                 return DropdownButton(
                 value: flightListViewModel.dropDownValue,
                 items: flightListViewModel.dropdownWidgetList,

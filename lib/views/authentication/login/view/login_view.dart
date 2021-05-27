@@ -84,6 +84,7 @@ class LoginView extends StatelessWidget {
               onTap: loginViewModel.isLoading
                   ? null
                   : () {
+                      print("Logging in!");
                       loginViewModel.login();
                     },
             ),

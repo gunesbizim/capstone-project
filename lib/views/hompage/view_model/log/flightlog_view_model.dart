@@ -41,9 +41,7 @@ abstract class _FlightLogViewModelBase with Store, BaseViewModel{
 
   @action
   void loadList() {
-    fireStore.fetchFlightList();
     NavigationService.instance.navigateToPage(path: RouteConstants.LOGS,data: []);
-
   }
 
   @action
