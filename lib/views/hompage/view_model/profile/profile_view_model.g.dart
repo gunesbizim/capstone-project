@@ -24,18 +24,18 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
     });
   }
 
-  final _$hasPPAtom = Atom(name: '_ProfileViewModelBase.hasPP');
+  final _$isLoadedAtom = Atom(name: '_ProfileViewModelBase.isLoaded');
 
   @override
-  bool get hasPP {
-    _$hasPPAtom.reportRead();
-    return super.hasPP;
+  bool get isLoaded {
+    _$isLoadedAtom.reportRead();
+    return super.isLoaded;
   }
 
   @override
-  set hasPP(bool value) {
-    _$hasPPAtom.reportWrite(value, super.hasPP, () {
-      super.hasPP = value;
+  set isLoaded(bool value) {
+    _$isLoadedAtom.reportWrite(value, super.isLoaded, () {
+      super.isLoaded = value;
     });
   }
 
@@ -104,7 +104,7 @@ mixin _$ProfileViewModel on _ProfileViewModelBase, Store {
   String toString() {
     return '''
 image: ${image},
-hasPP: ${hasPP},
+isLoaded: ${isLoaded},
 ppURL: ${ppURL},
 userName: ${userName},
 flightTime: ${flightTime}

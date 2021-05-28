@@ -42,19 +42,22 @@ class FireStoreService {
       "duration": duration
     };
     await flightsRef.add(flight);
-    Duration durationToAdd = _parseDurationFromMap(duration["hours"], duration["minutes"], duration["secons"]);
+    Duration durationToAdd = _parseDurationFromMap(duration["hours"], duration["minutes"], duration["seconds"]);
     await _addDuration(durationToAdd);
   }
 
   Future<Duration> getFlightTime() async {
     Duration duration = Duration();
+    print("----------------------uid");
+    print(authService.user!.uid);
     try {
-      await pilotsRef
-          .where("id", isEqualTo: authService.user!.uid)
-          .get()
+      var ref = pilotsRef.where("id", isEqualTo: authService.user!.uid);
+      await ref.get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((singleUser) {
-          duration = _parseDurationFromMap(singleUser["duration"]["hours"],singleUser["duration"]["minutes"],singleUser["duration"]["seconds"]);
+          print("single user duration");
+          print(singleUser.data());
+          duration = _parseDurationFromMap(singleUser["flightTime"]["hours"],singleUser["flightTime"]["minutes"],singleUser["flightTime"]["seconds"]);
         });
       });
     } on Exception {}
@@ -62,14 +65,21 @@ class FireStoreService {
   }
 
   Duration _parseDurationFromMap(String? hours, String? minutes, String? seconds) {
+    print("*************************");
+    print(hours);
+    print(minutes);
+    print(seconds);
     return Duration(
           hours: int.parse(hours!),
           minutes: int.parse(minutes!), 
           seconds: int.parse(seconds!));
   }
   Future _addDuration(Duration durationToAdd) async {
+
     await getFlightTime().then((value) {
+      
       Duration currentDuration = value;
+      print(currentDuration);
       currentDuration += durationToAdd;
       Map<String, String> finalDuration =
           DurationParser.parseDurationToMapHMS(currentDuration);

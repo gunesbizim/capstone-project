@@ -15,7 +15,7 @@ abstract class _ProfileViewModelBase with Store, BaseViewModel{
   late UserDetailService userDetailService;
 
   @observable
-  bool hasPP = false;
+  bool isLoaded = false;
 
   @observable
   String ppURL = "";
@@ -33,13 +33,15 @@ abstract class _ProfileViewModelBase with Store, BaseViewModel{
   void init(){
     userDetailService = UserDetailService.instance;
     print("Profile View Model initialized");
-    getUserDetails();
+    if(!isLoaded){
+      getUserDetails();
+    }
   }
 
   @action
   Future getUserDetails() async {
     print("$filePath: Getting user details");
-    await userDetailService.getUserDetails().then((result){
+    userDetailService.getUserDetails().then((result){
       print("$filePath: Assigning profile data to observable variables");
       userName = result["userName"]!;
       ppURL = result["ppURL"]!;

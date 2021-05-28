@@ -19,9 +19,9 @@ class _FlightControllerState extends State<FlightController> {
             decoration: BoxDecoration(color: Colors.white),
           ),
           Row(children: [
-            JoystickView(),
+            JoystickView(size: 150,),
             Expanded(child: Container()),
-            JoystickView()
+            JoystickView(size: 150,),
           ],)
         ],),
     );
