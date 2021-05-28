@@ -14,6 +14,7 @@ class EmailVerificationView extends StatelessWidget {
     MediaQueryData data = MediaQuery.of(context);
     double width = data.size.width;
     double height = data.size.height;
+    final args = ModalRoute.of(context)!.settings.arguments;
     return BaseView<EmailVerificationViewModel>(
         viewModel: EmailVerificationViewModel(),
         onPageBuilder:
@@ -48,6 +49,7 @@ class EmailVerificationView extends StatelessWidget {
                           ),
                         ))),
         onModelReady: (model) {
+          model.setArgs(args);
           model.setContext(context);
           model.init();
         });

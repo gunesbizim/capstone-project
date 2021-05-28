@@ -1,4 +1,5 @@
 import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,15 +17,16 @@ class AuthenticationService {
 
   Future<Map> signIn({required String email, required String password}) async {
     try {
-      var userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("email", email);
       prefs.setString("password", password);
       bool state = await verifyEmail();
+      var userDetails = await FireStoreService.instance.getUserDetails();
       return {
         "message": 'Sign In Completed',
-        "userCredential": userCredential,
+        "userCredential": userDetails,
         "state": state,
       };
     } on FirebaseAuthException catch (e) {
@@ -34,27 +36,21 @@ class AuthenticationService {
 
   Future<Map> tryAutoSignIn() async {
     final prefs = await SharedPreferences.getInstance();
-    print('here');
     try {
-      print(prefs.getString('email'));
-      print(prefs.getString('password'));
       if (prefs.getString('email') != null &&
           prefs.getString('password') != null) {
-        print('here2');
         String? email = prefs.getString('email');
         String? password = prefs.getString('password');
-        var userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+        await _firebaseAuth.signInWithEmailAndPassword(
             email: email!, password: password!);
-        print(userCredential);
+        var userDetails = await FireStoreService.instance.getUserDetails();
         bool state = await verifyEmail();
-        print(state);
         return {
           "message": 'Auto Sign In Completed',
-          "userCredential": userCredential,
+          "userCredential": userDetails,
           "state": state,
         };
       } else {
-        print('here3');
         return {
           "message": 'Auto Sign In Failed',
           "userCredential": null,
@@ -62,17 +58,24 @@ class AuthenticationService {
         };
       }
     } on FirebaseAuthException catch (e) {
-      print('here4');
       return {"message": e.message, "userCredential": null, "state": false};
     }
   }
 
-  Future<Map> signUp({required String email, required String password}) async {
+  Future<Map> signUp(
+      {required String email,
+      required String password,
+      required String fullName}) async {
     try {
-      var userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      print(userCredential);
-      return {"message": 'Sign In Completed', "userCredential": userCredential};
+      await FireStoreService.instance
+          .setUserData(id: user!.uid, name: fullName, email: email);
+      print(fullName);
+      var userDetails = await FireStoreService.instance.getUserDetails();
+      print(userDetails);
+
+      return {"message": 'Sign In Completed', "userCredential": userDetails};
     } on FirebaseAuthException catch (e) {
       return {"message": e.message, "userCredential": null};
     }
@@ -92,7 +95,6 @@ class AuthenticationService {
 
   Future<bool> verifyEmail() async {
     try {
-      print(user!.email);
       user!.reload();
       return user!.emailVerified;
     } on FirebaseAuthException catch (e) {
