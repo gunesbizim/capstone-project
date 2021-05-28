@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:capstone_project/core/enums/profile_picture_enum.dart';
 import 'package:capstone_project/services/authentication_service.dart';
 import 'package:capstone_project/services/fire_store_service.dart';
@@ -30,44 +28,43 @@ class UserDetailService with  ChangeNotifier{
     print("$filePath Getting user details from Firestore Service");
     return await _fireStoreService.getUserDetails();
   }
-  Future _setProfilePicture(ProfilePictureEnums mode) async{  
-      print("$filePath Setting profile pictur");
-      if(mode == ProfilePictureEnums.UPDATE){
-        //update existing image in firestore
-        await storageReference.delete();
-      }
-      try {
-        await storageReference.putFile(_image!)
-        .whenComplete(() => print("file uploaded"));
 
-       await storageReference
-          .getDownloadURL()
-          .then((fileURL) {    
-            url = fileURL;
-            _fireStoreService.updateField(
-              collection: "pilots",
-              field: "ppURL",
-              value: url
-            );
-          });  
-      } on Exception catch (e) {
-        print(e);
-      } 
+
+  Future _setProfilePicture(ProfilePictureEnums mode) async {
+      print("$filePath Setting profile pictue");
+
+    if (mode == ProfilePictureEnums.UPDATE) {
+      //update existing image in firestore
+      await storageReference.delete();
+    }
+    try {
+      await storageReference
+          .putFile(_image!)
+          .whenComplete(() => print("file uploaded"));
+
+      await storageReference.getDownloadURL().then((fileURL) {
+        url = fileURL;
+        _fireStoreService.updateField(
+            collection: "pilots", field: "ppURL", value: url);
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
-  Future<String> selectImage(ProfilePictureEnums mode)async {
-    final  pickedFile = await _picker.getImage(source: ImageSource.gallery);
-     
+  Future<String> selectImage(ProfilePictureEnums mode) async {
+    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       _image = File(pickedFile.path);
       _getStorageInstance();
-      print("----------------------------------------------------------------------------------------------------------------");
+      print(
+          "----------------------------------------------------------------------------------------------------------------");
       _image = await ImageCropper.cropImage(
         sourcePath: pickedFile.path,
         maxWidth: 1080,
         maxHeight: 1080,
         aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-        
       );
       await _setProfilePicture(mode);
     } else {
@@ -76,11 +73,13 @@ class UserDetailService with  ChangeNotifier{
 
     return url;
   }
-  void _getStorageInstance(){
-    storageReference = FirebaseStorage.instance    
-       .ref()    
-       .child('profile_pictures')
-       .child(AuthenticationService.instance.user!.uid)
-       .child("${AuthenticationService.instance.user!.uid}_pp${p.extension(_image!.path)}");  
+
+  void _getStorageInstance() {
+    storageReference = FirebaseStorage.instance
+        .ref()
+        .child('profile_pictures')
+        .child(AuthenticationService.instance.user!.uid)
+        .child(
+            "${AuthenticationService.instance.user!.uid}_pp${p.extension(_image!.path)}");
   }
 }
