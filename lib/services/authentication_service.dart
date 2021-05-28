@@ -1,4 +1,5 @@
 import 'package:capstone_project/core/constants/values/route_constants.dart';
+import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,15 +17,16 @@ class AuthenticationService {
 
   Future<Map> signIn({required String email, required String password}) async {
     try {
-      var userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("email", email);
       prefs.setString("password", password);
       bool state = await verifyEmail();
+      var userDetails = await FireStoreService.instance.getUserDetails();
       return {
         "message": 'Sign In Completed',
-        "userCredential": userCredential,
+        "userCredential": userDetails,
         "state": state,
       };
     } on FirebaseAuthException catch (e) {
@@ -43,14 +45,14 @@ class AuthenticationService {
         print('here2');
         String? email = prefs.getString('email');
         String? password = prefs.getString('password');
-        var userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+        await _firebaseAuth.signInWithEmailAndPassword(
             email: email!, password: password!);
-        print(userCredential);
+        var userDetails = await FireStoreService.instance.getUserDetails();
         bool state = await verifyEmail();
         print(state);
         return {
           "message": 'Auto Sign In Completed',
-          "userCredential": userCredential,
+          "userCredential": userDetails,
           "state": state,
         };
       } else {
@@ -69,10 +71,11 @@ class AuthenticationService {
 
   Future<Map> signUp({required String email, required String password}) async {
     try {
-      var userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      print(userCredential);
-      return {"message": 'Sign In Completed', "userCredential": userCredential};
+      var userDetails = await FireStoreService.instance.getUserDetails();
+
+      return {"message": 'Sign In Completed', "userCredential": userDetails};
     } on FirebaseAuthException catch (e) {
       return {"message": e.message, "userCredential": null};
     }
