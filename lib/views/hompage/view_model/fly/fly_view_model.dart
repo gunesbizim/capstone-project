@@ -17,6 +17,11 @@ abstract class _FlyViewModelBase  with BaseViewModel, Store {
   void init() {
   }
 
+
+  void setDroneConnectionViewModel(DroneConnectionViewModel droneConnectionViewModel){
+    this.droneConnectionViewModel = droneConnectionViewModel;
+  }
+
   @computed
   bool get isConnected => droneConnectionViewModel.isConnected;
   

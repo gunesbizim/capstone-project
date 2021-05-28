@@ -10,12 +10,10 @@ import 'package:flutter/material.dart';
 class ProfilePicture extends StatelessWidget with RouteAware{
   final String ppURL;
   final double screenHeight;
-  final bool hasPP;
   final Function  selectImage;
   ProfilePicture({
     required this.ppURL,
     required this.screenHeight,
-    required this.hasPP,
     required this.selectImage
   });
 

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:capstone_project/core/enums/drone_connection_status_type_enum.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/services.dart';
 
 class DroneConnectionStatusService {
   static final DroneConnectionStatusService instance =

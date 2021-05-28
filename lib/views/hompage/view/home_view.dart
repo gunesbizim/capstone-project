@@ -56,6 +56,7 @@ class HomeView extends StatelessWidget {
                   onModelReady: (model) {
                     model.setContext(context);
                     model.init();
+                    model.setDroneConnectionViewModel(droneConnectionViewModel);
                   })
             ],
           ),
@@ -354,7 +355,6 @@ class HomeView extends StatelessWidget {
             ProfilePicture(
                 ppURL: profileViewModel.ppURL,
                 screenHeight: queryData.size.height,
-                hasPP: profileViewModel.hasPP,
                 selectImage: profileViewModel.selectImage),
             //ProfilePicture(ppURL: profileViewModel.ppURL, screenHeight: queryData.size.height)
             //if user hasa pp, display it otherwise display add picture
