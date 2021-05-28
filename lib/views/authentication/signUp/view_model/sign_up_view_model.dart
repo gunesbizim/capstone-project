@@ -10,6 +10,7 @@ part 'sign_up_view_model.g.dart';
 class SignupViewModel = _SignupViewModelBase with _$SignupViewModel;
 
 abstract class _SignupViewModelBase with Store, BaseViewModel {
+  String name = "SignupViewModel";
   GlobalKey<FormState> globalFormState = GlobalKey();
   GlobalKey<ScaffoldState> globalScaffoldState = GlobalKey();
   late AuthenticationService signUpService;
@@ -24,7 +25,7 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   @override
   void init() {
-    print("init2");
+    print("$name init()");
     signUpService = AuthenticationService.instance;
     fireStoreService = FireStoreService.instance;
     navigationService = NavigationService.instance;
@@ -43,13 +44,14 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
   @action
   Future<void> signUp() async {
     isLoadingChange();
-    print("Sign Up Test123123");
+    print("$name Signing up");
     print(globalFormState);
     if (globalFormState.currentState!.validate()) {
-      print('2');
+      print("$name globalFormState.currentState is validated");
+      
       if ((pwCntrl!.text != "" && pw2Cntrl!.text != "") &&
           (pwCntrl!.text == pw2Cntrl!.text)) {
-        print('3');
+        print("$name Fields are validated");
         final response = await signUpService.signUp(
             email: emailCntrl!.text,
             password: pwCntrl!.text,

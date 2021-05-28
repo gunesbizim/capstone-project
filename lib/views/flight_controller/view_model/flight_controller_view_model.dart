@@ -8,10 +8,14 @@ class FlightControllerViewModel = _FlightControllerViewModelBase with _$FlightCo
 abstract class _FlightControllerViewModelBase with Store, BaseViewModel {
   
   @observable
-  double x = 80;
+  double leftX = 80;
   @observable
-  double y = 80;
+  double leftY = 80;
 
+  @observable
+  double rightX = 80;
+  @observable
+  double rightY = 80;
 
   @override
   void setContext(context) => this.context = context;
@@ -21,10 +25,31 @@ abstract class _FlightControllerViewModelBase with Store, BaseViewModel {
   }
 
   @action 
-  void setPosition(RenderBox box, Offset globalPosition){
+  void setPositionLeft(RenderBox box, Offset globalPosition){
     Offset pos = box.globalToLocal(globalPosition);
-    x = pos.dx;
-    y= pos.dy;
-    print("($x,$y");
+    leftX = pos.dx;
+    leftY= pos.dy;
+    print("($leftX,$leftY");
   }
+
+  @action
+  setPositionToNormalLeft(){
+    leftX = 80;
+    leftY = 80;
+  }
+
+  @action
+  Future<void> onDirectionChangedLeft(double degrees, double distance) async{
+    if(degrees==0.0&& distance==0.0){
+      setPositionToNormalLeft();
+    }
+    print("($degrees, $distance)");
+  }
+
+}
+
+
+enum JojystrickPosition{
+  left,
+  rigth
 }

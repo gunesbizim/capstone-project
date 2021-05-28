@@ -12,15 +12,13 @@ class FlightController extends StatefulWidget {
 }
 
 class _FlightControllerState extends State<FlightController> {
-  JoystickView leftJoystick = new JoystickView(size: 120);
+  late JoystickView leftJoystick = new JoystickView(size: 120);
   JoystickView rightJoystick = new JoystickView(size: 120);
-  GlobalKey _keyRed = GlobalKey();
-
+  GlobalKey _keyRed = GlobalKey<_FlightControllerState>();
   @override
   Widget build(BuildContext context) {
+    
     MediaQueryData queryData = MediaQuery.of(context);
-    RenderBox box = context.findRenderObject() as RenderBox;
-    print(box);
     return Scaffold(
       appBar: AppBar(),
       body: BaseView<FlightControllerViewModel>(viewModel: FlightControllerViewModel(), 
@@ -30,42 +28,50 @@ class _FlightControllerState extends State<FlightController> {
           Container(
             decoration: BoxDecoration(color: Colors.white),
           ),
-          Row(children: [
-           GestureDetector(
+          GestureDetector(
                   child: Container(
                     height: queryData.size.height*0.65,
                     width: queryData.size.width*0.33, 
-                    decoration: BoxDecoration(color: Colors.red),
+                    decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.1)),
+                    child: Stack(children: [
+                      Observer(builder: (_){
+                        return Positioned(
+
+                          left: model.leftX-60,
+                          top: model.leftY-60,
+                          child: leftJoystick);
+                      }),
+                    ],),
                     ),
                   onTapDown: (TapDownDetails tapDownDetails){
-                    print("---------------");
-                    print('${tapDownDetails.globalPosition}');
-                    print("---------------");
-                    model.setPosition(box, tapDownDetails.globalPosition);
-                  },
-            ),
-            Expanded(child: Container()),
-            JoystickView(size: 150,),
-          ],),
-          Observer(builder: (_){
-                      return Positioned(
+                    RenderBox renderBox = context.findRenderObject() as RenderBox;
+                    model.setPositionLeft(renderBox, tapDownDetails.globalPosition);
 
-                        left: model.x,
-                        bottom: model.y,
-                        child: leftJoystick,);
-                    }),
+                  },behavior: HitTestBehavior.translucent,
+                  
+            ),
+          
         ],);
         }, onModelReady: (model){
           model.setContext(context);
           model.init();
+          leftJoystick = new JoystickView(size: 120,onDirectionChanged: model.onDirectionChangedLeft,);
         })
     );
   }
   @override
   void initState(){
+
     super.initState();
+    
     SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
-  ]);
-}
+    ]);
+    //WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
+
+  }
+
+ _afterLayout(_) {
+     //renderBox = _keyRed.currentContext!.findRenderObject() as RenderBox;
+  }
 }

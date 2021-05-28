@@ -9,45 +9,96 @@ part of 'flight_controller_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
-  final _$xAtom = Atom(name: '_FlightControllerViewModelBase.x');
+  final _$leftXAtom = Atom(name: '_FlightControllerViewModelBase.leftX');
 
   @override
-  double get x {
-    _$xAtom.reportRead();
-    return super.x;
+  double get leftX {
+    _$leftXAtom.reportRead();
+    return super.leftX;
   }
 
   @override
-  set x(double value) {
-    _$xAtom.reportWrite(value, super.x, () {
-      super.x = value;
+  set leftX(double value) {
+    _$leftXAtom.reportWrite(value, super.leftX, () {
+      super.leftX = value;
     });
   }
 
-  final _$yAtom = Atom(name: '_FlightControllerViewModelBase.y');
+  final _$leftYAtom = Atom(name: '_FlightControllerViewModelBase.leftY');
 
   @override
-  double get y {
-    _$yAtom.reportRead();
-    return super.y;
+  double get leftY {
+    _$leftYAtom.reportRead();
+    return super.leftY;
   }
 
   @override
-  set y(double value) {
-    _$yAtom.reportWrite(value, super.y, () {
-      super.y = value;
+  set leftY(double value) {
+    _$leftYAtom.reportWrite(value, super.leftY, () {
+      super.leftY = value;
     });
+  }
+
+  final _$rightXAtom = Atom(name: '_FlightControllerViewModelBase.rightX');
+
+  @override
+  double get rightX {
+    _$rightXAtom.reportRead();
+    return super.rightX;
+  }
+
+  @override
+  set rightX(double value) {
+    _$rightXAtom.reportWrite(value, super.rightX, () {
+      super.rightX = value;
+    });
+  }
+
+  final _$rightYAtom = Atom(name: '_FlightControllerViewModelBase.rightY');
+
+  @override
+  double get rightY {
+    _$rightYAtom.reportRead();
+    return super.rightY;
+  }
+
+  @override
+  set rightY(double value) {
+    _$rightYAtom.reportWrite(value, super.rightY, () {
+      super.rightY = value;
+    });
+  }
+
+  final _$onDirectionChangedLeftAsyncAction =
+      AsyncAction('_FlightControllerViewModelBase.onDirectionChangedLeft');
+
+  @override
+  Future<void> onDirectionChangedLeft(double degrees, double distance) {
+    return _$onDirectionChangedLeftAsyncAction
+        .run(() => super.onDirectionChangedLeft(degrees, distance));
   }
 
   final _$_FlightControllerViewModelBaseActionController =
       ActionController(name: '_FlightControllerViewModelBase');
 
   @override
-  void setPosition(RenderBox box, Offset globalPosition) {
+  void setPositionLeft(RenderBox box, Offset globalPosition) {
     final _$actionInfo = _$_FlightControllerViewModelBaseActionController
-        .startAction(name: '_FlightControllerViewModelBase.setPosition');
+        .startAction(name: '_FlightControllerViewModelBase.setPositionLeft');
     try {
-      return super.setPosition(box, globalPosition);
+      return super.setPositionLeft(box, globalPosition);
+    } finally {
+      _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setPositionToNormalLeft() {
+    final _$actionInfo =
+        _$_FlightControllerViewModelBaseActionController.startAction(
+            name: '_FlightControllerViewModelBase.setPositionToNormalLeft');
+    try {
+      return super.setPositionToNormalLeft();
     } finally {
       _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -56,8 +107,10 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
   @override
   String toString() {
     return '''
-x: ${x},
-y: ${y}
+leftX: ${leftX},
+leftY: ${leftY},
+rightX: ${rightX},
+rightY: ${rightY}
     ''';
   }
 }

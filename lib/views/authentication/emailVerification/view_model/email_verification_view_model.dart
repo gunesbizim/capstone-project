@@ -15,7 +15,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
   late AuthenticationService authenticationService;
   late NavigationService navigationService;
   var args;
-
+  String path = 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
   void setArgs(args) {
     this.args = args;
   }
@@ -28,7 +28,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
     authenticationService = AuthenticationService.instance;
     navigationService = NavigationService.instance;
     updateEmail();
-    emailVerificationCheck(args);
+    emailVerificationCheck();
   }
 
   @observable
@@ -36,10 +36,10 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
 
   late bool _state = false;
   late Timer timer;
-  Future<void> emailVerificationCheck(Map<dynamic, dynamic> response) async {
+  Future<void> emailVerificationCheck() async {
     timer = Timer.periodic(Duration(seconds: 2), (timer) async {
       await authenticationService.verifyEmail().then((value) => _state = value);
-      navigateToHomePage(response);
+      navigateToHomePage();
       print(_state);
     });
   }
@@ -57,12 +57,13 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
     authenticationService.returnUserEmail().then((value) => email = value);
   }
 
-  void navigateToHomePage(Map<dynamic, dynamic> response) {
+  void navigateToHomePage() {
     print(_state);
     if (_state) {
       disposeTimer();
+      print('$path: $args');
       navigationService.navigateToPageClear(
-          path: RouteConstants.HOME_PAGE, data: response);
+          path: RouteConstants.HOME_PAGE, data: args);
     } else {}
   }
 }

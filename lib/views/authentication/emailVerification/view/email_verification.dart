@@ -11,10 +11,12 @@ class EmailVerificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    String name ="EmailVerificationView";
     MediaQueryData data = MediaQuery.of(context);
     double width = data.size.width;
     double height = data.size.height;
     final args = ModalRoute.of(context)!.settings.arguments;
+    print("name: args");
     return BaseView<EmailVerificationViewModel>(
         viewModel: EmailVerificationViewModel(),
         onPageBuilder:

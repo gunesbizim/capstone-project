@@ -10,7 +10,7 @@ class AuthenticationService {
   User? get user {
     return _firebaseAuth.currentUser;
   }
-
+  String name = "AuthenticationService:";
   static final AuthenticationService instance = AuthenticationService._init();
   AuthenticationService._init();
   //Stream<User> get authStateChanges =>_firebaseAuth.authStateChanges();
@@ -66,14 +66,16 @@ class AuthenticationService {
       {required String email,
       required String password,
       required String fullName}) async {
+    print("$name performing sign up");
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      print("$name performing User is created with email and password");
       await FireStoreService.instance
           .setUserData(id: user!.uid, name: fullName, email: email);
-      print(fullName);
+      print("$name userdata is set with the name of $fullName and user id of ${user!.uid}");
       var userDetails = await FireStoreService.instance.getUserDetails();
-      print(userDetails);
+      
 
       return {"message": 'Sign In Completed', "userCredential": userDetails};
     } on FirebaseAuthException catch (e) {

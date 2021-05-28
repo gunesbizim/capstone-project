@@ -3,7 +3,7 @@ import 'package:capstone_project/services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FireStoreService {
-  final String filePath = "package:capstone_project/services/fire_store_service.dart:";
+  final String filePath = "FireStoreService:";
 
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   static final FireStoreService instance = FireStoreService._init();
@@ -18,8 +18,12 @@ class FireStoreService {
       required String email,
       String lastFlightId = "",
       String ppURL = "",
-      String flightTime = "00:00:00"}) async {
-    Map<String, String> pilot = {
+      Map<String,String> flightTime = const {
+        "hours":"00",
+        "minutes":"00",
+        "seconds":"00"
+      }}) async {
+    Map<String, dynamic> pilot = {
       "pilotId": id,
       "fullName": name,
       "email": email,
@@ -27,6 +31,7 @@ class FireStoreService {
       "ppURL": ppURL,
       "flightTime": flightTime
     };
+    print("$filePath Setting user data of $id");
     await pilotsRef.doc(id).set(pilot);
   }
 
@@ -113,7 +118,8 @@ class FireStoreService {
 
     var userDetails = _fireStore
         .collection("pilots")
-        .where("id", isEqualTo: authService.user!.uid);
+        .where("pilotId", isEqualTo: authService.user!.uid);
+    print("$filePath getting user details of${authService.user!.uid}");
 
     await userDetails.get().then((querySnapshot) {
       querySnapshot.docs.forEach((data) {
