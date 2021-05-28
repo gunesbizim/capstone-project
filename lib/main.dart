@@ -34,14 +34,10 @@ class _ZettAppState extends State<ZettApp> {
           ),
         ),
         duration: 3000,
-<<<<<<< HEAD
-        nextScreen: Observer(builder: (context) => LoginView()),
-=======
         screenFunction: () async {
           return nextScreen();
         },
         splashTransition: SplashTransition.sizeTransition,
->>>>>>> 1d64361d10eff2cf197913afa2d50ac28144b1d2
       ),
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,

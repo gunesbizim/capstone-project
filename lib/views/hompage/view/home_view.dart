@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/fly_button.dart';
 import 'package:capstone_project/core/components/logo.dart';
@@ -58,6 +56,7 @@ class HomeView extends StatelessWidget {
                   onModelReady: (model) {
                     model.setContext(context);
                     model.init();
+                    model.setDroneConnectionViewModel(droneConnectionViewModel);
                   })
             ],
           ),
