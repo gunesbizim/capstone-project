@@ -19,7 +19,6 @@ class DroneConnectionStatusService {
   Future checkStatus() async {
     print("Checking Status");
     _timer = Timer.periodic(Duration(milliseconds: 50), (Timer t) async {
-      print(counter);
       if (counter == 100) {
         print("Timer is finished with count of 100");
         setStatus(DroneConnectionStatusTypeEnum.SUCCESS, "Hell yeah");

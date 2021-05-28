@@ -51,22 +51,20 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
           (pwCntrl!.text == pw2Cntrl!.text)) {
         print('3');
         final response = await signUpService.signUp(
-            email: emailCntrl!.text, password: pwCntrl!.text);
+            email: emailCntrl!.text,
+            password: pwCntrl!.text,
+            fullName: nameCntrl!.text);
         print('4');
         if (response["userCredential"] != null) {
-
-          fireStoreService.setUserData(
-              id:_authService.user!.uid, 
-              name: nameCntrl!.text,
-              email: emailCntrl!.text, 
-              lastFlightId: "No flight yet");
-          //TODO: Sow snackbar
-          //isLoadingChange(); zett@zett.com
-          print("5");
+          isLoadingChange();
+          print("Here");
           _authService.user!.sendEmailVerification();
           navigationService.navigateToPageClear(
               path: RouteConstants.VERIFICATION,
               data: response["userCredential"]);
+        } else {
+          print('Loggin error');
+          isLoadingChange();
         }
       }
     } else
@@ -81,5 +79,5 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
   @action
   void isLockStateChange() {
     isLockOpen = !isLockOpen;
-  }  
+  }
 }

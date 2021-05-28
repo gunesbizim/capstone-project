@@ -14,6 +14,11 @@ class EmailVerificationViewModel = _EmailVerificationViewModelBase
 abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
   late AuthenticationService authenticationService;
   late NavigationService navigationService;
+  var args;
+
+  void setArgs(args) {
+    this.args = args;
+  }
 
   @override
   void setContext(BuildContext context) => this.context = context;
@@ -23,7 +28,7 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
     authenticationService = AuthenticationService.instance;
     navigationService = NavigationService.instance;
     updateEmail();
-    emailVerificationCheck();
+    emailVerificationCheck(args);
   }
 
   @observable
@@ -31,10 +36,10 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
 
   late bool _state = false;
   late Timer timer;
-  Future<void> emailVerificationCheck() async {
+  Future<void> emailVerificationCheck(Map<dynamic, dynamic> response) async {
     timer = Timer.periodic(Duration(seconds: 2), (timer) async {
       await authenticationService.verifyEmail().then((value) => _state = value);
-      navigateToHomePage();
+      navigateToHomePage(response);
       print(_state);
     });
   }
@@ -52,12 +57,12 @@ abstract class _EmailVerificationViewModelBase with Store, BaseViewModel {
     authenticationService.returnUserEmail().then((value) => email = value);
   }
 
-  void navigateToHomePage() {
+  void navigateToHomePage(Map<dynamic, dynamic> response) {
     print(_state);
     if (_state) {
       disposeTimer();
       navigationService.navigateToPageClear(
-          path: RouteConstants.HOME_PAGE, data: 1);
+          path: RouteConstants.HOME_PAGE, data: response);
     } else {}
   }
 }

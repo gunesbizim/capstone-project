@@ -36,27 +36,21 @@ class AuthenticationService {
 
   Future<Map> tryAutoSignIn() async {
     final prefs = await SharedPreferences.getInstance();
-    print('here');
     try {
-      print(prefs.getString('email'));
-      print(prefs.getString('password'));
       if (prefs.getString('email') != null &&
           prefs.getString('password') != null) {
-        print('here2');
         String? email = prefs.getString('email');
         String? password = prefs.getString('password');
         await _firebaseAuth.signInWithEmailAndPassword(
             email: email!, password: password!);
         var userDetails = await FireStoreService.instance.getUserDetails();
         bool state = await verifyEmail();
-        print(state);
         return {
           "message": 'Auto Sign In Completed',
           "userCredential": userDetails,
           "state": state,
         };
       } else {
-        print('here3');
         return {
           "message": 'Auto Sign In Failed',
           "userCredential": null,
@@ -64,16 +58,22 @@ class AuthenticationService {
         };
       }
     } on FirebaseAuthException catch (e) {
-      print('here4');
       return {"message": e.message, "userCredential": null, "state": false};
     }
   }
 
-  Future<Map> signUp({required String email, required String password}) async {
+  Future<Map> signUp(
+      {required String email,
+      required String password,
+      required String fullName}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      await FireStoreService.instance
+          .setUserData(id: user!.uid, name: fullName, email: email);
+      print(fullName);
       var userDetails = await FireStoreService.instance.getUserDetails();
+      print(userDetails);
 
       return {"message": 'Sign In Completed', "userCredential": userDetails};
     } on FirebaseAuthException catch (e) {
@@ -95,7 +95,6 @@ class AuthenticationService {
 
   Future<bool> verifyEmail() async {
     try {
-      print(user!.email);
       user!.reload();
       return user!.emailVerified;
     } on FirebaseAuthException catch (e) {
