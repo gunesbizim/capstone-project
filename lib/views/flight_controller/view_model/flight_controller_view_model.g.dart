@@ -82,7 +82,7 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
       ActionController(name: '_FlightControllerViewModelBase');
 
   @override
-  void setPositionLeft(RenderBox box, Offset globalPosition) {
+  Offset setPositionLeft(RenderBox box, Offset globalPosition) {
     final _$actionInfo = _$_FlightControllerViewModelBaseActionController
         .startAction(name: '_FlightControllerViewModelBase.setPositionLeft');
     try {

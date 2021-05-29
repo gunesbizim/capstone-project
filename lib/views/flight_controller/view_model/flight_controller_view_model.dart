@@ -8,9 +8,9 @@ class FlightControllerViewModel = _FlightControllerViewModelBase with _$FlightCo
 abstract class _FlightControllerViewModelBase with Store, BaseViewModel {
   
   @observable
-  double leftX = 80;
+  double leftX = 160;
   @observable
-  double leftY = 80;
+  double leftY = 160;
 
   @observable
   double rightX = 80;
@@ -25,11 +25,11 @@ abstract class _FlightControllerViewModelBase with Store, BaseViewModel {
   }
 
   @action 
-  void setPositionLeft(RenderBox box, Offset globalPosition){
+  Offset setPositionLeft(RenderBox box, Offset globalPosition){
     Offset pos = box.globalToLocal(globalPosition);
     leftX = pos.dx;
     leftY= pos.dy;
-    print("($leftX,$leftY");
+    return Offset(leftX,leftY);
   }
 
   @action
@@ -43,7 +43,6 @@ abstract class _FlightControllerViewModelBase with Store, BaseViewModel {
     if(degrees==0.0&& distance==0.0){
       setPositionToNormalLeft();
     }
-    print("($degrees, $distance)");
   }
 
 }

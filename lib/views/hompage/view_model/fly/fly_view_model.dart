@@ -26,7 +26,7 @@ abstract class _FlyViewModelBase  with BaseViewModel, Store {
   bool get isConnected => droneConnectionViewModel.isConnected;
   
   void startFlight(){
-    NavigationService.instance.navigateToPage(path: RouteConstants.FLIGHT_CONTROLLER,data: []);
+    NavigationService.instance.navigateToPageClear(path: RouteConstants.FLIGHT_CONTROLLER,data: []);
   }
   
 }
