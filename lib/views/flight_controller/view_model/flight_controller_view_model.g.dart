@@ -82,11 +82,11 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
       ActionController(name: '_FlightControllerViewModelBase');
 
   @override
-  Offset setPositionLeft(RenderBox box, Offset globalPosition) {
+  Offset setPositionLeft(Offset localPosition) {
     final _$actionInfo = _$_FlightControllerViewModelBaseActionController
         .startAction(name: '_FlightControllerViewModelBase.setPositionLeft');
     try {
-      return super.setPositionLeft(box, globalPosition);
+      return super.setPositionLeft(localPosition);
     } finally {
       _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -99,6 +99,17 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
             name: '_FlightControllerViewModelBase.setPositionToNormalLeft');
     try {
       return super.setPositionToNormalLeft();
+    } finally {
+      _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Offset setPositionRight(Offset localPosition) {
+    final _$actionInfo = _$_FlightControllerViewModelBaseActionController
+        .startAction(name: '_FlightControllerViewModelBase.setPositionRight');
+    try {
+      return super.setPositionRight(localPosition);
     } finally {
       _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
     }

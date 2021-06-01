@@ -1,78 +1,49 @@
 
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/core/components/control_pad/control_pad.dart';
-import 'package:capstone_project/core/components/control_pad/views/joystic_view.dart';
-import 'package:capstone_project/views/flight_controller/view_model/flight_controller_view_model.dart';
+import 'package:capstone_project/core/enums/joystick_type.dart';import 'package:capstone_project/views/flight_controller/view_model/flight_controller_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
-class FlightController extends StatefulWidget {
-  @override
-  _FlightControllerState createState() => _FlightControllerState();
-}
-
-class _FlightControllerState extends State<FlightController> {
+class FlightController extends StatelessWidget{
   late JoystickViewUpdated leftJoystick;
-  JoystickView rightJoystick = JoystickView(size: 120,);
-  GlobalKey _keyRed = GlobalKey<_FlightControllerState>();
+  //late JoystickViewUpdated rightJoystick;
+
   @override
   Widget build(BuildContext context) {
-    
+    print("FlightController: Building Widget");
     MediaQueryData queryData = MediaQuery.of(context);
+    double screenHeight = queryData.size.height;
+    double screenWidth = queryData.size.width;
+    double joystickSize = screenHeight *0.35;
+    print("FlightController Width: $screenWidth, Height: $screenHeight");
     return Scaffold(
-      appBar: AppBar(),
+      
       body: BaseView<FlightControllerViewModel>(viewModel: FlightControllerViewModel(), 
         onPageBuilder: (BuildContext context, FlightControllerViewModel model){
           return Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(color: Colors.green),
-          ),
+          Container(decoration: BoxDecoration(color: Colors.green),),
           Row(children: [
             leftJoystick,
-            Expanded(child: Container()),
-            rightJoystick,
-          //  GestureDetector(
-          //         child: Container(
-          //               height: queryData.size.height*0.65,
-          //               width: queryData.size.width*0.33, 
-          //               decoration: BoxDecoration(color: Colors.red[900]),
-          //               //decoration: BoxDecoration(color: Colors.transparent),
-          //               ),
-          //         onTapDown: (TapDownDetails tapDownDetails){
-          //           RenderBox renderBox = context.findRenderObject() as RenderBox;
-          //           model.setPositionLeft(renderBox, tapDownDetails.globalPosition);
-
-          //         },
-          //         onPanUpdate: (DragUpdateDetails details){
-          //           print(details.globalPosition);
-          //         },
-          //   ),
-            // Expanded(child: Container()),
+            Expanded(child: Container(decoration: BoxDecoration(color: Colors.transparent),)),
+            //rightJoystick
           ],),
            
         ],);
         }, onModelReady: (model){
           model.setContext(context);
           model.init();
-          leftJoystick = new JoystickViewUpdated(size: 120,onDirectionChanged: model.onDirectionChangedLeft,flightControllerViewModel: model,);
+          leftJoystick = new JoystickViewUpdated(size: joystickSize,
+            onDirectionChanged: model.onDirectionChangedLeft,
+            flightControllerViewModel: model,
+            joystickType: JoystickType.Movement,
+            opacity: 0.25,
+            );
+          leftJoystick.init();
+          // rightJoystick = new JoystickViewUpdated(size: 120, 
+          //   onDirectionChanged: model.onDirectionChangedLeft,
+          //   flightControllerViewModel: model);
         })
     );
-  }
-  @override
-  void initState(){
-
-    super.initState();
-    
-    SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeRight,
-    ]);
-    //WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
-
-  }
-
- _afterLayout(_) {
-     //renderBox = _keyRed.currentContext!.findRenderObject() as RenderBox;
   }
 }

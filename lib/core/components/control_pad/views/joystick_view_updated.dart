@@ -1,6 +1,7 @@
 import 'dart:math' as _math;
 
 import 'package:capstone_project/core/constants/values/date_time_constants.dart';
+import 'package:capstone_project/core/enums/joystick_type.dart';
 import 'package:capstone_project/views/flight_controller/view_model/flight_controller_view_model.dart';
 import 'package:capstone_project/views/hompage/view_model/log/flightlog_view_model.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'circle_view.dart';
 
 typedef JoystickDirectionCallback = void Function(
     double degrees, double distance);
+typedef Repositioner = Offset Function(Offset localTapPoint);
 
 class JoystickViewUpdated extends StatelessWidget {
   /// The size of the joystick.
@@ -39,7 +41,7 @@ class JoystickViewUpdated extends StatelessWidget {
   /// The opacity applies to the whole joystick including icons
   ///
   /// Defaults to [null] which means there will be no [Opacity] widget used
-  final double? opacity;
+  late double? opacity;
 
   /// Callback to be called when user pans the joystick
   ///
@@ -62,6 +64,13 @@ class JoystickViewUpdated extends StatelessWidget {
   final bool showArrows;
 
   final FlightControllerViewModel flightControllerViewModel;
+  late final Repositioner repositioner;
+  late Offset _initializedXY;
+  late final Offset _sizeXY;
+  late final Offset _midSizeXY;
+  late final double  _actualSize;
+  late final double _innerCircleSize;
+  final JoystickType joystickType;
   JoystickViewUpdated(
       {this.size,
       this.iconsColor = Colors.white54,
@@ -71,60 +80,69 @@ class JoystickViewUpdated extends StatelessWidget {
       this.onDirectionChanged,
       this.interval,
       this.showArrows = true,
-      required this.flightControllerViewModel
+      required this.flightControllerViewModel,
+      required this.joystickType
       });
 
+  void init(){
+    _actualSize = size!;
+    _innerCircleSize = _actualSize / 2;
+    
+    // innerCircleSize = _actualSize / 2;
+    _sizeXY = Offset(_actualSize,_actualSize);
+    _midSizeXY = Offset(_innerCircleSize,_innerCircleSize);
+    if(joystickType == JoystickType.Movement){
+      repositioner = flightControllerViewModel.setPositionLeft; 
+    }else{
+      repositioner = flightControllerViewModel.setPositionRight; 
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    double actualSize = size!;
-    double innerCircleSize = actualSize / 2;
-    Offset lastPosition = Offset(innerCircleSize, innerCircleSize);
+    print("JoystickViewUpdated: build");
+    Offset lastPosition = Offset(_innerCircleSize, _innerCircleSize);
     Offset joystickInnerPosition = _calculatePositionOfInnerCircle(
-        lastPosition, innerCircleSize, actualSize, Offset(0, 0));
+        lastPosition, _innerCircleSize, _actualSize, Offset(0, 0));
 
     DateTime? _callbackTimestamp = DateTimeConstants.timeCheck;
     MediaQueryData queryData = MediaQuery.of(context);
     double screenHeight = queryData.size.height;
     double screenWidth = queryData.size.width/3;
-    late Offset initializedXY;
-    Offset sizeXY = Offset(size!,size!);
-    Offset midSizeXY = Offset(innerCircleSize,innerCircleSize);
+
+    print("screenHeight: $screenHeight");
     return Center(
         child: StatefulBuilder(
           builder: (context, setState) {
-            Widget joystick = _buildJoystickStack(actualSize, joystickInnerPosition);
+            Widget joystick = _buildJoystickStack(_actualSize, joystickInnerPosition);
 
             return GestureDetector(
               onPanStart: (details) {
-                
-                RenderBox renderBox = context.findRenderObject() as RenderBox;
-
-
-
-                initializedXY = flightControllerViewModel.setPositionLeft(renderBox, details.globalPosition);
-                Offset trueXY = initializedXY - sizeXY;
+                opacity = 1;
+                //RenderBox renderBox = context.findRenderObject() as RenderBox;
+                _initializedXY = repositioner(details.localPosition);
+                Offset trueXY = _initializedXY - _sizeXY;
                 Offset initializedInnerXY = details.localPosition;
-                Offset trueMidXY =  initializedInnerXY- midSizeXY;
+                Offset trueMidXY =  initializedInnerXY- _midSizeXY;
                 Offset absoluteXY = trueMidXY - trueXY;
-
+                
 
                 //Offset trueLocal = initializedOffset-details.localPosition;
-                print("********On Pan Start********");
-                print("##onPanStart: initializedXY $initializedXY");
-                print("##onPanStart: sizeXY $sizeXY");
-                print("##onPanStart: trueXY $trueXY");
-                print("-----------------------------");
-                print("##onPanStart: initializedInnerXY  $initializedInnerXY");
-                print("##onPanStart: midSizeXY $midSizeXY");
-                print("##onPanStart: trueMidXY $trueMidXY");
-                print("-----------------------------");
-                print("##onPanStart: trueMidXY $trueMidXY");
-                print("##onPanStart: trueXY $trueXY");
-                print("##onPanStart: absoluteXY $absoluteXY");
-                print("##onPanStart: details.local  ${details.localPosition}");
-                print("##onPanStart: lastPostion $lastPosition");
+                // print("********On Pan Start********");
+                // print("##onPanStart: initializedXY $initializedXY");
+                // print("##onPanStart: sizeXY $sizeXY");
+                // print("##onPanStart: trueXY $trueXY");
+                // print("-----------------------------");
+                // print("##onPanStart: initializedInnerXY  $initializedInnerXY");
+                // print("##onPanStart: midSizeXY $midSizeXY");
+                // print("##onPanStart: trueMidXY $trueMidXY");
+                // print("-----------------------------");
+                // print("##onPanStart: trueMidXY $trueMidXY");
+                // print("##onPanStart: trueXY $trueXY");
+                // print("##onPanStart: absoluteXY $absoluteXY");
+                // print("##onPanStart: details.local  ${details.localPosition}");
+                // print("##onPanStart: lastPostion $lastPosition");
 
-                _callbackTimestamp = _processGesture(actualSize, actualSize / 2,
+                _callbackTimestamp = _processGesture(_actualSize, _actualSize / 2,
                     absoluteXY,//details.localPosition,
                      _callbackTimestamp!);
 
@@ -132,75 +150,73 @@ class JoystickViewUpdated extends StatelessWidget {
               },
              
               onPanUpdate: (details) {
-
-                Offset trueXY = initializedXY - sizeXY;
+                Offset trueXY = _initializedXY - _sizeXY;
                 Offset initializedInnerXY = details.localPosition;
-                Offset trueMidXY =  initializedInnerXY- midSizeXY;
+                Offset trueMidXY =  initializedInnerXY - _midSizeXY;
                 Offset absoluteXY = trueMidXY - trueXY;
-
-
                 //Offset trueLocal = initializedOffset-details.localPosition;
-                print("********On Pan Update********");
-                print("##onPanUpdate: initializedXY $initializedXY");
-                print("##onPanUpdate: sizeXY $sizeXY");
-                print("##onPanUpdate: trueXY $trueXY");
-                print("-----------------------------");
-                print("##onPanUpdate: initializedInnerXY  $initializedInnerXY");
-                print("##onPanUpdate: midSizeXY $midSizeXY");
-                print("##onPanUpdate: trueMidXY $trueMidXY");
-                print("-----------------------------");
-                print("##onPanUpdate: trueMidXY $trueMidXY");
-                print("##onPanUpdate: trueXY $trueXY");
-                print("##onPanUpdate: absoluteXY $absoluteXY");
-
-
-                _callbackTimestamp = _processGesture(actualSize, actualSize / 2,
+                // print("********On Pan Update********");
+                // print("##onPanUpdate: initializedXY $initializedXY");
+                // print("##onPanUpdate: sizeXY $sizeXY");
+                // print("##onPanUpdate: trueXY $trueXY");
+                // print("-----------------------------");
+                // print("##onPanUpdate: initializedInnerXY  $initializedInnerXY");
+                // print("##onPanUpdate: midSizeXY $midSizeXY");
+                // print("##onPanUpdate: trueMidXY $trueMidXY");
+                // print("-----------------------------");
+                // print("##onPanUpdate: trueMidXY $trueMidXY");
+                // print("##onPanUpdate: trueXY $trueXY");
+                // print("##onPanUpdate: absoluteXY $absoluteXY");
+                _callbackTimestamp = _processGesture(_actualSize, _actualSize / 2,
                    absoluteXY, _callbackTimestamp!);
                 
                 joystickInnerPosition = _calculatePositionOfInnerCircle(
                     lastPosition,
-                    innerCircleSize,
-                    actualSize,
+                    _innerCircleSize,
+                    _actualSize,
                     absoluteXY);
 
-                print("##onPanUpdate: joystickInnerPosition $joystickInnerPosition");
+                //print("##onPanUpdate: joystickInnerPosition $joystickInnerPosition");
 
                 setState(() => lastPosition = absoluteXY);
               },
                onPanEnd: (details) {
+                 opacity = 0.25;
                 _callbackTimestamp = DateTimeConstants.timeCheck;
                 if (onDirectionChanged != null) {
                   onDirectionChanged!(0, 0);
                 }
                 joystickInnerPosition = _calculatePositionOfInnerCircle(
-                    Offset(innerCircleSize, innerCircleSize),
-                    innerCircleSize,
-                    actualSize,
+                    Offset(_innerCircleSize, _innerCircleSize),
+                    _innerCircleSize,
+                    _actualSize,
                     Offset(0, 0));
                 setState(() =>
-                    lastPosition = Offset(innerCircleSize, innerCircleSize));
+                    lastPosition = Offset(_innerCircleSize, _innerCircleSize));
               },
-              // onTapDown: (TapDownDetails tapDownDetails){
-              //    //TODO: add joystick positon enum
-              //     },
-              child: (opacity != null)
-                  ? Opacity(opacity: opacity!, child: joystick)
-                  :Stack(children: [
+
+              child: Stack(children: [
                       Container(
                         padding: EdgeInsets.all(25),
                         height: screenHeight,
                         width: screenWidth,
-                        decoration: BoxDecoration(color: Colors.red[900]),
+                        decoration: BoxDecoration(color: Colors.red[900]!.withOpacity(0.3)),
                       ),
                       Observer(builder: (_){
-                       
                         return Positioned(
-                          top: flightControllerViewModel.leftY-actualSize/2,
-                          left: flightControllerViewModel.leftX-actualSize/2,
-                          child: joystick
-                        );
-                      })
-                  ],)
+                                top: flightControllerViewModel.leftY-_actualSize/2,
+                                left: flightControllerViewModel.leftX-_actualSize/2,
+                                //child:OverflowBox(
+                                  child: Opacity(
+                                    opacity: opacity==null? 1: opacity!,
+                                    child: joystick
+                            ),
+                          );
+                       // );
+                      }),
+                    ], 
+                    clipBehavior: Clip.none,
+                  )
               
             );
           },

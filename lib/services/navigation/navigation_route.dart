@@ -4,9 +4,11 @@ import 'package:capstone_project/views/authentication/emailVerification/view/ema
 import 'package:capstone_project/views/authentication/login/view/login_view.dart';
 import 'package:capstone_project/views/authentication/signUp/view/signUp_view.dart';
 import 'package:capstone_project/views/flight_controller/view/flight_controller_view.dart';
+import 'package:capstone_project/views/flight_controller/view/transition_view.dart';
 import 'package:capstone_project/views/flight_list/view/flight_list_view.dart';
 import 'package:capstone_project/views/hompage/view/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class NavigationRoute {
@@ -30,7 +32,7 @@ class NavigationRoute {
       case RouteConstants.ZETTAPP:
         return normalNavigate(ZettApp(), args);
       case RouteConstants.FLIGHT_CONTROLLER:
-        return normalNavigate(FlightController(), args);
+        return normalNavigate(TransitionView(), args);
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(), //TODO: add error page

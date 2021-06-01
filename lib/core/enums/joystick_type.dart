@@ -1,0 +1,5 @@
+
+enum JoystickType {
+  Movement,
+  Rotator,
+}
