@@ -22,7 +22,6 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
   void setContext(BuildContext context) => this.context = context;
   @override
   void init() {
-    print("init");
     loginService = AuthenticationService.instance;
     navigationService = NavigationService.instance;
     emailController = TextEditingController();
@@ -46,7 +45,8 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
         print(await response["state"]);
         bool state = response["state"];
         if (state) {
-          //FireStoreService.instance.getUserDetails();
+          final snackBar = SnackBar(content: Text(response["message"]));
+          ScaffoldMessenger.of(context!).showSnackBar(snackBar);
           navigationService.navigateToPageClear(
               path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
         } else {
@@ -55,7 +55,8 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
               data: response["userCredential"]);
         }
       } else {
-        print(response["message"]);
+        final snackBar = SnackBar(content: Text(response["message"]));
+        ScaffoldMessenger.of(context!).showSnackBar(snackBar);
       }
     } //else
     isLoadingChange();

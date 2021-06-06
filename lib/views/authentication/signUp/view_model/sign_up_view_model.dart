@@ -48,7 +48,7 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
     print(globalFormState);
     if (globalFormState.currentState!.validate()) {
       print("$name globalFormState.currentState is validated");
-      
+
       if ((pwCntrl!.text != "" && pw2Cntrl!.text != "") &&
           (pwCntrl!.text == pw2Cntrl!.text)) {
         print("$name Fields are validated");
@@ -56,21 +56,26 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
             email: emailCntrl!.text,
             password: pwCntrl!.text,
             fullName: nameCntrl!.text);
-        print('4');
         if (response["userCredential"] != null) {
           isLoadingChange();
-          print("Here");
           _authService.user!.sendEmailVerification();
+          final snackBar = SnackBar(content: Text('Sign up completed.'));
+          ScaffoldMessenger.of(context!).showSnackBar(snackBar);
           navigationService.navigateToPageClear(
               path: RouteConstants.VERIFICATION,
               data: response["userCredential"]);
         } else {
-          print('Loggin error');
+          final snackBar = SnackBar(content: Text('Something went wrong.'));
+          ScaffoldMessenger.of(context!).showSnackBar(snackBar);
           isLoadingChange();
         }
       }
     } else
       isLoadingChange();
+    final snackBar = SnackBar(
+        content:
+            Text('Something went wrong ! Please restart the application.'));
+    ScaffoldMessenger.of(context!).showSnackBar(snackBar);
   }
 
   @action

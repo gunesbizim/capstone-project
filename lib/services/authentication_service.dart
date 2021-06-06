@@ -2,6 +2,7 @@ import 'package:capstone_project/core/constants/values/route_constants.dart';
 import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
@@ -116,11 +117,16 @@ class AuthenticationService {
     }
   }
 
-  void sendRecoveryEmail(String email) {
+  void sendRecoveryEmail(String email, BuildContext context) {
     try {
       _firebaseAuth.sendPasswordResetEmail(email: email);
+      final snackBar = SnackBar(
+          content: Text(
+              'The recovery e mail was sent if the entered mail address is registered. Please check your email.'));
+      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      final snackBar = SnackBar(content: Text(e.message!));
+      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
     }
   }
 }

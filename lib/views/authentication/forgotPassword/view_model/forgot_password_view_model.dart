@@ -30,6 +30,6 @@ abstract class _ForgotPasswordViewModelBase with Store, BaseViewModel {
   }
 
   void sendEmail() {
-    authenticationService.sendRecoveryEmail(emailController!.text);
+    authenticationService.sendRecoveryEmail(emailController!.text, context!);
   }
 }

@@ -1,23 +1,25 @@
 import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/services/authentication_service.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'app_bar_view_model.g.dart';
 
 class AppBarViewModel = _AppBarViewModelBase with _$AppBarViewModel;
 
 abstract class _AppBarViewModelBase with Store, BaseViewModel {
-  @override 
+  @override
   void setContext(context) => this.context = context;
 
   late final AuthenticationService authService;
 
   @override
-  void init(){
+  void init() {
     authService = AuthenticationService.instance;
-  } 
-  
-  void logOut(){
-    authService.logOut();
   }
 
+  void logOut() {
+    authService.logOut();
+    final snackBar = SnackBar(content: Text('Logged out.'));
+    ScaffoldMessenger.of(context!).showSnackBar(snackBar);
+  }
 }
