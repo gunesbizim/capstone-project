@@ -1,6 +1,5 @@
 import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/services/authentication_service.dart';
-import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +63,10 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
 
   navigateToSignUp() {
     navigationService.navigateToPage(path: RouteConstants.SIGNUP);
+  }
+
+  navigateToForgotPassword() {
+    navigationService.navigateToPage(path: RouteConstants.FORGOT_PASSWORD);
   }
 
   @action

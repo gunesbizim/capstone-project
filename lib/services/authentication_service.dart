@@ -10,6 +10,7 @@ class AuthenticationService {
   User? get user {
     return _firebaseAuth.currentUser;
   }
+
   String name = "AuthenticationService:";
   static final AuthenticationService instance = AuthenticationService._init();
   AuthenticationService._init();
@@ -73,9 +74,9 @@ class AuthenticationService {
       print("$name performing User is created with email and password");
       await FireStoreService.instance
           .setUserData(id: user!.uid, name: fullName, email: email);
-      print("$name userdata is set with the name of $fullName and user id of ${user!.uid}");
+      print(
+          "$name userdata is set with the name of $fullName and user id of ${user!.uid}");
       var userDetails = await FireStoreService.instance.getUserDetails();
-      
 
       return {"message": 'Sign In Completed', "userCredential": userDetails};
     } on FirebaseAuthException catch (e) {
@@ -112,6 +113,14 @@ class AuthenticationService {
       return email!;
     } on FirebaseAuthException catch (e) {
       return e.message!;
+    }
+  }
+
+  void sendRecoveryEmail(String email) {
+    try {
+      _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
     }
   }
 }

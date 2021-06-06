@@ -15,7 +15,6 @@ class DroneConnectionStatusService {
 
   int counter = 0;
   DroneConnectionStatusService._init();
-
   Future checkStatus() async {
     print("Checking Status");
     _timer = Timer.periodic(Duration(milliseconds: 50), (Timer t) async {
@@ -34,4 +33,17 @@ class DroneConnectionStatusService {
       counter++;
     });
   }
+
+//  Future<void> droneConnectionCheck() async {
+//    final String ip = await Wifi.ip;
+  //   final String subnet = ip.substring(0, ip.lastIndexOf('.'));
+  //  final int port = 80;
+
+  // final stream = NetworkAnalyzer.discover(subnet, port);
+  // stream.listen((NetworkAddress addr) {
+  // if (addr.exists) {
+  //   print('Found device: ${addr.ip}');
+  // }
+  //  });
+  // }
 }

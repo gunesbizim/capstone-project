@@ -4,6 +4,7 @@ class RouteConstants {
   static const String SIGNUP = "/signup";
   static const String LOGS = "/logs";
   static const String VERIFICATION = "/verification";
-  static const String ZETTAPP ="/zett_app";
+  static const String ZETTAPP = "/zett_app";
   static const String FLIGHT_CONTROLLER = "/flight_controller";
+  static const String FORGOT_PASSWORD = "/forgotpassword";
 }
