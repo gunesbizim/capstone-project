@@ -19,8 +19,7 @@ class ProfilePicture extends StatelessWidget with RouteAware{
 
   @override
   Widget build(BuildContext context) {
-    //TODO:
-    //calculate dimension according to screen height.
+    //TODO: calculate dimension according to screen height.
     final double dimension = 138.0;
     return ppURL!=""? GestureDetector(
                       child: Container(

@@ -9,6 +9,14 @@ class FlightDataService{
   static final FlightDataService instance = FlightDataService._init();
   FlightDataService._init();
 
+  late Map flightLog;
+  /*
+    fliht duration,
+    speed
+    total distance
+    
+    map
+   */
   void generateMockData(){
     for(int i = 1; i<=31; i++){
       print(i);

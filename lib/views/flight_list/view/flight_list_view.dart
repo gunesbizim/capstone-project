@@ -37,13 +37,15 @@ class FlightListView extends StatelessWidget {
                 child:RefreshIndicator(
                   child: Observer(
                     builder: (context){
-                      print("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+                      if(flightListViewModel.flights.length==0)
+                          return Text("There are no flights yet");
                       return ListView.builder(
                       physics: AlwaysScrollableScrollPhysics(),
                       controller: flightListViewModel.scrollController,
                       itemCount: flightListViewModel.flights.length,
                       itemBuilder: (context, index){
                         print("index: ${index}");
+                       
                         return FlightListSingleItem(queryData: queryData, data: flightListViewModel.flights[index]);
                       },
                     );

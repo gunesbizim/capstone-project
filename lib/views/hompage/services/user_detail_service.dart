@@ -40,7 +40,7 @@ class UserDetailService with  ChangeNotifier{
     try {
       await storageReference
           .putFile(_image!)
-          .whenComplete(() => print("file uploaded"));
+          .whenComplete(() => print("file uploaded")); //TODO show snackbar.
 
       await storageReference.getDownloadURL().then((fileURL) {
         url = fileURL;

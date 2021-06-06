@@ -51,6 +51,7 @@ class FlightListLoadService{
         if(isNew) flights.clear();
         collection.get().then((querySnapshot) {
           collectionState = querySnapshot; // store collection state to set where to start next
+          print("query snapshot length: ${querySnapshot.docs.length}");
           querySnapshot.docs.forEach((element) { 
             DateTime start = DateTime.parse(element["flightStartTime"].toDate().toString());
             String startString = DateFormat("dd-MM-yyyy").format(start);

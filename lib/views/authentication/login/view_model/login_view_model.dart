@@ -21,6 +21,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
 
   @override
   void setContext(BuildContext context) => this.context = context;
+
   @override
   void init() {
     print("init");
@@ -56,6 +57,7 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
               data: response["userCredential"]);
         }
       } else {
+        //TODO: Show Snackbar
         print(response["message"]);
       }
     } //else

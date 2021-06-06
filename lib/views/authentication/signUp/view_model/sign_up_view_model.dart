@@ -68,8 +68,8 @@ abstract class _SignupViewModelBase with Store, BaseViewModel {
           print('Loggin error');
           isLoadingChange();
         }
-      }
-    } else
+      } //TODO: add show snackbar
+    } else 
       isLoadingChange();
   }
 
