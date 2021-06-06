@@ -1,6 +1,7 @@
 import 'package:capstone_project/core/constants/values/route_constants.dart';
 import 'package:capstone_project/main.dart';
 import 'package:capstone_project/views/authentication/emailVerification/view/email_verification.dart';
+import 'package:capstone_project/views/authentication/forgotPassword/view/forgot_password_view.dart';
 import 'package:capstone_project/views/authentication/login/view/login_view.dart';
 import 'package:capstone_project/views/authentication/signUp/view/signUp_view.dart';
 import 'package:capstone_project/views/flight_controller/view/flight_controller_view.dart';
@@ -33,6 +34,8 @@ class NavigationRoute {
         return normalNavigate(ZettApp(), args);
       case RouteConstants.FLIGHT_CONTROLLER:
         return normalNavigate(TransitionView(), args);
+      case RouteConstants.FORGOT_PASSWORD:
+        return normalNavigate(ForgotPasswordView(), args);
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(), //TODO: add error page

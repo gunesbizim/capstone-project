@@ -2,6 +2,7 @@ import 'package:capstone_project/core/constants/values/route_constants.dart';
 import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
@@ -10,6 +11,7 @@ class AuthenticationService {
   User? get user {
     return _firebaseAuth.currentUser;
   }
+
   String name = "AuthenticationService:";
   static final AuthenticationService instance = AuthenticationService._init();
   AuthenticationService._init();
@@ -73,9 +75,9 @@ class AuthenticationService {
       print("$name performing User is created with email and password");
       await FireStoreService.instance
           .setUserData(id: user!.uid, name: fullName, email: email);
-      print("$name userdata is set with the name of $fullName and user id of ${user!.uid}");
+      print(
+          "$name userdata is set with the name of $fullName and user id of ${user!.uid}");
       var userDetails = await FireStoreService.instance.getUserDetails();
-      
 
       return {"message": 'Sign In Completed', "userCredential": userDetails};
     } on FirebaseAuthException catch (e) {
@@ -112,6 +114,19 @@ class AuthenticationService {
       return email!;
     } on FirebaseAuthException catch (e) {
       return e.message!;
+    }
+  }
+
+  void sendRecoveryEmail(String email, BuildContext context) {
+    try {
+      _firebaseAuth.sendPasswordResetEmail(email: email);
+      final snackBar = SnackBar(
+          content: Text(
+              'The recovery e mail was sent if the entered mail address is registered. Please check your email.'));
+      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
+    } on FirebaseAuthException catch (e) {
+      final snackBar = SnackBar(content: Text(e.message!));
+      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
     }
   }
 }

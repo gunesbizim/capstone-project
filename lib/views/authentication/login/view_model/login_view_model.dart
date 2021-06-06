@@ -1,6 +1,5 @@
 import 'package:capstone_project/core/base/model/base_view_model.dart';
 import 'package:capstone_project/services/authentication_service.dart';
-import 'package:capstone_project/services/fire_store_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:capstone_project/views/authentication/emailVerification/view_model/email_verification_view_model.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,6 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
-    print("init");
     loginService = AuthenticationService.instance;
     navigationService = NavigationService.instance;
     emailController = TextEditingController();
@@ -48,7 +46,8 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
         print(await response["state"]);
         bool state = response["state"];
         if (state) {
-          //FireStoreService.instance.getUserDetails();
+          final snackBar = SnackBar(content: Text(response["message"]));
+          ScaffoldMessenger.of(context!).showSnackBar(snackBar);
           navigationService.navigateToPageClear(
               path: RouteConstants.HOME_PAGE, data: response["userCredential"]);
         } else {
@@ -57,8 +56,8 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
               data: response["userCredential"]);
         }
       } else {
-        //TODO: Show Snackbar
-        print(response["message"]);
+        final snackBar = SnackBar(content: Text(response["message"]));
+        ScaffoldMessenger.of(context!).showSnackBar(snackBar);
       }
     } //else
     isLoadingChange();
@@ -66,6 +65,10 @@ abstract class _LoginViewModelBase with Store, BaseViewModel {
 
   navigateToSignUp() {
     navigationService.navigateToPage(path: RouteConstants.SIGNUP);
+  }
+
+  navigateToForgotPassword() {
+    navigationService.navigateToPage(path: RouteConstants.FORGOT_PASSWORD);
   }
 
   @action

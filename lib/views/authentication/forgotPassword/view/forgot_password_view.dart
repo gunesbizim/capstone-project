@@ -2,24 +2,22 @@ import 'package:capstone_project/core/components/logo.dart';
 import 'package:capstone_project/core/constants/values/app_colors.dart';
 import 'package:capstone_project/core/base/view/base_widget.dart';
 import 'package:capstone_project/views/authentication/forgotPassword/view_model/forgot_password_view_model.dart';
-import 'package:capstone_project/views/authentication/login/view_model/login_view_model.dart';
-import 'package:capstone_project/views/authentication/validation.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:capstone_project/core/constants/values/text_constants.dart';
 
-class LoginView extends StatelessWidget {
+class ForgotPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //TODO: connect it with an upper widget
     MediaQueryData data = MediaQuery.of(context);
     double height = data.size.height;
     double width = data.size.width;
-    return BaseView<LoginViewModel>(
-        viewModel: LoginViewModel(),
-        onPageBuilder: (BuildContext context, LoginViewModel value) =>
+    return BaseView<ForgotPasswordViewModel>(
+        viewModel: ForgotPasswordViewModel(),
+        onPageBuilder: (BuildContext context, ForgotPasswordViewModel value) =>
             Container(
               decoration: BoxDecoration(gradient: AppColors.backgroundGradient),
               child: Scaffold(
@@ -48,7 +46,6 @@ class LoginView extends StatelessWidget {
                               buildGeneralForm(value),
                               buildLoginButton(data, value),
                               buildDontHaveAnAccount(value),
-                              buildForgotPassword(value),
                             ],
                           ),
                         )
@@ -64,7 +61,7 @@ class LoginView extends StatelessWidget {
   }
 
   Observer buildLoginButton(
-      MediaQueryData data, LoginViewModel loginViewModel) {
+      MediaQueryData data, ForgotPasswordViewModel forgotPasswordViewModel) {
     return Observer(
       builder: (_) {
         return Container(
@@ -76,18 +73,15 @@ class LoginView extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.all(Radius.circular(30)),
               child: Center(
-                  child: Text("LOG IN",
+                  child: Text("SUBMIT",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
                         fontSize: 16,
                       ))),
-              onTap: loginViewModel.isLoading
-                  ? null
-                  : () {
-                      print("Logging in!");
-                      loginViewModel.login();
-                    },
+              onTap: () {
+                forgotPasswordViewModel.sendEmail();
+              },
             ),
           ),
         );
@@ -95,26 +89,22 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Form buildGeneralForm(LoginViewModel loginViewModel) {
+  Form buildGeneralForm(ForgotPasswordViewModel forgotPasswordViewModel) {
     return Form(
-      key: loginViewModel.globalFormState,
+      key: forgotPasswordViewModel.globalFormState,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: buildEmailField(loginViewModel),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: buildPasswordField(loginViewModel),
+            child: buildEmailField(forgotPasswordViewModel),
           ),
         ],
       ),
     );
   }
 
-  Column buildDontHaveAnAccount(LoginViewModel value) {
+  Column buildDontHaveAnAccount(ForgotPasswordViewModel value) {
     return Column(
       children: [
         SizedBox(
@@ -138,47 +128,11 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Column buildForgotPassword(LoginViewModel value) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        RichText(
-          text: TextSpan(
-            style: TextConstants.home_screen_14_bold,
-            children: <TextSpan>[
-              TextSpan(
-                text: "Forgot password ?",
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    value.navigateToForgotPassword();
-                  },
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  TextFormField buildPasswordField(LoginViewModel loginViewModel) {
+  TextFormField buildEmailField(
+      ForgotPasswordViewModel forgotPasswordViewModel) {
     return TextFormField(
       style: TextStyle(color: Colors.white),
-      controller: loginViewModel.passwordController,
-      obscureText: true,
-      decoration: buildInputDecoration("Password", "Zett123!"),
-      validator: (value) {
-        if (value == null || value.isEmpty) return "Password can not be empty!";
-        return PasswordValidator.validate(value) ? null : "Invalid Password";
-      },
-    );
-  }
-
-  TextFormField buildEmailField(LoginViewModel loginViewModel) {
-    return TextFormField(
-      style: TextStyle(color: Colors.white),
-      controller: loginViewModel.emailController,
+      controller: forgotPasswordViewModel.emailController,
       decoration: buildInputDecoration("Email", "example@example.com"),
       validator: (value) {
         if (value == null || value.isEmpty) return "Email can not be empty!";
