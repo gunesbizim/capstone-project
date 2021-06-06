@@ -653,6 +653,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  ping_discover_network:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "8c575307b2f68b47e39b912b2e253ff3c6dd28ca"
+      url: "https://github.com/gunesbizim/ping_discover_network-0.2.0-1-nullSafety.git"
+    source: git
+    version: "0.2.0+1"
   platform:
     dependency: transitive
     description:
@@ -854,6 +863,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  wifi:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "115c0bfb83fc808c32561684b8f59625122adae4"
+      url: "https://github.com/gunesbizim/wifi-0.1.5.1.git"
+    source: git
+    version: "0.1.5"
   win32:
     dependency: transitive
     description:
