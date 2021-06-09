@@ -1,7 +1,7 @@
 import 'package:capstone_project/core/base/view/base_widget.dart';
-import 'package:capstone_project/core/components/fly_button.dart';
+import 'package:capstone_project/core/components/home/fly_button.dart';
 import 'package:capstone_project/core/components/logo.dart';
-import 'package:capstone_project/core/components/profile_picture.dart';
+import 'package:capstone_project/core/components/home/profile_picture.dart';
 import 'package:capstone_project/core/constants/values/app_colors.dart';
 import 'package:capstone_project/core/constants/values/text_constants.dart';
 import 'package:capstone_project/views/hompage/view_model/app_bar/app_bar_view_model.dart';

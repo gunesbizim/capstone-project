@@ -98,6 +98,7 @@ class LoginView extends StatelessWidget {
   Form buildGeneralForm(LoginViewModel loginViewModel) {
     return Form(
       key: loginViewModel.globalFormState,
+
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -162,7 +163,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  TextFormField buildPasswordField(LoginViewModel loginViewModel) {
+  TextFormField   buildPasswordField(LoginViewModel loginViewModel) {
     return TextFormField(
       style: TextStyle(color: Colors.white),
       controller: loginViewModel.passwordController,
@@ -170,7 +171,9 @@ class LoginView extends StatelessWidget {
       decoration: buildInputDecoration("Password", "Zett123!"),
       validator: (value) {
         if (value == null || value.isEmpty) return "Password can not be empty!";
-        return PasswordValidator.validate(value) ? null : "Invalid Password";
+        else if(PasswordValidator.validate(value)) return "Invalid Password";
+        else if(value.length < 8) return "Password should consists at least 8 characters";
+        else return null;
       },
     );
   }

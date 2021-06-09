@@ -29,7 +29,7 @@ class FlightButton extends StatelessWidget {
           Container(
             decoration:
                 BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-            height: height * 0.19, //todo calculate dynamically
+            height: height * 0.19,
             width: width * 0.4,
             child: Material(
               color: Colors.transparent,

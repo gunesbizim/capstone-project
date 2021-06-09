@@ -123,10 +123,10 @@ class AuthenticationService {
       final snackBar = SnackBar(
           content: Text(
               'The recovery e mail was sent if the entered mail address is registered. Please check your email.'));
-      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } on FirebaseAuthException catch (e) {
       final snackBar = SnackBar(content: Text(e.message!));
-      ScaffoldMessenger.of(context!).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

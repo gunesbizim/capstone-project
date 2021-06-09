@@ -203,15 +203,26 @@ class JoystickViewUpdated extends StatelessWidget {
                         decoration: BoxDecoration(color: Colors.red[900]!.withOpacity(0.3)),
                       ),
                       Observer(builder: (_){
-                        return Positioned(
-                                top: flightControllerViewModel.leftY-_actualSize/2,
-                                left: flightControllerViewModel.leftX-_actualSize/2,
-                                //child:OverflowBox(
-                                  child: Opacity(
-                                    opacity: opacity==null? 1: opacity!,
-                                    child: joystick
-                            ),
-                          );
+                        if(joystickType == JoystickType.Movement)
+                          return Positioned(
+                                  top: flightControllerViewModel.leftY-_actualSize/2,
+                                  left: flightControllerViewModel.leftX-_actualSize/2,
+                                  //child:OverflowBox(
+                                    child: Opacity(
+                                      opacity: opacity==null? 1: opacity!,
+                                      child: joystick
+                              ),
+                            );
+                        else
+                           return Positioned(
+                                  top: flightControllerViewModel.rightY-_actualSize/2,
+                                  left: flightControllerViewModel.rightX-_actualSize/2,
+                                  //child:OverflowBox(
+                                    child: Opacity(
+                                      opacity: opacity==null? 1: opacity!,
+                                      child: joystick 
+                              ),
+                            );
                        // );
                       }),
                     ], 

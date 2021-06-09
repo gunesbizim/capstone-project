@@ -8,10 +8,10 @@ import 'package:mobx/mobx.dart';
 
 class FlightListLoadService{
   static final FlightListLoadService instance = FlightListLoadService._init();
-  late QuerySnapshot collectionState;
+  late QuerySnapshot _collectionState;
   late ObservableList<FlightLogItemModel> flights;
-  late bool isDescending;
-  late String orderBy;
+  late bool _isDescending;
+  late String _orderBy;
   FlightListLoadService._init();
   AuthenticationService _authService = AuthenticationService.instance;
   FireStoreService _fireStoreService = FireStoreService.instance;
@@ -20,8 +20,8 @@ class FlightListLoadService{
     var collection = _fireStoreService.getLimitedCollection(
       collectionName: "flights",
       whereField: "pilotId",
-      orderBy: orderBy,
-      isDescending: isDescending,
+      orderBy: _orderBy,
+      isDescending: _isDescending,
       limit: 15
     );
         
@@ -30,8 +30,8 @@ class FlightListLoadService{
 
   Future<void> getDocumentsNext(String dropDownValue) async {
     // Get the last visible document
-    var lastVisible = collectionState.docs[collectionState.docs.length-1];
-    print('listDocument legnth: ${collectionState.size} last: $lastVisible');
+    var lastVisible = _collectionState.docs[_collectionState.docs.length-1];
+    print('listDocument legnth: ${_collectionState.size} last: $lastVisible');
     
 
     setSearchCriteria(dropDownValue);
@@ -39,8 +39,8 @@ class FlightListLoadService{
     var collection = _fireStoreService.getLimitedCollection(
       collectionName: "flights",
       whereField: "pilotId",
-      orderBy: orderBy,
-      isDescending: isDescending,
+      orderBy: _orderBy,
+      isDescending: _isDescending,
       limit: 8
     );
 
@@ -50,7 +50,7 @@ class FlightListLoadService{
   void fetchDocuments(Query collection,bool isNew){
         if(isNew) flights.clear();
         collection.get().then((querySnapshot) {
-          collectionState = querySnapshot; // store collection state to set where to start next
+          _collectionState = querySnapshot; // store collection state to set where to start next
           print("query snapshot length: ${querySnapshot.docs.length}");
           querySnapshot.docs.forEach((element) { 
             DateTime start = DateTime.parse(element["flightStartTime"].toDate().toString());
@@ -66,22 +66,22 @@ class FlightListLoadService{
     
   void setSearchCriteria(String dropDownValue) {
     if(dropDownValue == SortingConstants.FLIGHT_DATE_ASCENDING.name){
-      isDescending = false;
-      orderBy = "flightStartTime";
-      print("current field name: $orderBy");
+      _isDescending = false;
+      _orderBy = "flightStartTime";
+      print("current field name: $_orderBy");
 
     } else if(dropDownValue == SortingConstants.FLIGHT_DATE_DESCENDING.name){
-      isDescending = true;
-      orderBy = "flightStartTime";
-      print("current field name: $orderBy");
+      _isDescending = true;
+      _orderBy = "flightStartTime";
+      print("current field name: $_orderBy");
     } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_ASCENDING.name){
-      isDescending = false;
-      orderBy = "duration";
-      print("current field name: $orderBy");
+      _isDescending = false;
+      _orderBy = "duration";
+      print("current field name: $_orderBy");
     } else if(dropDownValue == SortingConstants.FLIGHT_DURATION_DESCENDING.name){
-      isDescending = true;
-      orderBy = "duration";      
-      print("current field name: $orderBy");
+      _isDescending = true;
+      _orderBy = "duration";      
+      print("current field name: $_orderBy");
     }   
   }
 

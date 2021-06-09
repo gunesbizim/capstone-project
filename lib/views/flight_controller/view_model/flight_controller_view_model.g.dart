@@ -69,6 +69,38 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
     });
   }
 
+  final _$flightDurationAtom =
+      Atom(name: '_FlightControllerViewModelBase.flightDuration');
+
+  @override
+  String get flightDuration {
+    _$flightDurationAtom.reportRead();
+    return super.flightDuration;
+  }
+
+  @override
+  set flightDuration(String value) {
+    _$flightDurationAtom.reportWrite(value, super.flightDuration, () {
+      super.flightDuration = value;
+    });
+  }
+
+  final _$cameraIconAtom =
+      Atom(name: '_FlightControllerViewModelBase.cameraIcon');
+
+  @override
+  Icon get cameraIcon {
+    _$cameraIconAtom.reportRead();
+    return super.cameraIcon;
+  }
+
+  @override
+  set cameraIcon(Icon value) {
+    _$cameraIconAtom.reportWrite(value, super.cameraIcon, () {
+      super.cameraIcon = value;
+    });
+  }
+
   final _$onDirectionChangedLeftAsyncAction =
       AsyncAction('_FlightControllerViewModelBase.onDirectionChangedLeft');
 
@@ -76,6 +108,15 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
   Future<void> onDirectionChangedLeft(double degrees, double distance) {
     return _$onDirectionChangedLeftAsyncAction
         .run(() => super.onDirectionChangedLeft(degrees, distance));
+  }
+
+  final _$onDirectionChangedRightAsyncAction =
+      AsyncAction('_FlightControllerViewModelBase.onDirectionChangedRight');
+
+  @override
+  Future<void> onDirectionChangedRight(double degrees, double distance) {
+    return _$onDirectionChangedRightAsyncAction
+        .run(() => super.onDirectionChangedRight(degrees, distance));
   }
 
   final _$_FlightControllerViewModelBaseActionController =
@@ -105,6 +146,18 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
   }
 
   @override
+  dynamic setPositionToNormalRight() {
+    final _$actionInfo =
+        _$_FlightControllerViewModelBaseActionController.startAction(
+            name: '_FlightControllerViewModelBase.setPositionToNormalRight');
+    try {
+      return super.setPositionToNormalRight();
+    } finally {
+      _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Offset setPositionRight(Offset localPosition) {
     final _$actionInfo = _$_FlightControllerViewModelBaseActionController
         .startAction(name: '_FlightControllerViewModelBase.setPositionRight');
@@ -116,12 +169,36 @@ mixin _$FlightControllerViewModel on _FlightControllerViewModelBase, Store {
   }
 
   @override
+  void updateTimerUI() {
+    final _$actionInfo = _$_FlightControllerViewModelBaseActionController
+        .startAction(name: '_FlightControllerViewModelBase.updateTimerUI');
+    try {
+      return super.updateTimerUI();
+    } finally {
+      _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void stopVideoRecording() {
+    final _$actionInfo = _$_FlightControllerViewModelBaseActionController
+        .startAction(name: '_FlightControllerViewModelBase.stopVideoRecording');
+    try {
+      return super.stopVideoRecording();
+    } finally {
+      _$_FlightControllerViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 leftX: ${leftX},
 leftY: ${leftY},
 rightX: ${rightX},
-rightY: ${rightY}
+rightY: ${rightY},
+flightDuration: ${flightDuration},
+cameraIcon: ${cameraIcon}
     ''';
   }
 }

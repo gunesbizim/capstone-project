@@ -28,7 +28,7 @@ class _ZettAppState extends State<ZettApp> {
         splash: SizedBox(
           width: 300.0,
           child: FittedBox(
-            child: Image.asset('assets/images/launch_image.gif'),
+            child: Image.asset('assets/images/launch_image.gif'),     
             fit: BoxFit.fitWidth,
           ),
         ),

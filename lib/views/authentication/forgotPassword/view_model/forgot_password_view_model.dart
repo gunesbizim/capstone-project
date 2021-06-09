@@ -4,13 +4,14 @@ import 'package:capstone_project/services/authentication_service.dart';
 import 'package:capstone_project/services/navigation/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+
+import 'package:mobx/mobx.dart';
 part 'forgot_password_view_model.g.dart';
 
-class ForgotPasswordViewModel = _ForgotPasswordViewModelBase
-    with _$ForgotPasswordViewModel;
+class ForgotPasswordViewModel = _ForgotPasswordViewModelBase with _$ForgotPasswordViewModel;
 
-abstract class _ForgotPasswordViewModelBase with Store, BaseViewModel {
-  GlobalKey<FormState> globalFormState = GlobalKey();
+abstract class _ForgotPasswordViewModelBase with Store, BaseViewModel{
+    GlobalKey<FormState> globalFormState = GlobalKey();
   GlobalKey<ScaffoldState> globalScaffoldState = GlobalKey();
   TextEditingController? emailController;
   late NavigationService navigationService;
@@ -25,11 +26,11 @@ abstract class _ForgotPasswordViewModelBase with Store, BaseViewModel {
     emailController = TextEditingController();
   }
 
-  void navigateToSignUp() {
+ void navigateToSignUp() {
     navigationService.navigateToPage(path: RouteConstants.SIGNUP);
   }
 
   void sendEmail() {
     authenticationService.sendRecoveryEmail(emailController!.text, context!);
-  }
+  } 
 }

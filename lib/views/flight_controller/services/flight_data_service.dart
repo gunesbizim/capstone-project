@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:async';
 import 'dart:math';
 
 import 'package:capstone_project/core/constants/functions/duratio_parser.dart';
@@ -17,6 +17,16 @@ class FlightDataService{
     
     map
    */
+  late Stopwatch flightTimer;
+
+  Future<void> startTimer() async{
+    flightTimer = new Stopwatch();
+    flightTimer.start();
+  }
+
+  Duration currentTime(){
+    return flightTimer.elapsed;
+  }
   void generateMockData(){
     for(int i = 1; i<=31; i++){
       print(i);
@@ -36,7 +46,10 @@ class FlightDataService{
       );
       print("-------------");
     }
- 
+
+    void startRecording() async {
+      
+    }
 
   }
 }

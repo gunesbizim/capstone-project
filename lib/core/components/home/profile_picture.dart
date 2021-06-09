@@ -1,11 +1,8 @@
-import 'dart:io';
-import 'dart:ui';
 
 import 'package:capstone_project/core/constants/values/app_colors.dart';
 import 'package:capstone_project/core/enums/profile_picture_enum.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'package:flutter/material.dart';
+
 
 class ProfilePicture extends StatelessWidget with RouteAware{
   final String ppURL;
