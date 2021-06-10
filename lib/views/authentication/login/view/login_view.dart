@@ -171,7 +171,7 @@ class LoginView extends StatelessWidget {
       decoration: buildInputDecoration("Password", "Zett123!"),
       validator: (value) {
         if (value == null || value.isEmpty) return "Password can not be empty!";
-        else if(PasswordValidator.validate(value)) return "Invalid Password";
+        else if(!PasswordValidator.validate(value)) return "Invalid Password";
         else if(value.length < 8) return "Password should consists at least 8 characters";
         else return null;
       },

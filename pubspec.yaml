@@ -34,15 +34,10 @@ dependencies:
 
   mobx: ^2.0.1
   mobx_codegen: ^2.0.1+3
-  
-  email_validator: ^2.0.1
-  json_annotation: ^4.0.1
-  json_serializable: ^4.1.2
-  provider: ^5.0.0
   flutter_mobx: ^2.0.0-nullsafety.3
-  flutter_svg: ^0.22.0
+  
+  email_validator: ^2.0.1  
   image_picker: ^0.7.5+2
-  extended_image: ^4.1.0
   image_cropper: ^1.4.0
   animated_splash_screen: ^1.1.0
   connectivity: ^3.0.4
@@ -51,6 +46,9 @@ dependencies:
   duration: ^3.0.6
   flutter_launcher_icons: ^0.9.0
   shared_preferences: ^2.0.6
+  flutter_ffmpeg: ^0.4.0
+  web_socket_channel: ^2.1.0
+  gallery_saver: ^2.1.0
  # wifi:
   #   git:
    #    url: https://github.com/gunesbizim/wifi-0.1.5.1.git

@@ -200,7 +200,7 @@ class JoystickViewUpdated extends StatelessWidget {
                         padding: EdgeInsets.all(25),
                         height: screenHeight,
                         width: screenWidth,
-                        decoration: BoxDecoration(color: Colors.red[900]!.withOpacity(0.3)),
+                        //decoration: BoxDecoration(color: Colors.red[900]!.withOpacity(0.3)),
                       ),
                       Observer(builder: (_){
                         if(joystickType == JoystickType.Movement)

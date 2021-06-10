@@ -24,12 +24,14 @@ class FlightController extends StatelessWidget{
         onPageBuilder: (BuildContext context, FlightControllerViewModel model){
           return Stack(
         children: [
-          Container(decoration: BoxDecoration(color: Colors.green),),
+          model.hasVideoStream ?Container(decoration: BoxDecoration(color: Colors.red),):
+          Container(height: screenHeight,
+          width: screenWidth, 
+          decoration: BoxDecoration(color: Colors.green),child: Center(child: Text("There is no incoming video stream.",style: TextStyle(color: Colors.white,fontSize: 50,),)) ),
           Row(children: [
             leftJoystick,
             Expanded(child: Container(decoration: BoxDecoration(color: Colors.transparent),)),
             rightJoystick
-            //rightJoystick
           ],),
            Column(children: [
              SizedBox(height:25),
@@ -76,9 +78,6 @@ class FlightController extends StatelessWidget{
           leftJoystick.init();
           rightJoystick.init();
 
-          // rightJoystick = new JoystickViewUpdated(size: 120, 
-          //   onDirectionChanged: model.onDirectionChangedLeft,
-          //   flightControllerViewModel: model);
         })
     );
   }

@@ -50,6 +50,8 @@ class FlightDataService{
     void startRecording() async {
       
     }
-
+    void stopRecording() async {
+      
+    }
   }
 }

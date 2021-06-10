@@ -68,6 +68,5 @@ abstract class _FlightListViewModelBase with BaseViewModel, Store {
   void dropDownValueChanged(var value){
     dropDownValue = value;
     getDocuments();
-
   }
  }

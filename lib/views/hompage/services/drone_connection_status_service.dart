@@ -20,16 +20,10 @@ class DroneConnectionStatusService {
     _timer = Timer.periodic(Duration(milliseconds: 50), (Timer t) async {
       if (counter == 10) {
         print("Timer is finished with count of 100");
-        setStatus(DroneConnectionStatusTypeEnum.SUCCESS, "Hell yeah");
+        setStatus(DroneConnectionStatusTypeEnum.SUCCESS, "Connected");
         t.cancel();
         counter = 0;
       }
-      // try {
-      //  _result = await _connectivity.checkConnectivity();
-      //  setStatus(DroneConnectionStatusTypeEnum.SUCCESS,"hell yeah");
-      // } on PlatformException catch (e) {
-      //   setStatus(DroneConnectionStatusTypeEnum.ERROR,e.toString());
-      // }
       counter++;
     });
   }

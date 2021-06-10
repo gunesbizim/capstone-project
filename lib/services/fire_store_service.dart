@@ -16,7 +16,6 @@ class FireStoreService {
       {required String id,
       required String name,
       required String email,
-      String lastFlightId = "",
       String ppURL = "",
       Map<String,String> flightTime = const {
         "hours":"00",
@@ -27,7 +26,6 @@ class FireStoreService {
       "pilotId": id,
       "fullName": name,
       "email": email,
-      "lastFlightId": lastFlightId,
       "ppURL": ppURL,
       "flightTime": flightTime
     };

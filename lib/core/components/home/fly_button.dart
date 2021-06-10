@@ -12,6 +12,7 @@ class FlightButton extends StatelessWidget {
 
   FlightButton({required this.flyViewModel});
 
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData data = MediaQuery.of(context);
@@ -42,15 +43,30 @@ class FlightButton extends StatelessWidget {
                       gradient: AppColors.flightButtonGradient,
                       shape: BoxShape.circle,
                     ),
-                    child: Text(
-                      "FLY",
-                      style: TextConstants.home_screen_50,
-                    ),
+                    child: Observer(
+                      builder: (_){
+                        return !flyViewModel.isStarting?Text(
+                          "FLY",
+                          style: TextConstants.home_screen_50,
+                        ): Column(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Text(
+                            "ABORT",
+                            style: TextConstants.home_screen_35,
+                          ),Text(
+                            flyViewModel.start.toString(),
+                            style: TextConstants.home_screen_35,
+                          )
+                          ],);
+                      } ,)
                   ),
                   onTap: flyViewModel.isConnected
                       ? () {
                         //FlightDataService.instance.generateMockData();
-                        flyViewModel.startFlight();
+                        if(!flyViewModel.isStarting)
+                          flyViewModel.startFlight();
+                        else
+                          flyViewModel.breakStartFlight();
                       }
                       : () {                        
 

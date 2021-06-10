@@ -45,6 +45,7 @@ class _ZettAppState extends State<ZettApp> {
 
   Future<Widget> nextScreen() async {
     final map = await AuthenticationService.instance.tryAutoSignIn();
+    print(map);
     if (map['userCredential'] != null) {
       return HomeView();
     } else {

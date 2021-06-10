@@ -29,6 +29,8 @@ abstract class _FlightControllerViewModelBase with Store, BaseViewModel {
   @observable
   Icon cameraIcon = Icon(Icons.videocam_sharp,color: Colors.white,);
 
+  bool hasVideoStream = false;
+
   bool isRecording = false;
 
   late final double _normalLeftX;

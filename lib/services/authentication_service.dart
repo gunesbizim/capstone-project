@@ -38,6 +38,7 @@ class AuthenticationService {
 
   Future<Map> tryAutoSignIn() async {
     final prefs = await SharedPreferences.getInstance();
+    print("---------------auyo sign in");
     try {
       if (prefs.getString('email') != null &&
           prefs.getString('password') != null) {
