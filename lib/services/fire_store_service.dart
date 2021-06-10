@@ -1,6 +1,7 @@
 import 'package:capstone_project/core/constants/functions/duratio_parser.dart';
 import 'package:capstone_project/services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class FireStoreService {
   final String filePath = "FireStoreService:";
@@ -143,5 +144,26 @@ class FireStoreService {
 
   String parseFlightTime(Map<String, dynamic> flightTime) {
     return "${flightTime["hours"].toString()}H ${flightTime["minutes"].toString()}M ${flightTime["seconds"].toString()}S";
+  }
+
+  void getLastFlight(Function setLastFlight){
+    String lastFlight = "No Flight";
+    var collection = getLimitedCollection(
+      collectionName: "flights",
+      whereField: "pilotId",
+      orderBy: "flightStartTime",
+      isDescending: true,
+      limit: 1
+    );
+
+    collection.get().then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+            DateTime date = DateTime.parse(element["flightStartTime"].toDate().toString());
+            String startString = DateFormat("dd-MM-yyyy").format(date);
+            print("###############################33");
+            print("start $startString");
+            setLastFlight(startString);
+        });
+    } );
   }
 }

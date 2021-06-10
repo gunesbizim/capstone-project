@@ -32,7 +32,7 @@ abstract class _FlightLogViewModelBase with Store, BaseViewModel{
   }
   @action
   void getLastDate(){
-    changeDate("23.05.2020");
+    fireStoreService.getLastFlight(changeDate);
   }
   @action
   void changeDate(String date){

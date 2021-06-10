@@ -54,7 +54,10 @@ class FlightController extends StatelessWidget{
                   }
                  ),IconButton(onPressed: (){
                      model.takeSnapshot();
-                  }, icon: Icon(Icons.camera_alt,color: Colors.white,) )
+                  }, icon: Icon(Icons.camera_alt,color: Colors.white,) ),
+                  IconButton(onPressed: (){
+                     model.endFlight();
+                  },icon: Icon(Icons.flight_land,color: Colors.white,))
                ],
              )
            ],)

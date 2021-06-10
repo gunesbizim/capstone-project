@@ -77,7 +77,6 @@ void startTimer() {
         NavigationService.instance.navigateToPageClear(path: RouteConstants.FLIGHT_CONTROLLER,data: []);
       } else {
         start--;
-        
       }
     },
   );
